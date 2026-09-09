@@ -493,14 +493,14 @@ problema que você já sentiu na pele.
 
 ## ✅ Checkpoint
 
-- [ ] `git config --global --list` mostra nome e e-mail
-- [ ] O e-mail é o `@users.noreply.github.com`, não o seu pessoal
-- [ ] <https://github.com/marcelosub1993/docusaurus-learning> existe e é público
-- [ ] O README aparece renderizado na página inicial do repositório
-- [ ] O repositório tem description e pelo menos 4 topics
-- [ ] `git log --oneline` mostra pelo menos um commit
-- [ ] `git status` responde `nothing to commit, working tree clean`
-- [ ] Você sabe explicar a diferença entre `add`, `commit` e `push`
+- [x] `git config --global --list` mostra nome e e-mail
+- [x] O e-mail é o `@users.noreply.github.com`, não o seu pessoal
+- [x] <https://github.com/marcelosub1993/docusaurus-learning> existe e é público
+- [x] O README aparece renderizado na página inicial do repositório
+- [x] O repositório tem description e pelo menos 4 topics
+- [x] `git log --oneline` mostra pelo menos um commit
+- [x] `git status` responde `nothing to commit, working tree clean`
+- [x] Você sabe explicar a diferença entre `add`, `commit` e `push`
 
 ---
 

@@ -13,7 +13,7 @@
 
 ```powershell
 cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
-npx create-docusaurus@latest website classic --skip-install
+npx create-docusaurus@latest website classic
 ```
 
 Traduzindo o comando:
@@ -24,11 +24,6 @@ Traduzindo o comando:
 | `create-docusaurus@latest` | O gerador oficial, na versão mais recente |
 | `website` | Nome da pasta que será criada, dentro do repositório |
 | `classic` | O template — traz docs, blog, tema e tudo preparado |
-| `--skip-install` | **Cria os arquivos mas não instala as dependências ainda** |
-
-O `--skip-install` é o detalhe que faz o resto do módulo funcionar. Você precisa
-que a pasta `node_modules` **ainda não exista** quando criar os junctions do
-Passo 2. Se o gerador instalar tudo primeiro, você teria que apagar e refazer.
 
 👀 Ele pergunta qual linguagem usar:
 
@@ -40,6 +35,14 @@ Passo 2. Se o gerador instalar tudo primeiro, você teria que apagar e refazer.
 
 Escolha **JavaScript** com as setas e Enter. TypeScript é ótimo, mas adiciona uma
 camada de aprendizado que não ajuda agora.
+
+👀 Depois vêm alguns minutos de instalação — ele cria os arquivos **e** baixa as
+~1.200 dependências.
+
+👀 Pelo caminho aparecem avisos de `deprecated`, como `uuid@8.3.2`. **Pode
+ignorar.** São dependências indiretas: algum pacote do Docusaurus depende delas,
+não você. Aviso de `deprecated` só te diz respeito quando é um pacote que **você**
+instalou.
 
 👀 No fim:
 
@@ -55,71 +58,83 @@ precisa de configuração de proxy. Veja o
 
 ---
 
-## Passo 2 — Criar os junctions antes de instalar
+## Passo 2 — Tirar as pastas de cache do OneDrive
 
 Lembra do [Módulo 00, Passo 4](./00-environment-setup.md#passo-4--a-pasta-do-projeto-e-o-problema-do-onedrive)?
-Três pastas não podem sincronizar no OneDrive. Agora é a hora.
+Três pastas de cache não podem sincronizar no OneDrive. Agora é a hora.
 
-💻 Primeiro, crie os destinos reais, fora do OneDrive:
-
-```powershell
-$local = "C:\dev\docusaurus-local\website"
-New-Item -ItemType Directory -Force "$local\node_modules" | Out-Null
-New-Item -ItemType Directory -Force "$local\.docusaurus" | Out-Null
-New-Item -ItemType Directory -Force "$local\build" | Out-Null
-```
-
-💻 Agora entre em `website` e crie os três junctions:
+💻 Entre em `website` e rode o bloco inteiro:
 
 ```powershell
 cd website
-New-Item -ItemType Junction -Path "node_modules" -Target "$local\node_modules" | Out-Null
-New-Item -ItemType Junction -Path ".docusaurus"  -Target "$local\.docusaurus"  | Out-Null
-New-Item -ItemType Junction -Path "build"        -Target "$local\build"        | Out-Null
+$local = "C:\dev\docusaurus-local\website"
+
+New-Item -ItemType Directory -Force "$local\.docusaurus", "$local\build", "$local\node_modules-cache" | Out-Null
+
+foreach ($p in @(".docusaurus", "build", "node_modules\.cache")) {
+  if (Test-Path $p) { Remove-Item -Recurse -Force $p }
+}
+
+New-Item -ItemType Junction -Path ".docusaurus"         -Target "$local\.docusaurus"        | Out-Null
+New-Item -ItemType Junction -Path "build"               -Target "$local\build"              | Out-Null
+New-Item -ItemType Junction -Path "node_modules\.cache" -Target "$local\node_modules-cache" | Out-Null
 ```
 
-💻 Confirme que os três são junctions e não pastas comuns:
+O `foreach` existe porque um junction não pode ser criado por cima de uma pasta
+que já existe. Se for a sua primeira vez, ele não remove nada — as três ainda não
+nasceram.
+
+💻 Confirme que os três viraram junction:
 
 ```powershell
-Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType, Target -AutoSize
+Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType -AutoSize
+Get-Item "node_modules\.cache" -Force | Select-Object Name, LinkType, Target
 ```
 
-👀 Três linhas, todas com `LinkType` = `Junction` e o `Target` apontando para
-`C:\dev\docusaurus-local\website\...`.
+👀 `.docusaurus` e `build` na primeira tabela, `node_modules\.cache` na segunda —
+os três com `LinkType` = `Junction`.
 
 > **Não precisa de administrador.** Junction é diferente de link simbólico:
 > qualquer usuário cria. Se algum comando pedir elevação, você digitou
 > `SymbolicLink` em vez de `Junction`.
 
-⚠️ Se você **não** quiser usar junctions, pule este passo inteiro. O site vai
-funcionar igual — você só fica exposto à sincronização lenta e aos erros de cache
-do [Módulo 99](./99-troubleshooting.md).
+### E o `node_modules`?
+
+Ele **não** entra nessa lista, e o motivo é uma limitação do npm que vale
+conhecer: se `node_modules` for um junction, o `npm install` **apaga o junction**
+e cria uma pasta de verdade no lugar. Você veria isto no terminal:
+
+```
+npm warn reify Removing non-directory C:\...\website\node_modules
+```
+
+O npm verifica se `node_modules` é um diretório real antes de extrair os pacotes,
+e remove qualquer coisa que não seja. É comportamento deliberado, documentado no
+[issue #3669 do npm](https://github.com/npm/cli/issues/3669) — e o caso de uso
+citado lá é exatamente este, gente tentando tirar a pasta da nuvem. Não tem como
+contornar.
+
+Então o `node_modules` vai sincronizar mesmo — cerca de 250 MB e 30 mil arquivos.
+Isso é um custo de **volume**: a primeira sincronização demora e consome cota.
+
+⚠️ Mas repare que o problema **grave** — os builds que quebram com erro sem
+sentido — vem das pastas de *cache*, não do `node_modules` em si. E essas o npm
+não gerencia, então os junctions delas sobrevivem a todo `npm install`. É por isso
+que essa solução parcial resolve a maior parte do risco.
+
+⚠️ A exceção: se você um dia apagar o `node_modules` inteiro para reinstalar do
+zero, o junction de `.cache` vai junto. Rode o bloco deste passo de novo depois do
+`npm install` — ele é idempotente, feito para isso. O
+[Módulo 99](./99-troubleshooting.md#os-junctions-sumiram-depois-de-um-npm-install)
+repete o procedimento.
+
+💡 Se a sincronização te incomodar, o atalho é pausar o OneDrive antes de
+instalar pacotes: clique no ícone da nuvem na bandeja → **Pausar sincronização →
+2 horas**. Rode o `npm install`, e despause quando terminar.
 
 ---
 
-## Passo 3 — Instalar as dependências
-
-💻 Ainda dentro de `website`:
-
-```powershell
-npm install
-```
-
-👀 Alguns minutos, uma barra de progresso, e no fim algo como
-`added 1268 packages in 1m`.
-
-💻 Confirme que as dependências foram parar fora do OneDrive:
-
-```powershell
-(Get-ChildItem "C:\dev\docusaurus-local\website\node_modules").Count
-```
-
-👀 Um número grande (centenas). Se der `0`, o junction não foi criado antes do
-install — apague `node_modules` e refaça os Passos 2 e 3.
-
----
-
-## Passo 4 — Subir o site
+## Passo 3 — Subir o site
 
 💻
 
@@ -144,7 +159,7 @@ Você está vendo o site de exemplo do template: uma home com três colunas, um 
 
 ---
 
-## Passo 5 — Ver a mágica do hot reload
+## Passo 4 — Ver a mágica do hot reload
 
 💻 Em outro terminal:
 
@@ -154,10 +169,51 @@ code "C:\Users\marce\OneDrive\Documents\Docusaurus"
 
 Isso abre o repositório inteiro — `guide/` e `website/` lado a lado.
 
-📄 Abra `website/docs/intro.mdx` e mude o título da primeira linha depois do
-front matter, por exemplo para `# Welcome to Nimbus`. Salve com `Ctrl+S`.
+**1. Vá até a página que você vai editar**
 
-👀 Olhe o navegador **sem recarregar a página**: o texto mudou sozinho.
+👀 No navegador você está na **home** (`http://localhost:3000/`). O arquivo que
+vamos mexer não é ela.
+
+🌐 Clique em **Tutorial**, na barra de cima. Você chega em
+`http://localhost:3000/docs/intro`, numa página que começa com o título
+**"Tutorial Intro"**.
+
+⚠️ Este passo é fácil de pular, e aí você edita o arquivo, olha a home, não vê
+nada mudar e acha que o hot reload está quebrado. **Deixe esta página aberta.**
+
+**2. Abra o arquivo correspondente**
+
+📄 No VS Code, abra `website/docs/intro.mdx`. As primeiras linhas são:
+
+```mdx
+---
+sidebar_position: 1
+---
+
+# Tutorial Intro
+```
+
+Aquele bloco entre as duas linhas de `---` é uma área de configuração da página —
+ele não aparece no site. Por enquanto **não mexa nele**; o
+[Módulo 03](./03-first-page.md#passo-3--o-front-matter) explica o que é e como
+usar (o nome dele é *front matter*, e é onde você controla título, ordem no menu
+e URL).
+
+**3. Edite e salve**
+
+📄 **Substitua** a linha `# Tutorial Intro` por:
+
+```mdx
+# Welcome to Nimbus
+```
+
+⚠️ Substitua mesmo — não acrescente uma linha nova. Se ficarem dois `#` no
+arquivo, a página fica com dois títulos grandes, um embaixo do outro.
+
+Salve com `Ctrl+S`.
+
+👀 Olhe o navegador, **na aba do `/docs/intro`, sem recarregar a página**: o
+texto mudou sozinho.
 
 Isso é *hot reload*. É o que torna o Docusaurus agradável de usar: você escreve e
 vê o resultado imediatamente. Mantenha o `npm start` rodando o guia inteiro.
@@ -168,7 +224,7 @@ vê o resultado imediatamente. Mantenha o `npm start` rodando o guia inteiro.
 
 ---
 
-## Passo 6 — O tour pelas pastas
+## Passo 5 — O tour pelas pastas
 
 Compare com a tabela abaixo. Não precisa entender tudo agora — volte aqui quando
 um módulo mencionar um arquivo.
@@ -192,10 +248,19 @@ Docusaurus/                     ← a raiz do repositório Git
     ├── sidebars.js             🧭 O menu lateral da documentação
     ├── package.json            📋 Dependências e comandos
     ├── package-lock.json       🔒 As versões exatas instaladas — vai pro Git
-    ├── node_modules/           🚫 junction — nunca edite, nunca versione
-    ├── .docusaurus/            🚫 junction — cache de build
-    └── build/                  🚫 junction — o site gerado
+    ├── node_modules/           🚫 Dependências — nunca edite, nunca versione
+    │   └── .cache/             🔗 junction → C:\dev  (cache do bundler)
+    ├── .docusaurus/            🔗 junction → C:\dev  (cache de build)
+    └── build/                  🔗 junction → C:\dev  (o site gerado)
 ```
+
+🔗 = junction, ou seja, mora fisicamente fora do OneDrive (Passo 2).
+🚫 = nunca editar à mão e nunca commitar.
+
+⚠️ Repare que `node_modules` é 🚫 mas **não** é 🔗: ela sincroniza no OneDrive,
+porque o npm não aceita que ela seja junction. Só a `.cache` de dentro dela fica
+de fora. As três 🔗 e a `node_modules` estão todas no `.gitignore`, pelo mesmo
+motivo: são geradas, não escritas.
 
 ### As quatro pastas que importam
 
@@ -248,7 +313,7 @@ configuração mais prática para começar, e a que vamos manter até o Módulo 
 
 ---
 
-## Passo 7 — Os comandos do projeto
+## Passo 6 — Os comandos do projeto
 
 Estão declarados no `package.json`. Os que importam:
 
@@ -291,7 +356,7 @@ npm start
 
 ---
 
-## Passo 8 — Registrar no Git
+## Passo 7 — Registrar no Git
 
 O site nasceu. Hora da primeira foto dele.
 
@@ -335,8 +400,11 @@ git push
 ## ✅ Checkpoint
 
 - [ ] `http://localhost:3000` abre o site de exemplo
-- [ ] `node_modules`, `.docusaurus` e `build` são junctions apontando para `C:\dev\`
+- [ ] `.docusaurus`, `build` e `node_modules\.cache` são junctions apontando para `C:\dev\`
+- [ ] Você sabe explicar por que o `node_modules` **não** é junction
+- [ ] Você achou a página do `intro.mdx` no site (navbar → **Tutorial**)
 - [ ] Você editou `website/docs/intro.mdx` e viu a mudança sem recarregar
+- [ ] A página tem **um** título grande, não dois
 - [ ] Você sabe parar o servidor (`Ctrl+C`) e subir de novo (`npm start`)
 - [ ] `npm run build` termina com SUCCESS
 - [ ] `website/` está no GitHub, sem `node_modules`

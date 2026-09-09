@@ -121,19 +121,37 @@ reais em projetos Node:
    [Módulo 99](./99-troubleshooting.md#panic-occurred-at-runtime--modulegraphmodule--not-found-rspack)
    mostra a cara desse erro.
 
-### A solução
+### A solução (parcial, e vale entender o "parcial")
 
-Nenhuma das três pastas problemáticas — `node_modules`, `build` e `.docusaurus` —
-precisa de backup: as três são **geradas** a partir do código, e o Módulo 01 vai
-ensinar o Git a ignorá-las.
+Nenhuma das pastas problemáticas — `node_modules`, `build`, `.docusaurus` e o
+cache do bundler — precisa de backup: todas são **geradas** a partir do código, e
+o Módulo 01 vai ensinar o Git a ignorá-las.
 
 Então a saída é fazer o OneDrive ignorá-las também. E existe um jeito limpo: o
 OneDrive **não sincroniza junctions de diretório**. Um junction é um atalho no
-nível do sistema de arquivos — para o Node e o npm ele é uma pasta normal, mas o
-OneDrive olha, vê que é um ponto de reparse e passa direto.
+nível do sistema de arquivos — para o Node ele é uma pasta normal, mas o OneDrive
+olha, vê que é um ponto de reparse e passa direto.
 
-Ou seja: as pastas ficam fisicamente fora do OneDrive, e o projeto continua
-inteiro no lugar que você quer.
+Ou seja: a pasta fica fisicamente fora do OneDrive, e o projeto continua inteiro
+no lugar que você quer.
+
+⚠️ **Mas isso não funciona para o `node_modules`.** O `npm install` verifica se
+essa pasta é um diretório real e **apaga** o junction se não for — é
+comportamento deliberado do npm, não dá para contornar. O Módulo 02 explica
+quando você vir a mensagem.
+
+Na prática, então, a divisão fica assim:
+
+| Pasta | Junction? | Consequência |
+|---|---|---|
+| `.docusaurus` | ✅ | Fora do OneDrive — **é a que causa os builds quebrados** |
+| `node_modules\.cache` | ✅ | Fora do OneDrive — cache do bundler |
+| `build` | ✅ | Fora do OneDrive |
+| `node_modules` | ❌ | Sincroniza. ~250 MB e 30 mil arquivos. |
+
+O que sobra é um custo de **volume** (sincronização lenta e cota), não de
+**correção**: as pastas que quebram o build ficam de fora. É uma troca aceitável,
+e é o preço de manter o projeto no OneDrive.
 
 💻 Crie agora a pasta que vai receber esses arquivos, fora do OneDrive:
 
@@ -145,10 +163,9 @@ Test-Path "C:\dev\docusaurus-local\website"
 👀 Deve responder `True`.
 
 Só isso por enquanto. Os junctions em si são criados no
-[Módulo 02, Passo 2](./02-creating-the-site.md#passo-2--criar-os-junctions-antes-de-instalar),
-porque eles precisam existir **antes** do `npm install` — se a pasta
-`node_modules` já existir de verdade, não dá para transformá-la em junction sem
-apagar tudo.
+[Módulo 02, Passo 2](./02-creating-the-site.md#passo-2--tirar-as-pastas-de-cache-do-onedrive),
+depois que o projeto existir — não dá para apontar um atalho para uma pasta que
+ainda não foi criada.
 
 > **E se eu preferir não usar junction?** Funciona sem — o site vai rodar. Você
 > só troca conforto por risco: sincronização lenta e a chance de encontrar os

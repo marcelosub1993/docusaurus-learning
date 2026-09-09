@@ -24,9 +24,9 @@ npm install
 O passo 2 é o mais subestimado: **o `npm start` ignora links quebrados**. Muito
 "problema misterioso" aparece nomeado e explicado no `npm run build`.
 
-⚠️ Se você usa junctions (Módulo 02), o passo 3 **apaga o junction**, não a pasta
-de destino. Recrie o junction antes de rodar `npm install` de novo — veja
-[Apaguei o `node_modules` e perdi o junction](#apaguei-o-node_modules-e-perdi-o-junction).
+⚠️ Se você usa junctions (Módulo 02), o passo 3 apaga junto o junction de
+`node_modules\.cache`. Recrie-o **depois** do `npm install` — veja
+[Os junctions sumiram depois de um `npm install`](#os-junctions-sumiram-depois-de-um-npm-install).
 
 ---
 
@@ -141,21 +141,55 @@ caminho é reescrever o histórico — mais trabalho do que vale a pena agora.
 
 **Não é erro.** É o `core.autocrlf true` fazendo o trabalho dele. Pode ignorar.
 
-### Apaguei o `node_modules` e perdi o junction
+### `npm warn reify Removing non-directory ...\node_modules`
 
-**Sintoma:** `npm install` funciona, mas as dependências voltaram a ficar dentro
-do OneDrive — e a sincronização enlouqueceu.
+**Não é erro, e não tem conserto.** É o npm avisando que encontrou um
+`node_modules` que não era um diretório real — um junction — e o apagou para criar
+uma pasta de verdade no lugar.
 
-**Conserto:**
+O npm faz isso de propósito: ele verifica se `node_modules` é um diretório real
+antes de extrair os pacotes, e remove qualquer coisa que não seja. Está registrado
+no [issue #3669 do npm](https://github.com/npm/cli/issues/3669), aberto há anos, e
+o caso de uso citado lá é exatamente este — gente tentando tirar o `node_modules`
+do OneDrive e do Dropbox.
+
+**A consequência:** `node_modules` sincroniza mesmo. É um custo de volume (~250 MB,
+30 mil arquivos), não de correção — as pastas que quebram o build são as de cache,
+e essas o npm não gerencia. Veja o
+[Módulo 02, Passo 2](./02-creating-the-site.md#e-o-node_modules).
+
+**O que fazer:** confirme que os outros junctions sobreviveram.
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus\website"
-Remove-Item -Recurse -Force node_modules
-$local = "C:\dev\docusaurus-local\website"
-New-Item -ItemType Directory -Force "$local\node_modules" | Out-Null
-New-Item -ItemType Junction -Path "node_modules" -Target "$local\node_modules" | Out-Null
-npm install
+Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
+Get-Item "node_modules\.cache" -Force -ErrorAction SilentlyContinue | Select-Object Name, LinkType
 ```
+
+### Os junctions sumiram depois de um `npm install`
+
+**Sintoma:** o comando acima não lista `.docusaurus`, `build` ou
+`node_modules\.cache` como `Junction` — e os builds voltaram a quebrar de forma
+aleatória.
+
+Acontece quando você apaga `node_modules` inteiro para reinstalar do zero: o
+junction de `.cache` vai junto.
+
+**Conserto** — dentro de `website`, depois do `npm install`:
+
+```powershell
+$local = "C:\dev\docusaurus-local\website"
+New-Item -ItemType Directory -Force "$local\.docusaurus", "$local\build", "$local\node_modules-cache" | Out-Null
+foreach ($p in @(".docusaurus", "build", "node_modules\.cache")) {
+  if (Test-Path $p) { Remove-Item -Recurse -Force $p }
+}
+New-Item -ItemType Junction -Path ".docusaurus"        -Target "$local\.docusaurus"        | Out-Null
+New-Item -ItemType Junction -Path "build"              -Target "$local\build"              | Out-Null
+New-Item -ItemType Junction -Path "node_modules\.cache" -Target "$local\node_modules-cache" | Out-Null
+Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
+```
+
+⚠️ Repare que o `node_modules` **não** está na lista. Ele nunca vai ser junction —
+veja o item anterior.
 
 💻 Confira sempre com:
 
@@ -376,14 +410,16 @@ padrão. Por isso este erro ficou comum.
    npm run clear
    ```
 
-2. Confirmar que os junctions existem (é a solução de verdade):
+2. Confirmar que os junctions de cache existem (é a solução de verdade):
 
    ```powershell
    Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
+   Get-Item "node_modules\.cache" -Force -ErrorAction SilentlyContinue | Select-Object Name, LinkType
    ```
 
-   Se `.docusaurus` e `node_modules` não aparecerem como `Junction`, veja
-   [Apaguei o `node_modules` e perdi o junction](#apaguei-o-node_modules-e-perdi-o-junction).
+   Você precisa ver `.docusaurus`, `build` e `node_modules\.cache` como
+   `Junction`. O `node_modules` em si **não** é junction e não deve ser — veja
+   [Os junctions sumiram depois de um `npm install`](#os-junctions-sumiram-depois-de-um-npm-install).
 
 3. Se voltar mesmo com junctions, desligue o cache persistente:
 
