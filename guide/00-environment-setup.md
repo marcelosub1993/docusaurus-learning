@@ -118,59 +118,56 @@ reais em projetos Node:
    milissegundos depois. Se o OneDrive mexer no arquivo nesse intervalo, o build
    quebra com erros que não fazem sentido: *panics*, arquivos "não encontrados"
    que existem, builds que funcionam numa hora e falham na outra. O
-   [Módulo 99](./99-troubleshooting.md#panic-occurred-at-runtime--modulegraphmodule--not-found-rspack)
+   [Módulo 99](./99-troubleshooting.md#problemas-causados-pelo-onedrive)
    mostra a cara desse erro.
 
-### A solução (parcial, e vale entender o "parcial")
+### A decisão
 
-Nenhuma das pastas problemáticas — `node_modules`, `build`, `.docusaurus` e o
-cache do bundler — precisa de backup: todas são **geradas** a partir do código, e
-o Módulo 01 vai ensinar o Git a ignorá-las.
+**Vamos manter o projeto no OneDrive mesmo, sem truque nenhum.**
 
-Então a saída é fazer o OneDrive ignorá-las também. E existe um jeito limpo: o
-OneDrive **não sincroniza junctions de diretório**. Um junction é um atalho no
-nível do sistema de arquivos — para o Node ele é uma pasta normal, mas o OneDrive
-olha, vê que é um ponto de reparse e passa direto.
+Existem técnicas para tirar essas pastas da sincronização. Eu tentei três, e a
+conclusão foi que todas custam mais do que resolvem: ou o npm as desfaz sozinho,
+ou o próprio Docusaurus as apaga no build, ou você precisa recriá-las à mão para
+sempre. Complexidade permanente no Módulo 00 para um problema que talvez nunca
+apareça é mau negócio.
 
-Ou seja: a pasta fica fisicamente fora do OneDrive, e o projeto continua inteiro
-no lugar que você quer.
+Então o plano é o inverso: **setup simples, e conserto documentado se der
+problema.**
 
-⚠️ **Mas isso não funciona para o `node_modules`.** O `npm install` verifica se
-essa pasta é um diretório real e **apaga** o junction se não for — é
-comportamento deliberado do npm, não dá para contornar. O Módulo 02 explica
-quando você vir a mensagem.
+### Dois hábitos que evitam quase tudo
 
-Na prática, então, a divisão fica assim:
+**1. Pause o OneDrive antes de instalar pacotes.**
 
-| Pasta | Junction? | Consequência |
-|---|---|---|
-| `.docusaurus` | ✅ | Fora do OneDrive — **é a que causa os builds quebrados** |
-| `node_modules\.cache` | ✅ | Fora do OneDrive — cache do bundler |
-| `build` | ✅ | Fora do OneDrive |
-| `node_modules` | ❌ | Sincroniza. ~250 MB e 30 mil arquivos. |
+É quando os milhares de arquivos aparecem de uma vez. Clique no ícone da nuvem na
+bandeja do sistema → **Pausar sincronização → 2 horas**. Rode o `npm install`, e
+despause quando terminar.
 
-O que sobra é um custo de **volume** (sincronização lenta e cota), não de
-**correção**: as pastas que quebram o build ficam de fora. É uma troca aceitável,
-e é o preço de manter o projeto no OneDrive.
+Não é obrigatório. Mas se a máquina ficar lenta depois de um `npm install`, é
+isso, e agora você sabe.
 
-💻 Crie agora a pasta que vai receber esses arquivos, fora do OneDrive:
+**2. Se um build quebrar com erro que não faz sentido, suspeite do OneDrive.**
+
+*Panic*, arquivo "não encontrado" que existe, build que funciona numa hora e falha
+na outra — nada disso é culpa do seu código. O
+[Módulo 99](./99-troubleshooting.md#problemas-causados-pelo-onedrive) tem a escada
+de correção, da mais simples à definitiva. A primeira tentativa é sempre
+`npm run clear`.
+
+### A saída de emergência
+
+Se o OneDrive atrapalhar de verdade, mova o projeto para fora dele. A partir do
+Módulo 01 isso vira uma operação de dois comandos, porque o GitHub passa a ter
+tudo:
 
 ```powershell
-New-Item -ItemType Directory -Force "C:\dev\docusaurus-local\website" | Out-Null
-Test-Path "C:\dev\docusaurus-local\website"
+cd C:\dev
+git clone https://github.com/marcelosub1993/docusaurus-learning.git
 ```
 
-👀 Deve responder `True`.
+Aí você trabalha em `C:\dev\docusaurus-learning` e o backup continua sendo o Git —
+que é o que backup de código deveria ser desde sempre.
 
-Só isso por enquanto. Os junctions em si são criados no
-[Módulo 02, Passo 2](./02-creating-the-site.md#passo-2--tirar-as-pastas-de-cache-do-onedrive),
-depois que o projeto existir — não dá para apontar um atalho para uma pasta que
-ainda não foi criada.
-
-> **E se eu preferir não usar junction?** Funciona sem — o site vai rodar. Você
-> só troca conforto por risco: sincronização lenta e a chance de encontrar os
-> erros de cache do Módulo 99. Se topar, pule a criação dos junctions no Módulo
-> 02 e siga o resto igual.
+Guarde essa carta na manga. Não precisa usar agora.
 
 ---
 
@@ -212,10 +209,10 @@ ls
 - [x] `npm -v` mostra um número de versão
 - [x] `git --version` mostra uma versão
 - [x] VS Code instalado, com a extensão MDX
-- [x] `C:\dev\docusaurus-local\website` existe
 - [x] Você consegue entrar na pasta do projeto com `cd` e ver o `guide` no `ls`
-- [x] Você sabe explicar, em uma frase, por que `node_modules` não pode
-      sincronizar no OneDrive
+- [x] Você sabe onde fica o botão de pausar o OneDrive
+- [x] Você sabe que erro de build sem sentido é sintoma de sincronização, e que o
+      Módulo 99 tem o conserto
 
 ---
 
@@ -243,8 +240,11 @@ Um aquecimento de terminal, para os comandos deixarem de ser estranhos.
 ## 📌 O que você aprendeu
 
 O Docusaurus é uma ferramenta Node: o ambiente é Node + Git + editor + terminal.
-O lugar onde o projeto mora afeta se ele vai funcionar de forma confiável, e
-pastas geradas (`node_modules`, `build`, `.docusaurus`) não devem ser
-sincronizadas nem versionadas — elas são reconstruíveis a partir do código.
+O lugar onde o projeto mora afeta se ele vai funcionar de forma confiável — pasta
+sincronizada e projeto Node se dão mal, e você já sabe qual é o sintoma.
+
+Escolhemos setup simples com conserto documentado, em vez de prevenção
+complicada. É uma troca que vale quase sempre: o problema pode nem aparecer, e se
+aparecer você tem a receita.
 
 ➡️ Próximo: [Módulo 01 — Git e GitHub](./01-git-and-github.md)

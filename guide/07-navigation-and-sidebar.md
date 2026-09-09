@@ -281,7 +281,8 @@ navbar: {
 },
 ```
 
-⚠️ Reinicie o `npm start` depois de mexer aqui.
+👀 A navbar muda sozinha ao salvar — `themeConfig` recarrega. Se não mudar,
+`Ctrl+C` e `npm start`.
 
 ### Diferença entre `to` e `href`
 

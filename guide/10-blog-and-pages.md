@@ -210,6 +210,12 @@ blog: {
 
 💻 Reinicie o `npm start` e confira `/blog`.
 
+⚠️ Aqui o reinício **é** obrigatório, e vale entender por quê: essas opções não
+estão no `themeConfig` — estão dentro do `presets`, configurando o plugin de blog.
+Opção de plugin muda o pipeline de build, e o servidor não se reconfigura sozinho.
+É a distinção da tabela do
+[Módulo 02](./02-creating-the-site.md#o-que-recarrega-sozinho-e-o-que-não).
+
 ### Passo 8 — Não quero blog
 
 Muito site de documentação interna não tem blog. Para desligar:

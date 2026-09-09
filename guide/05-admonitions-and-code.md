@@ -126,11 +126,13 @@ prism: {
 },
 ```
 
-⚠️ Lembre: mudou o `docusaurus.config.js`, precisa parar (`Ctrl+C`) e rodar
-`npm start` de novo.
-
 👀 Compare antes e depois: sem o `additionalLanguages`, o bloco `powershell`
 aparece em cinza, sem cores. Com ele, os comandos e as flags ganham destaque.
+
+⚠️ Se as cores não aparecerem depois de salvar, aplique a regra prática do
+[Módulo 02](./02-creating-the-site.md#o-que-recarrega-sozinho-e-o-que-não):
+`Ctrl+C` e `npm start`. Este é um caso de fronteira — está no `themeConfig`, mas
+mexe em quais arquivos de linguagem entram no pacote.
 
 ### Passo 5 — Título no bloco
 

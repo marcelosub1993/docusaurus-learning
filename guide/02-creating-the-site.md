@@ -56,85 +56,14 @@ Happy building awesome websites!
 precisa de configuração de proxy. Veja o
 [Módulo 99](./99-troubleshooting.md#erro-de-rede-ou-proxy-no-npm).
 
----
-
-## Passo 2 — Tirar as pastas de cache do OneDrive
-
-Lembra do [Módulo 00, Passo 4](./00-environment-setup.md#passo-4--a-pasta-do-projeto-e-o-problema-do-onedrive)?
-Três pastas de cache não podem sincronizar no OneDrive. Agora é a hora.
-
-💻 Entre em `website` e rode o bloco inteiro:
-
-```powershell
-cd website
-$local = "C:\dev\docusaurus-local\website"
-
-New-Item -ItemType Directory -Force "$local\.docusaurus", "$local\build", "$local\node_modules-cache" | Out-Null
-
-foreach ($p in @(".docusaurus", "build", "node_modules\.cache")) {
-  if (Test-Path $p) { Remove-Item -Recurse -Force $p }
-}
-
-New-Item -ItemType Junction -Path ".docusaurus"         -Target "$local\.docusaurus"        | Out-Null
-New-Item -ItemType Junction -Path "build"               -Target "$local\build"              | Out-Null
-New-Item -ItemType Junction -Path "node_modules\.cache" -Target "$local\node_modules-cache" | Out-Null
-```
-
-O `foreach` existe porque um junction não pode ser criado por cima de uma pasta
-que já existe. Se for a sua primeira vez, ele não remove nada — as três ainda não
-nasceram.
-
-💻 Confirme que os três viraram junction:
-
-```powershell
-Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType -AutoSize
-Get-Item "node_modules\.cache" -Force | Select-Object Name, LinkType, Target
-```
-
-👀 `.docusaurus` e `build` na primeira tabela, `node_modules\.cache` na segunda —
-os três com `LinkType` = `Junction`.
-
-> **Não precisa de administrador.** Junction é diferente de link simbólico:
-> qualquer usuário cria. Se algum comando pedir elevação, você digitou
-> `SymbolicLink` em vez de `Junction`.
-
-### E o `node_modules`?
-
-Ele **não** entra nessa lista, e o motivo é uma limitação do npm que vale
-conhecer: se `node_modules` for um junction, o `npm install` **apaga o junction**
-e cria uma pasta de verdade no lugar. Você veria isto no terminal:
-
-```
-npm warn reify Removing non-directory C:\...\website\node_modules
-```
-
-O npm verifica se `node_modules` é um diretório real antes de extrair os pacotes,
-e remove qualquer coisa que não seja. É comportamento deliberado, documentado no
-[issue #3669 do npm](https://github.com/npm/cli/issues/3669) — e o caso de uso
-citado lá é exatamente este, gente tentando tirar a pasta da nuvem. Não tem como
-contornar.
-
-Então o `node_modules` vai sincronizar mesmo — cerca de 250 MB e 30 mil arquivos.
-Isso é um custo de **volume**: a primeira sincronização demora e consome cota.
-
-⚠️ Mas repare que o problema **grave** — os builds que quebram com erro sem
-sentido — vem das pastas de *cache*, não do `node_modules` em si. E essas o npm
-não gerencia, então os junctions delas sobrevivem a todo `npm install`. É por isso
-que essa solução parcial resolve a maior parte do risco.
-
-⚠️ A exceção: se você um dia apagar o `node_modules` inteiro para reinstalar do
-zero, o junction de `.cache` vai junto. Rode o bloco deste passo de novo depois do
-`npm install` — ele é idempotente, feito para isso. O
-[Módulo 99](./99-troubleshooting.md#os-junctions-sumiram-depois-de-um-npm-install)
-repete o procedimento.
-
-💡 Se a sincronização te incomodar, o atalho é pausar o OneDrive antes de
-instalar pacotes: clique no ícone da nuvem na bandeja → **Pausar sincronização →
-2 horas**. Rode o `npm install`, e despause quando terminar.
+💡 Este é o momento que o [Módulo 00](./00-environment-setup.md#dois-hábitos-que-evitam-quase-tudo)
+avisou: 30 mil arquivos apareceram de uma vez dentro do OneDrive. Se a máquina
+ficar lenta nos próximos minutos, é a sincronização — e da próxima vez você pausa
+antes.
 
 ---
 
-## Passo 3 — Subir o site
+## Passo 2 — Subir o site
 
 💻
 
@@ -159,7 +88,7 @@ Você está vendo o site de exemplo do template: uma home com três colunas, um 
 
 ---
 
-## Passo 4 — Ver a mágica do hot reload
+## Passo 3 — Ver a mágica do hot reload
 
 💻 Em outro terminal:
 
@@ -218,13 +147,44 @@ texto mudou sozinho.
 Isso é *hot reload*. É o que torna o Docusaurus agradável de usar: você escreve e
 vê o resultado imediatamente. Mantenha o `npm start` rodando o guia inteiro.
 
-⚠️ Uma exceção importante: mudanças em **`docusaurus.config.js`** exigem parar
-(`Ctrl+C`) e rodar `npm start` de novo. Se você mexeu na config e nada aconteceu,
-é isso. O mesmo vale depois de instalar qualquer pacote novo.
+### O que recarrega sozinho e o que não
+
+Isso vale saber agora, porque economiza reinício desnecessário — e porque muito
+tutorial na internet ensina errado.
+
+O `docusaurus.config.js` **também** tem hot reload. Mudar `title`, `tagline`,
+`navbar`, `footer` ou cores reflete no navegador sem você parar nada.
+
+Mas nem tudo:
+
+| O que você mudou | Recarrega sozinho? |
+|---|:---:|
+| `title`, `tagline`, `favicon` | ✅ |
+| `themeConfig` — navbar, footer, cores, `announcementBar`, prism | ✅ |
+| Conteúdo em `docs/`, `blog/`, `src/` | ✅ |
+| `sidebars.js` | ✅ |
+| Instalar um pacote novo (`npm install ...`) | ❌ |
+| Adicionar `plugins`, `themes` ou `presets` | ❌ |
+| `markdown`, `future`, `i18n` | ❌ |
+| `babel.config.js` | ❌ |
+
+A lógica por trás: o servidor de desenvolvimento consegue trocar **dados** em
+tempo real, mas não consegue se reconfigurar. Tudo que muda o *pipeline de build*
+— plugins, temas, dependências — exige subir de novo.
+
+💡 **A regra prática:** mudou a config e o site não reagiu em 2 segundos?
+`Ctrl+C` e `npm start`. É barato e sempre funciona. Este guia avisa nos pontos em
+que o reinício é obrigatório.
+
+> **Se você achar tutorial dizendo que config nunca recarrega:** era verdade, e
+> ainda é para quem escreve o config com `module.exports` (CommonJS). O template
+> do Docusaurus 3 usa `export default`, e com ESM o hot reload funciona —
+> [issue #9698](https://github.com/facebook/docusaurus/issues/9698). Se um dia
+> você converter o arquivo para `module.exports`, perde esse ganho.
 
 ---
 
-## Passo 5 — O tour pelas pastas
+## Passo 4 — O tour pelas pastas
 
 Compare com a tabela abaixo. Não precisa entender tudo agora — volte aqui quando
 um módulo mencionar um arquivo.
@@ -248,19 +208,17 @@ Docusaurus/                     ← a raiz do repositório Git
     ├── sidebars.js             🧭 O menu lateral da documentação
     ├── package.json            📋 Dependências e comandos
     ├── package-lock.json       🔒 As versões exatas instaladas — vai pro Git
-    ├── node_modules/           🚫 Dependências — nunca edite, nunca versione
-    │   └── .cache/             🔗 junction → C:\dev  (cache do bundler)
-    ├── .docusaurus/            🔗 junction → C:\dev  (cache de build)
-    └── build/                  🔗 junction → C:\dev  (o site gerado)
+    ├── node_modules/           🚫 Dependências instaladas
+    ├── .docusaurus/            🚫 Cache de build
+    └── build/                  🚫 O site gerado — aparece no primeiro build
 ```
 
-🔗 = junction, ou seja, mora fisicamente fora do OneDrive (Passo 2).
-🚫 = nunca editar à mão e nunca commitar.
+🚫 = **gerada**, não escrita por você. Nunca edite à mão, nunca commite. As três
+estão no `.gitignore` pelo mesmo motivo: um comando as reconstrói inteiras
+(`npm install` recria a primeira, `npm run build` as outras duas).
 
-⚠️ Repare que `node_modules` é 🚫 mas **não** é 🔗: ela sincroniza no OneDrive,
-porque o npm não aceita que ela seja junction. Só a `.cache` de dentro dela fica
-de fora. As três 🔗 e a `node_modules` estão todas no `.gitignore`, pelo mesmo
-motivo: são geradas, não escritas.
+Essa é também a razão de elas não precisarem de backup. Se um dia você apagar as
+três por engano, não perdeu nada — só tempo de reinstalar.
 
 ### As quatro pastas que importam
 
@@ -313,7 +271,7 @@ configuração mais prática para começar, e a que vamos manter até o Módulo 
 
 ---
 
-## Passo 6 — Os comandos do projeto
+## Passo 5 — Os comandos do projeto
 
 Estão declarados no `package.json`. Os que importam:
 
@@ -356,7 +314,7 @@ npm start
 
 ---
 
-## Passo 7 — Registrar no Git
+## Passo 6 — Registrar no Git
 
 O site nasceu. Hora da primeira foto dele.
 
@@ -399,16 +357,15 @@ git push
 
 ## ✅ Checkpoint
 
-- [ ] `http://localhost:3000` abre o site de exemplo
-- [ ] `.docusaurus`, `build` e `node_modules\.cache` são junctions apontando para `C:\dev\`
-- [ ] Você sabe explicar por que o `node_modules` **não** é junction
-- [ ] Você achou a página do `intro.mdx` no site (navbar → **Tutorial**)
-- [ ] Você editou `website/docs/intro.mdx` e viu a mudança sem recarregar
-- [ ] A página tem **um** título grande, não dois
-- [ ] Você sabe parar o servidor (`Ctrl+C`) e subir de novo (`npm start`)
-- [ ] `npm run build` termina com SUCCESS
-- [ ] `website/` está no GitHub, sem `node_modules`
-- [ ] Você sabe dizer, de cabeça, para que serve `docs/`, `static/` e `sidebars.js`
+- [x] `http://localhost:3000` abre o site de exemplo
+- [x] Você sabe quais três pastas são geradas e por que nunca entram no Git
+- [x] Você achou a página do `intro.mdx` no site (navbar → **Tutorial**)
+- [x] Você editou `website/docs/intro.mdx` e viu a mudança sem recarregar
+- [x] A página tem **um** título grande, não dois
+- [x] Você sabe parar o servidor (`Ctrl+C`) e subir de novo (`npm start`)
+- [x] `npm run build` termina com SUCCESS
+- [x] `website/` está no GitHub, sem `node_modules`
+- [x] Você sabe dizer, de cabeça, para que serve `docs/`, `static/` e `sidebars.js`
 
 ---
 
@@ -430,11 +387,16 @@ E, mais abaixo, dentro de `footer`:
 copyright: `Copyright © ${new Date().getFullYear()} Nimbus. Built with Docusaurus.`,
 ```
 
-**2. Confirme a pegadinha do Passo 5**
+**2. Confirme o hot reload da config**
 
-Salve **sem** parar o servidor e olhe o navegador. Nada muda — o
-`docusaurus.config.js` não tem hot reload. Agora `Ctrl+C`, `npm start`, e o nome
-aparece na navbar e na aba do navegador.
+Salve **sem** parar o servidor e olhe o navegador.
+
+👀 "Nimbus" aparece na navbar e na aba do navegador sozinho — sem reiniciar. É a
+tabela do [Passo 3](#o-que-recarrega-sozinho-e-o-que-não): `title` e `tagline`
+são dados, e dados recarregam.
+
+O primeiro reinício obrigatório só vai aparecer no Módulo 06, quando você
+instalar um pacote. O guia avisa na hora.
 
 **3. Ache o que ainda é do template**
 
@@ -469,7 +431,8 @@ git push
 
 Um projeto Docusaurus é uma pasta com conteúdo em Markdown, dois arquivos de
 configuração e um servidor de desenvolvimento. `npm start` é para escrever,
-`npm run build` é para validar e publicar. As pastas geradas ficam fora do
-OneDrive por junction e fora do Git por `.gitignore` — pelo mesmo motivo.
+`npm run build` é para validar e publicar. Três pastas são geradas
+(`node_modules`, `.docusaurus`, `build`) e por isso ficam fora do Git — um comando
+reconstrói qualquer uma delas. E o hot reload cobre dados, não o pipeline de build.
 
 ➡️ Próximo: [Módulo 03 — Sua primeira página](./03-first-page.md)

@@ -24,9 +24,8 @@ npm install
 O passo 2 é o mais subestimado: **o `npm start` ignora links quebrados**. Muito
 "problema misterioso" aparece nomeado e explicado no `npm run build`.
 
-⚠️ Se você usa junctions (Módulo 02), o passo 3 apaga junto o junction de
-`node_modules\.cache`. Recrie-o **depois** do `npm install` — veja
-[Os junctions sumiram depois de um `npm install`](#os-junctions-sumiram-depois-de-um-npm-install).
+💡 Se o erro for daqueles que **não fazem sentido**, pule direto para
+[Problemas causados pelo OneDrive](#problemas-causados-pelo-onedrive).
 
 ---
 
@@ -141,61 +140,14 @@ caminho é reescrever o histórico — mais trabalho do que vale a pena agora.
 
 **Não é erro.** É o `core.autocrlf true` fazendo o trabalho dele. Pode ignorar.
 
-### `npm warn reify Removing non-directory ...\node_modules`
+### `npm warn deprecated <pacote>@<versão>`
 
-**Não é erro, e não tem conserto.** É o npm avisando que encontrou um
-`node_modules` que não era um diretório real — um junction — e o apagou para criar
-uma pasta de verdade no lugar.
+**Não é erro.** É uma dependência **indireta**: algum pacote do Docusaurus depende
+dela, não você.
 
-O npm faz isso de propósito: ele verifica se `node_modules` é um diretório real
-antes de extrair os pacotes, e remove qualquer coisa que não seja. Está registrado
-no [issue #3669 do npm](https://github.com/npm/cli/issues/3669), aberto há anos, e
-o caso de uso citado lá é exatamente este — gente tentando tirar o `node_modules`
-do OneDrive e do Dropbox.
-
-**A consequência:** `node_modules` sincroniza mesmo. É um custo de volume (~250 MB,
-30 mil arquivos), não de correção — as pastas que quebram o build são as de cache,
-e essas o npm não gerencia. Veja o
-[Módulo 02, Passo 2](./02-creating-the-site.md#e-o-node_modules).
-
-**O que fazer:** confirme que os outros junctions sobreviveram.
-
-```powershell
-Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
-Get-Item "node_modules\.cache" -Force -ErrorAction SilentlyContinue | Select-Object Name, LinkType
-```
-
-### Os junctions sumiram depois de um `npm install`
-
-**Sintoma:** o comando acima não lista `.docusaurus`, `build` ou
-`node_modules\.cache` como `Junction` — e os builds voltaram a quebrar de forma
-aleatória.
-
-Acontece quando você apaga `node_modules` inteiro para reinstalar do zero: o
-junction de `.cache` vai junto.
-
-**Conserto** — dentro de `website`, depois do `npm install`:
-
-```powershell
-$local = "C:\dev\docusaurus-local\website"
-New-Item -ItemType Directory -Force "$local\.docusaurus", "$local\build", "$local\node_modules-cache" | Out-Null
-foreach ($p in @(".docusaurus", "build", "node_modules\.cache")) {
-  if (Test-Path $p) { Remove-Item -Recurse -Force $p }
-}
-New-Item -ItemType Junction -Path ".docusaurus"        -Target "$local\.docusaurus"        | Out-Null
-New-Item -ItemType Junction -Path "build"              -Target "$local\build"              | Out-Null
-New-Item -ItemType Junction -Path "node_modules\.cache" -Target "$local\node_modules-cache" | Out-Null
-Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
-```
-
-⚠️ Repare que o `node_modules` **não** está na lista. Ele nunca vai ser junction —
-veja o item anterior.
-
-💻 Confira sempre com:
-
-```powershell
-Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
-```
+Aviso de `deprecated` só te diz respeito quando é um pacote que **você** instalou
+com `npm install`. Nos outros casos, quem tem que atualizar é o autor do pacote
+que depende dele. Ignore.
 
 ---
 
@@ -386,66 +338,136 @@ espaço) não funciona mais.
 
 ---
 
-## Erros de servidor e build
+## Problemas causados pelo OneDrive
 
-### `Panic occurred at runtime` / `ModuleGraphModule ... not found` (rspack)
+O projeto mora numa pasta sincronizada, e isso tem um custo conhecido. Esta seção
+existe porque o [Módulo 00](./00-environment-setup.md#a-decisão) escolheu **setup
+simples com conserto documentado**, em vez de prevenção complicada. Aqui está o
+conserto.
+
+### Como reconhecer
+
+O sintoma característico é o **erro que não faz sentido**:
+
+- *Panic* do rspack, com caminho de arquivo `.rs` no meio
+- Arquivo "não encontrado" que você está vendo na tela
+- Build que funciona, você não muda nada, e falha na próxima execução
+- Erro que some sozinho quando você tenta de novo
+- Erro que aponta para um arquivo dentro de `.docusaurus` ou `node_modules`
+
+A causa é sempre a mesma: o bundler grava um arquivo de cache e o relê
+milissegundos depois. Se o OneDrive tocar no arquivo nesse intervalo — para ler,
+enviar ou substituir por um placeholder — o bundler encontra algo diferente do
+que gravou.
+
+⚠️ **Não é o seu código.** Se o erro fala de você (link quebrado, MDX inválido,
+`className`), procure na seção certa deste módulo. Esta aqui é para quando o erro
+fala da ferramenta.
+
+### O exemplo mais comum
 
 ```
 panicked at crates\rspack_core\src\module_graph\mod.rs:
 ModuleGraphModule with identifier ...cssExtractHmr.js not found
 ```
 
-**Causa:** bug do rspack no hot reload, quase sempre disparado por cache
-persistente inconsistente. **Pastas sincronizadas são a causa mais comum** — a
-sincronização mexe nos arquivos de cache enquanto o bundler os usa.
+O template do Docusaurus 3 vem com `future: {v4: true}`, que liga o rspack e o
+cache persistente dele por padrão. É esse cache que entra em corrida com a
+sincronização.
 
-O template do Docusaurus 3 vem com `future: {v4: true}`, que liga o rspack por
-padrão. Por isso este erro ficou comum.
+### A escada de correção
 
-**Conserto, em ordem:**
+Suba um degrau por vez. A maioria dos casos morre no primeiro.
 
-1. Limpar o cache:
+**1. Limpe o cache**
 
-   ```powershell
-   npm run clear
-   ```
+```powershell
+npm run clear
+npm start
+```
 
-2. Confirmar que os junctions de cache existem (é a solução de verdade):
+Resolve o episódio isolado. Se voltar em dias diferentes, suba.
 
-   ```powershell
-   Get-ChildItem -Force | Where-Object { $_.LinkType } | Format-Table Name, LinkType
-   Get-Item "node_modules\.cache" -Force -ErrorAction SilentlyContinue | Select-Object Name, LinkType
-   ```
+**2. Pause a sincronização enquanto trabalha**
 
-   Você precisa ver `.docusaurus`, `build` e `node_modules\.cache` como
-   `Junction`. O `node_modules` em si **não** é junction e não deve ser — veja
-   [Os junctions sumiram depois de um `npm install`](#os-junctions-sumiram-depois-de-um-npm-install).
+Ícone da nuvem na bandeja → **Pausar sincronização → 2 horas**.
 
-3. Se voltar mesmo com junctions, desligue o cache persistente:
+Se o problema some com a sincronização pausada, você acabou de **confirmar o
+diagnóstico**. Isso vale mais que o alívio: agora você sabe.
 
-   ```js
-   future: {
-     v4: true,
-     faster: {
-       rspackPersistentCache: false,
-     },
-   },
-   ```
+**3. Desligue o cache persistente**
 
-4. Se ainda voltar, volte para o webpack — mais lento, mais estável:
+📄 Em `docusaurus.config.js`:
 
-   ```js
-   future: {
-     v4: true,
-     faster: {
-       rspackBundler: false,
-       rspackPersistentCache: false,
-     },
-   },
-   ```
+```js
+future: {
+  v4: true,
+  faster: {
+    rspackPersistentCache: false,
+  },
+},
+```
+
+Isso ataca a causa: sem cache persistente, não há arquivo antigo para o OneDrive
+corromper entre execuções. Custo: rebuilds um pouco mais lentos.
+
+⚠️ Reinicie o `npm start` — mexer em `future` é uma das mudanças que não
+recarregam sozinhas.
+
+**4. Volte para o webpack**
+
+Mais lento, mais tolerante:
+
+```js
+future: {
+  v4: true,
+  faster: {
+    rspackBundler: false,
+    rspackPersistentCache: false,
+  },
+},
+```
 
 > `rspackPersistentCache` exige `rspackBundler: true`. Se desligar o bundler,
 > desligue os dois.
+
+**5. Mova o projeto para fora do OneDrive**
+
+O conserto definitivo. A partir do Módulo 01 é barato, porque o GitHub tem tudo:
+
+```powershell
+cd C:\dev
+git clone https://github.com/marcelosub1993/docusaurus-learning.git
+cd docusaurus-learning\website
+npm install
+```
+
+Você passa a trabalhar em `C:\dev\docusaurus-learning`, e o backup continua sendo
+o Git. A pasta antiga no OneDrive pode ser apagada depois que você confirmar que
+o novo clone roda — e que **não havia nada não commitado** nela:
+
+```powershell
+cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+git status
+```
+
+👀 Tem que responder `working tree clean`. Se não responder, commite e faça push
+antes de apagar qualquer coisa.
+
+### A sincronização está lenta ou a cota estourou
+
+Não é erro, é volume: `node_modules` tem ~30 mil arquivos e ~250 MB, e `build`
+é regravada inteira a cada `npm run build`.
+
+**Mitigação:** pause a sincronização antes de `npm install` e de builds em série.
+
+**Conserto:** o degrau 5 acima. Não existe meio-termo bom — eu tentei três
+técnicas para excluir só essas pastas da sincronização e nenhuma se sustenta
+(o npm desfaz, o Docusaurus apaga, ou você recria à mão para sempre).
+
+---
+
+## Erros de servidor e build
 
 ### `Port 3000 is already in use`
 
@@ -466,10 +488,26 @@ Stop-Process -Id <NUMERO> -Force
 
 ### Mudei o `docusaurus.config.js` e nada aconteceu
 
-**Causa:** esse arquivo não tem hot reload.
+**Causa:** depende do que você mudou. O config **tem** hot reload para dados —
+`title`, `tagline`, `themeConfig` inteiro. Mas o servidor não consegue se
+reconfigurar, então tudo que mexe no pipeline de build exige subir de novo:
 
-**Conserto:** `Ctrl+C` e `npm start` de novo. Vale também para `sidebars.js` em
-alguns casos, e sempre depois de instalar um pacote.
+- instalar um pacote (`npm install ...`)
+- adicionar ou remover `plugins`, `themes`, `presets`
+- opções de plugin dentro do `presets` (as do blog e das docs, por exemplo)
+- `markdown`, `future`, `i18n`
+- `babel.config.js`
+
+**Conserto:** `Ctrl+C` e `npm start`.
+
+⚠️ **Se o config parou de recarregar completamente**, verifique se ele termina com
+`export default config;`. Com `module.exports = config;` (CommonJS) o hot reload
+do config quebra — é o [issue #9698](https://github.com/facebook/docusaurus/issues/9698),
+ainda aberto. O template usa ESM; se você converteu para CommonJS, converta de
+volta.
+
+Veja a tabela completa no
+[Módulo 02](./02-creating-the-site.md#o-que-recarrega-sozinho-e-o-que-não).
 
 ### `ReferenceError: window is not defined`
 

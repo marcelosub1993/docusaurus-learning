@@ -357,11 +357,15 @@ como você se confunde daqui a seis meses.
 Agora o teste que ensina o mecanismo:
 
 1. Feche a barra no navegador (clique no ×)
-2. Recarregue — ela não volta
-3. 📄 Troque o `id` para `release_2_1`
-4. Reinicie o `npm start` e recarregue
+2. Recarregue a página — ela não volta
+3. 📄 Troque o `id` para `release_2_1` e salve
+4. Recarregue a página de novo
 
 👀 Ela voltou. Agora você entende para que serve o `id`.
+
+Repare que você não precisou reiniciar o servidor — `announcementBar` está no
+`themeConfig`, que recarrega sozinho. Mas **precisou recarregar a página**, porque
+a decisão de mostrar ou esconder é lida do armazenamento do navegador na carga.
 
 **5. Um cartão social próprio**
 
