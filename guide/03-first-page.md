@@ -112,8 +112,15 @@ o título da página é "Installing Nimbus".
 | `sidebar_position` | Ordem no menu (menor primeiro) | `sidebar_position: 1` |
 | `description` | Resumo para busca e preview de link | `description: Requirements and...` |
 | `slug` | Muda a URL | `slug: /get-started` |
-| `id` | Muda o identificador interno | `id: install-nimbus` |
+| `id` | Muda o identificador interno — **e a URL junto** | `id: install-nimbus` |
 | `tags` | Etiquetas, com página de listagem própria | `tags: [setup]` |
+
+💡 **Sobre `tags`:** funciona já, e cada tag ganha uma página em
+`/docs/tags/<tag>`. Mas o Docusaurus aceita qualquer palavra que você escrever, e
+avisa no terminal que ela não está declarada — é assim que o vocabulário de tags
+de um site vira bagunça (`setup`, `Setup`, `install`, `installation` convivendo).
+O [Módulo 10](./10-blog-and-pages.md#e-nas-docs) ensina a declará-las num
+`tags.yml`. Até lá, use com moderação ou deixe para depois.
 
 ⚠️ **O front matter é YAML, e YAML se importa com espaços.** `title:Installation`
 (sem espaço depois dos dois-pontos) quebra o build. Valores com `:` no meio
@@ -125,17 +132,74 @@ precisam de aspas: `title: "Nimbus: the basics"`.
 
 Estes dois causam confusão, então vale parar aqui.
 
-**Sem nada:** arquivo `docs/installation.mdx` → id `installation`, URL
-`/docs/installation`.
+A regra que explica tudo, e que quase nenhum tutorial diz:
 
-**Com `slug: /get-started`:** o id continua `installation`, mas a URL vira
-`/get-started` — a barra inicial tira a página de dentro de `/docs/`. Sem barra
-(`slug: get-started`), a URL vira `/docs/get-started`.
+> **A URL não vem do nome do arquivo. Ela vem do `slug`, e o `slug` cai no `id`
+> quando você não informa. O `id`, por sua vez, cai no nome do arquivo.**
 
-**Com `id: install-nimbus`:** a URL não muda, mas o nome que você usa no
-`sidebars.js` passa a ser `install-nimbus`, não `installation`.
+É uma cascata de três degraus:
 
-⚠️ **Este é o erro nº 1 de quem começa.** Você define `id:` no front matter,
+```
+nome do arquivo  →  id  →  slug  →  URL
+                    ↑       ↑
+              front matter  front matter
+```
+
+Cada front matter interrompe a cascata no seu degrau. Na prática, para
+`docs/installation.mdx`:
+
+| Front matter | id | URL |
+|---|---|---|
+| *(nada)* | `installation` | `/docs/installation` |
+| `id: install-nimbus` | `install-nimbus` | `/docs/install-nimbus` ← **mudou** |
+| `slug: get-started` | `installation` | `/docs/get-started` |
+| os dois juntos | `install-nimbus` | `/docs/get-started` ← o `slug` ganha |
+
+Repare na segunda linha: **`id` também muda a URL.** É o efeito colateral que
+pega todo mundo, porque o nome do campo não sugere isso.
+
+### O `/docs/` não sai nunca
+
+Repare que **todas** as URLs da tabela começam com `/docs/`. Isso não é
+coincidência, e é o segundo mal-entendido comum:
+
+> **O `slug` só controla o caminho *dentro* de `/docs/`. Nenhum valor de `slug`
+> tira a página de lá.**
+
+Quem define esse prefixo é o `routeBasePath` do plugin de docs, e ele vale para a
+documentação inteira, não para uma página. Se você quiser as docs na raiz do site,
+é `routeBasePath: '/'` na configuração — tudo ou nada.
+
+E a barra inicial do `slug`? Ela existe, mas quer dizer outra coisa:
+
+| `slug` | Significa | Para `docs/installation.mdx` | Para `docs/faq/licensing.mdx` |
+|---|---|---|---|
+| `get-started` | Relativo **à pasta do arquivo** | `/docs/get-started` | `/docs/faq/get-started` |
+| `/get-started` | Relativo **à raiz de `docs/`** | `/docs/get-started` | `/docs/get-started` |
+
+⚠️ Nas páginas que estão **na raiz de `docs/`**, as duas formas dão exatamente o
+mesmo resultado — a pasta do arquivo já *é* a raiz. Se você testar a diferença no
+`installation.mdx`, vai concluir que a barra não faz nada.
+
+A diferença só aparece em arquivo dentro de subpasta, e é aí que ela é útil: a
+barra inicial **escapa da pasta**. É o que o exercício deste módulo faz com o FAQ.
+
+⚠️ O `id` **não pode conter barra**. `id: guides/install` derruba o build com
+`Document id "guides/install" cannot include slash`. A pasta já entra no id
+sozinha: `docs/faq/licensing.mdx` com `id: license` vira o id `faq/license`.
+
+### Qual usar, e quando
+
+| Objetivo | Use |
+|---|---|
+| Encurtar ou fixar a URL pública | `slug` |
+| Encurtar o nome usado no `sidebars.js` | `id` |
+| Só renomear a página no menu | `sidebar_label` |
+
+💡 **Na dúvida, use `slug` e não mexa no `id`.** O `slug` faz uma coisa só e diz o
+que faz. O `id` faz duas, e é aí que a confusão nasce.
+
+⚠️ **O erro nº 1 de quem começa** vem daqui: você define `id:` no front matter,
 depois escreve `'installation'` no `sidebars.js`, e o build falha com:
 
 ```
@@ -146,14 +210,37 @@ These sidebar document ids do not exist:
 
 A mensagem lista os ids válidos logo abaixo. Leia essa lista — a resposta está lá.
 
-💻 Teste você mesmo agora, enquanto é barato: adicione `id: install-nimbus` ao
-front matter, salve, e olhe o terminal do `npm start`.
+💻 Teste a cascata você mesmo agora, enquanto é barato. 📄 Adicione ao front
+matter de `installation.mdx`:
 
-👀 Nada quebra — porque a sidebar ainda é `autogenerated`, que descobre os ids
-sozinha. O erro só aparece quando você assume o controle do `sidebars.js`, no
-Módulo 07. Guarde esta página na memória para quando isso acontecer.
+```mdx
+id: install-nimbus
+```
 
-📄 Depois **remova** o `id:`. Não vamos precisar dele.
+👀 Salve e olhe a barra de endereço: a página que estava em `/docs/installation`
+agora está em `/docs/install-nimbus`, e o link antigo dá **404**.
+
+📄 Agora acrescente também:
+
+```mdx
+slug: get-started
+```
+
+👀 A URL vira `/docs/get-started`. O `slug` ganhou do `id`.
+
+💻 E confirme o que a tabela acima disse: 📄 troque para `slug: /get-started`, com
+barra.
+
+👀 **Nada muda** — continua `/docs/get-started`. Como o arquivo está na raiz de
+`docs/`, "relativo à pasta" e "relativo à raiz de `docs/`" são o mesmo lugar. E
+nem com a barra a página sai de `/docs/`.
+
+📄 Depois **remova os dois campos**. Não vamos precisar deles nesta página, e a
+URL volta a ser `/docs/installation`.
+
+> **Por que nada quebrou no terminal?** Porque a sidebar ainda é `autogenerated`,
+> que descobre os ids sozinha. O erro do `sidebars.js` só aparece no Módulo 07,
+> quando você assumir o controle do menu. Guarde esta página para lá.
 
 ---
 
@@ -285,16 +372,70 @@ URL. Guarde isso — é a forma recomendada, e o
 [Módulo 04](./04-writing-markdown.md#passo-7--links-a-parte-importante) explica
 por quê.
 
-💻 Valide antes de seguir. Pare o servidor (`Ctrl+C`) e rode:
+### Você acabou de quebrar dois links — conserte agora
+
+⚠️ Este passo tem uma consequência que não é óbvia: **`/docs/intro` deixou de
+existir**. E o template do Docusaurus aponta para esse endereço em dois lugares,
+escritos como URL à mão.
+
+Se você rodar `npm run build` agora, ele falha com uma lista enorme:
+
+```
+Docusaurus found broken links!
+Frequent broken links are linking to:
+- /docs/intro
+```
+
+A lista parece assustadora — dezenas de páginas — mas são **dois** links só. Um
+deles está no rodapé, que aparece em toda página do site; por isso ele é contado
+uma vez por página.
+
+💡 A mensagem do Docusaurus até avisa: *"Maybe those broken links appear on all
+pages through your site layout? We recommend that you check your theme
+configuration"*. Quando um link quebrado aparecer em todo lugar, olhe navbar e
+rodapé primeiro.
+
+📄 **Conserto 1 — o rodapé.** Em `docusaurus.config.js`, dentro de `footer`,
+procure `label: 'Tutorial'`:
+
+```js
+{
+  label: 'Tutorial',
+  to: '/docs/intro',     // ← troque para '/docs/'
+},
+```
+
+📄 **Conserto 2 — o botão da home.** Em `src/pages/index.js`, procure o `<Link>`
+do banner:
+
+```jsx
+<Link
+  className="button button--secondary button--lg"
+  to="/docs/intro">        {/* ← troque para "/docs/" */}
+  Docusaurus Tutorial - 5min ⏱️
+</Link>
+```
+
+Aproveite e troque o texto do botão para algo seu, como `Get started - 5min ⏱️`.
+
+💻 **Agora sim, valide.** Pare o servidor (`Ctrl+C`) e rode:
 
 ```powershell
 npm run build
 ```
 
-👀 `[SUCCESS] Generated static files in "build".` Se falhar, a mensagem diz qual
-arquivo e qual linha — quase sempre é indentação de YAML no front matter.
+👀 `[SUCCESS] Generated static files in "build".`
+
+Se ainda falhar, leia a lista: ela diz a página de origem de cada link. Se falhar
+por outro motivo, quase sempre é indentação de YAML no front matter.
 
 💻 Suba de novo: `npm start`
+
+> **A lição, que vale mais que o conserto:** mudar o endereço de uma página quebra
+> quem apontava para ela. Links escritos como URL à mão (`to: '/docs/intro'`) não
+> avisam quando você renomeia — só somem. Links por caminho de arquivo
+> (`./installation.mdx`) são validados no build. É por isso que o Módulo 04
+> insiste tanto nisso.
 
 ---
 
@@ -314,14 +455,15 @@ cd website
 
 ## ✅ Checkpoint
 
-- [ ] Você tem 4 páginas: Overview, Installation, Basic setup, Advanced setup
-- [ ] O menu lateral está na ordem que você quis
-- [ ] A categoria "Configuration" já vem expandida
-- [ ] Clicar em "Configuration" abre uma página de índice com cards
-- [ ] `/docs/` abre a Overview (por causa do `slug: /`)
-- [ ] Você sabe explicar a diferença entre `id`, `slug` e `sidebar_label`
-- [ ] `npm run build` passa
-- [ ] Commit feito
+- [x] Você tem 4 páginas: Overview, Installation, Basic setup, Advanced setup
+- [x] O menu lateral está na ordem que você quis
+- [x] A categoria "Configuration" já vem expandida
+- [x] Clicar em "Configuration" abre uma página de índice com cards
+- [x] `/docs/` abre a Overview (por causa do `slug: /`)
+- [x] Você sabe explicar a diferença entre `id`, `slug` e `sidebar_label`
+- [x] Nenhum `/docs/intro` sobrou no rodapé nem no botão da home
+- [x] `npm run build` passa **sem** a lista de links quebrados
+- [x] Commit feito
 
 ---
 
@@ -364,10 +506,24 @@ Dica de `position`: a Configuration está em `2`. Escolha um número maior.
 
 **3. Dê uma URL curta a uma das páginas**
 
-A pergunta de licenciamento é a mais compartilhada. Faça a URL dela ser
-`/faq-licensing`, direto na raiz do site, sem o `/docs/` na frente.
+A pergunta de licenciamento é a mais compartilhada, e por padrão ela mora em
+`/docs/faq/licensing` — longo demais para colar num chat.
 
-Releia o Passo 4 se travar: a diferença está na barra inicial.
+Faça a URL dela ser **`/docs/faq-licensing`**: ainda dentro de `/docs/`, mas
+**fora da pasta `faq/`**.
+
+Aqui a barra inicial finalmente importa, porque o arquivo está numa subpasta:
+
+| O que você escrever | URL resultante |
+|---|---|
+| `slug: faq-licensing` | `/docs/faq/faq-licensing` — ficou pior |
+| *(o que você quer)* | `/docs/faq-licensing` |
+
+Releia [O `/docs/` não sai nunca](#o-docs-não-sai-nunca) se travar.
+
+⚠️ Repare que a página **sai da pasta na URL, mas continua na pasta no menu.** A
+sidebar é montada pela estrutura de arquivos, não pela URL — os dois são
+independentes, e isso é útil.
 
 **4. Ligue o FAQ à Overview**
 
@@ -388,10 +544,12 @@ npm run build
 
 - O menu mostra, nesta ordem: Overview, Installation, Configuration, Frequently
   asked questions
-- `http://localhost:3000/faq-licensing` abre a página de licenciamento
+- `http://localhost:3000/docs/faq-licensing` abre a página de licenciamento
 - `http://localhost:3000/docs/faq/licensing` dá 404 — a página **mudou** de
   endereço, não ganhou um segundo
-- O link na Overview funciona e leva para `/faq-licensing`
+- No menu lateral, ela continua dentro de "Frequently asked questions", mesmo com
+  a URL fora da pasta
+- O link na Overview funciona e leva para `/docs/faq-licensing`
 - `npm run build` termina com SUCCESS
 - `git log --oneline` mostra o commit do exercício
 

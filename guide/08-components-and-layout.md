@@ -292,7 +292,7 @@ import {CardGrid, Card} from '@site/src/components/Cards';
   <Card icon="⚙️" title="Configuration" to="/docs/configuration/basic-setup">
     The three settings you need first.
   </Card>
-  <Card icon="❓" title="FAQ" to="/faq-licensing">
+  <Card icon="❓" title="FAQ" to="/docs/faq-licensing">
     Licensing, performance and data retention.
   </Card>
 </CardGrid>

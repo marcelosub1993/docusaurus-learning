@@ -185,6 +185,56 @@ o build — só gera o aviso do `onInlineTags`. O Docusaurus cria a tag na hora.
 `releases`, `Release` e `new-version` convivendo. Declare no arquivo e use só o
 que está lá.
 
+#### E nas docs
+
+O mesmo mecanismo existe na documentação, com o arquivo em outro lugar — é o que
+o [Módulo 03](./03-first-page.md#os-campos-que-você-mais-vai-usar) deixou pendente.
+
+| | Blog | Docs |
+|---|---|---|
+| Arquivo de declaração | `blog/tags.yml` | `docs/tags.yml` |
+| Já vem no template? | ✅ Sim | ❌ Não — você cria |
+| URL da tag | `/blog/tags/<tag>` | `/docs/tags/<tag>` |
+| Aviso de tag não declarada | `onInlineTags` do blog | `onInlineTags` das docs |
+
+📄 Crie `docs/tags.yml`:
+
+```yml
+setup:
+  label: Setup
+  description: Installing and configuring Nimbus
+
+troubleshooting:
+  label: Troubleshooting
+  description: Diagnosing problems
+
+reference:
+  label: Reference
+  description: Syntax and command reference
+```
+
+📄 E use numa página, por exemplo em `docs/installation.mdx`:
+
+```mdx
+---
+tags: [setup]
+---
+```
+
+👀 Acesse `/docs/tags` — existe uma página de índice listando todas as tags, e
+cada uma leva às páginas que a usam.
+
+⚠️ **Tag de doc e tag de blog são vocabulários separados.** Uma `release`
+declarada no `blog/tags.yml` não existe para as docs, e vice-versa. Se quiser os
+dois iguais, você duplica — não há como compartilhar um arquivo só.
+
+> **Vale a pena usar tags nas docs?** Menos do que no blog. Post é conteúdo solto
+> ordenado por data, e a tag é a principal forma de encontrar assunto. Documentação
+> já tem sidebar, breadcrumb e busca fazendo esse trabalho. Use tags nas docs
+> quando um assunto **atravessa** a hierarquia do menu — algo como "tudo que
+> menciona proxy", espalhado por cinco seções diferentes. Para o resto, a sidebar
+> resolve melhor.
+
 ### Passo 7 — Configurar o blog
 
 📄 Em `docusaurus.config.js`, dentro do preset, na chave `blog`:
@@ -327,12 +377,13 @@ Três coisas novas:
 1. `HomepageHeader` — a faixa colorida do topo, definida no próprio arquivo
 2. `<HomepageFeatures />` — as três colunas, em `src/components/HomepageFeatures/`
 
-💻 Comece pequeno: 📄 no `index.js`, mude o texto do botão e o destino dele. O
-template aponta para `/docs/intro`, que não existe mais — você mudou o slug dessa
-página para `/` no Módulo 03.
+O destino do botão você já consertou no
+[Módulo 03](./03-first-page.md#você-acabou-de-quebrar-dois-links--conserte-agora),
+quando o `slug: /` derrubou o `/docs/intro`. O que falta aqui é o resto do texto.
 
-⚠️ Esse é um link quebrado esperando para acontecer. Rode `npm run build` para
-confirmar que ele te avisa.
+💻 Comece pequeno: 📄 no `index.js`, troque o título e o subtítulo da faixa
+colorida pelos do Nimbus. Eles vêm de `siteConfig.title` e `siteConfig.tagline`,
+que você já preencheu — então talvez não haja nada a fazer além de conferir.
 
 📄 Depois abra `src/components/HomepageFeatures/index.js`. Ele tem uma lista:
 
@@ -383,6 +434,7 @@ cd website
 ## ✅ Checkpoint
 
 - [ ] A pasta `blog/` tem só os seus posts, `authors.yml` e `tags.yml`
+- [ ] `docs/tags.yml` existe e `/docs/tags` lista as tags da documentação
 - [ ] Nenhum aviso de autor, tag ou truncate no terminal
 - [ ] Existe uma página de autor em `/blog/authors/marcelo`
 - [ ] Uma página em Markdown em `src/pages/`

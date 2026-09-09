@@ -42,8 +42,8 @@ com `Can't find any sidebar with id "tutorialSidebar"` se você esquecer.
 ## Passo 2 — Descobrir os ids
 
 Antes de escrever qualquer coisa à mão, você precisa saber os nomes que o
-Docusaurus usa internamente. O id vem do **caminho do arquivo dentro de `docs/`,
-sem a extensão**.
+Docusaurus usa internamente. Como nenhuma página sua tem `id:` no front matter, o
+id de todas vem do **caminho do arquivo dentro de `docs/`, sem a extensão**.
 
 | Arquivo | id |
 |---|---|
@@ -54,9 +54,22 @@ sem a extensão**.
 | `docs/faq/licensing.mdx` | `faq/licensing` |
 
 ⚠️ **O `slug` não muda o id.** A página de licenciamento tem `slug: /faq-licensing`,
-mas o id dela continua `faq/licensing`. Slug é URL; id é o nome interno. Confundir
-os dois é o erro nº 1 deste módulo — o [Módulo 03, Passo 4](./03-first-page.md#passo-4--entendendo-slug-e-id)
-já tinha avisado.
+mas o id dela continua `faq/licensing`. Slug é URL; id é o nome interno.
+
+⚠️ **Mas o `id` muda a URL.** A relação não é simétrica, e é a
+[cascata do Módulo 03](./03-first-page.md#passo-4--entendendo-slug-e-id):
+`arquivo → id → slug → URL`. Se você um dia puser `id:` numa página para encurtar
+o nome aqui no `sidebars.js`, saiba que a URL dela muda junto — a menos que você
+fixe a URL com `slug`.
+
+💻 Não confie na memória. Peça a lista de ids ao próprio Docusaurus:
+
+```powershell
+npm run build
+```
+
+👀 Se algum id estiver errado, a mensagem de erro imprime **todos os ids válidos**.
+É a fonte da verdade, e sai de graça.
 
 ---
 
@@ -372,7 +385,7 @@ footer: {
     {
       title: 'Support',
       items: [
-        {label: 'Frequently asked questions', to: '/faq-licensing'},
+        {label: 'Frequently asked questions', to: '/docs/faq-licensing'},
         {label: 'Report an issue', href: 'https://github.com/marcelosub1993/docusaurus-learning/issues'},
       ],
     },

@@ -230,8 +230,30 @@ uma página e esqueceu do rodapé.
 
 **4. Link do template que sobrou**
 
-O `src/pages/index.js` aponta para `/docs/intro`. Se você deu `slug: /` ao
-`intro.mdx`, essa rota não existe mais.
+O template aponta para `/docs/intro` em **dois** lugares: o botão do banner em
+`src/pages/index.js` e o item "Tutorial" do `footer`, no `docusaurus.config.js`.
+Se você deu `slug: /` ao `intro.mdx` ([Módulo 03](./03-first-page.md#você-acabou-de-quebrar-dois-links--conserte-agora)),
+essa rota não existe mais e os dois quebram.
+
+### A lista de links quebrados tem dezenas de linhas
+
+**Não são dezenas de links.** Quase sempre é **um** link, num elemento que aparece
+em todas as páginas — o rodapé ou a navbar — e o Docusaurus conta uma ocorrência
+por página.
+
+O próprio erro avisa:
+
+```
+It looks like some of the broken links we found appear in many pages of your site.
+Maybe those broken links appear on all pages through your site layout?
+We recommend that you check your theme configuration for such links
+(particularly, theme navbar and footer).
+```
+
+**Como ler a saída:** ignore a lista exaustiva no começo e procure a seção
+`Frequent broken links are linking to:`. Ela resume os destinos distintos — é o
+que você realmente precisa consertar. Uma linha ali costuma virar 20 na lista de
+baixo.
 
 > **Não resolva desligando.** `onBrokenLinks: 'ignore'` faz o erro sumir e o site
 > quebrar para o usuário. O erro está te protegendo.
@@ -717,7 +739,7 @@ mas cada um aponta para uma prática melhor.
 | Aviso | O que fazer |
 |---|---|
 | `blog authors ... are not defined in "authors.yml"` | Declare o autor ([Módulo 10](./10-blog-and-pages.md#passo-5--autores)) |
-| `Tags [x] used in ... are not defined in tags.yml` | Declare a tag ([Módulo 10](./10-blog-and-pages.md#passo-6--tags)) |
+| `Tags [x] used in ... are not defined in tags.yml` | Declare a tag em `blog/tags.yml` ou `docs/tags.yml`, conforme onde ela foi usada ([Módulo 10](./10-blog-and-pages.md#passo-6--tags)) |
 | `blog posts without truncation markers` | Adicione `{/* truncate */}` no post |
 | `Docs markdown link couldn't be resolved` | Um link `./file.mdx` apontando para arquivo inexistente |
 | `warning: LF will be replaced by CRLF` | Nada. É o Git normalizando as quebras de linha. |

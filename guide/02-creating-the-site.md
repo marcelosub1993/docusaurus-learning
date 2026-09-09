@@ -373,15 +373,40 @@ git push
 
 **1. Dê nome ao site**
 
-📄 Em `website/docusaurus.config.js`, troque três campos. Os valores do template
-são `'My Site'`, `'Dinosaurs are cool'` e `'My Project, Inc.'`:
+⚠️ Atenção a uma pegadinha do template: **`'My Site'` aparece duas vezes no
+arquivo**, e os dois campos são independentes. Trocar um não troca o outro.
+
+| Onde | O que controla |
+|---|---|
+| `title`, no topo do arquivo | A aba do navegador, o `<title>` do HTML, o cartão social |
+| `themeConfig.navbar.title` | Só o texto ao lado do logo, na barra de cima |
+
+Eles são separados de propósito: é comum o site se chamar "Nimbus Documentation"
+e a navbar mostrar só "Nimbus", que é curto e cabe no celular.
+
+📄 **No topo do arquivo** — os valores do template são `'My Site'` e
+`'Dinosaurs are cool'`:
 
 ```js
 title: 'Nimbus',
 tagline: 'Sync your data without thinking about it',
 ```
 
-E, mais abaixo, dentro de `footer`:
+📄 **Dentro de `themeConfig.navbar`** — mais dois `'My Site'`:
+
+```js
+navbar: {
+  title: 'Nimbus',
+  logo: {
+    alt: 'Nimbus logo',
+    src: 'img/logo.svg',
+  },
+```
+
+O `alt` é o texto que leitores de tela anunciam e que aparece se a imagem falhar.
+Deixar "My Site Logo" ali é o tipo de sobra que ninguém vê até alguém precisar.
+
+📄 **Dentro de `footer`**, no fim:
 
 ```js
 copyright: `Copyright © ${new Date().getFullYear()} Nimbus. Built with Docusaurus.`,
@@ -391,9 +416,12 @@ copyright: `Copyright © ${new Date().getFullYear()} Nimbus. Built with Docusaur
 
 Salve **sem** parar o servidor e olhe o navegador.
 
-👀 "Nimbus" aparece na navbar e na aba do navegador sozinho — sem reiniciar. É a
-tabela do [Passo 3](#o-que-recarrega-sozinho-e-o-que-não): `title` e `tagline`
-são dados, e dados recarregam.
+👀 "Nimbus" aparece na barra de cima **e** na aba do navegador, sozinho, sem
+reiniciar. É a tabela do [Passo 3](#o-que-recarrega-sozinho-e-o-que-não): esses
+campos são dados, e dados recarregam.
+
+💡 Se a navbar continuou dizendo "My Site", você trocou só o `title` do topo. É
+exatamente a pegadinha do item 1 — volte e troque o `navbar.title` também.
 
 O primeiro reinício obrigatório só vai aparecer no Módulo 06, quando você
 instalar um pacote. O guia avisa na hora.
@@ -406,8 +434,12 @@ instalar um pacote. O guia avisa na hora.
 Select-String -Path "docusaurus.config.js" -Pattern "facebook|My Site|Dinosaurs|My Project"
 ```
 
-👀 Devem sobrar as linhas de `organizationName`, `projectName` e as duas de
-`editUrl`. Deixe como está — o Módulo 12 arruma essas.
+👀 Devem sobrar **só** as linhas de `organizationName`, `projectName` e as duas de
+`editUrl` — todas com `facebook`. Deixe como estão: o Módulo 12 arruma essas.
+
+⚠️ Se ainda aparecer algum `My Site`, é o `navbar.title` ou o `logo.alt` do item
+1. Este comando é a rede de segurança contra a pegadinha — use-o sempre que
+achar que terminou de renomear alguma coisa.
 
 **4. Commite**
 
@@ -421,6 +453,8 @@ git push
 **Como saber que deu certo:**
 
 - A aba do navegador mostra "Nimbus", não "My Site"
+- A barra de cima, ao lado do logo, também mostra "Nimbus"
+- O `Select-String` do item 3 não encontra mais nenhum `My Site`
 - O rodapé não diz mais "My Project, Inc."
 - `npm run build` continua passando
 - `git log --oneline` mostra três commits
