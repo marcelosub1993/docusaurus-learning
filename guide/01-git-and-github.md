@@ -446,12 +446,9 @@ Duas regras que resolvem quase tudo:
 
 ---
 
-## Passo 11 — Branches (quando você precisar)
+## Passo 11 — Branches, e quando começar a usá-las
 
-Enquanto você trabalha sozinho, commitar direto na `main` é perfeitamente aceitável
-— e é o que este guia faz. Mas vale saber o mecanismo, porque o Módulo 12 usa.
-
-Uma branch é uma linha paralela de commits. Você experimenta nela sem tocar na
+Uma branch é uma linha paralela de commits. Você trabalha nela sem tocar na
 `main`, e depois traz de volta.
 
 ```powershell
@@ -463,7 +460,34 @@ git branch -d experiment/dark-theme   # apaga a branch, já incorporada
 ```
 
 Nome de branch segue o mesmo padrão dos arquivos: minúsculas, hífen, inglês.
-`feature/`, `fix/` e `experiment/` como prefixo são convenções comuns.
+`feature/`, `fix/`, `docs/` e `experiment/` como prefixo são convenções comuns.
+
+### A regra deste guia: duas fases
+
+A pergunta "devo trabalhar em branch ou direto na `main`?" tem uma resposta que
+não é gosto pessoal:
+
+> **Branch começa a valer a pena quando quebrar a `main` custa alguma coisa.**
+
+Por isso o guia muda de comportamento no meio do caminho:
+
+| Fase | Como commitar | Por quê |
+|---|---|---|
+| **Módulos 02 a 11** | Direto na `main` | Você é o único autor, cada módulo é uma unidade coerente, e o site ainda não está publicado. Quebrar a `main` custa zero: ninguém vê. |
+| **Módulo 12 em diante** | Branch + Pull Request | O site está no ar. Todo push na `main` **republica o site público**, e um link quebrado deixa de ser um erro no seu terminal para virar um erro que outras pessoas veem. |
+
+O que muda concretamente no Módulo 12: você cria um segundo workflow que roda o
+build **no Pull Request**. Ele mostra o ❌ antes de a `main` ser tocada — e é aí
+que o PR deixa de ser ritual e passa a verificar alguma coisa de verdade.
+
+⚠️ **Não comece a usar branch agora.** Abrir um PR, aprovar você mesmo e mesclar,
+sem nenhum robô olhando e sem site no ar, ensina o gesto e esconde o motivo.
+Quando você abrir o primeiro PR, no Módulo 12, vai ser porque ele resolve um
+problema que você já sentiu na pele.
+
+> **E se eu trabalhar com outra pessoa um dia?** Aí branch + PR passa a valer
+> desde o primeiro commit, mesmo sem CI — porque o custo que aparece é outro:
+> dois autores mexendo na mesma `main` ao mesmo tempo.
 
 ---
 
@@ -557,5 +581,9 @@ Git registra o histórico local; GitHub hospeda uma cópia. O ciclo é
 `add` → `commit` → `push`, e a staging area existe para você separar assuntos.
 Um repositório bom tem README, `.gitignore`, LICENSE, description com topics e um
 histórico que se lê. Arquivos gerados nunca entram — nem no Git, nem no OneDrive.
+
+E branch não é uma questão de gosto: ela passa a valer a pena quando quebrar a
+`main` custa alguma coisa. Até lá — Módulo 11 — você commita direto; do Módulo 12
+em diante, com o site no ar, o caminho é branch + Pull Request.
 
 ➡️ Próximo: [Módulo 02 — Criando o site](./02-creating-the-site.md)

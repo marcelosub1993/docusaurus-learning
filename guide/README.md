@@ -53,7 +53,7 @@ e tags, busca funcionando, componentes React próprios e o site publicado no ar.
 | # | Módulo | Você sai sabendo |
 |---|---|---|
 | 00 | [Preparando o ambiente](./00-environment-setup.md) | Instalar Node, Git e VS Code; deixar a pasta do projeto pronta para funcionar dentro do OneDrive |
-| 01 | [Git e GitHub](./01-git-and-github.md) | Criar o repositório, escrever um bom README, fazer commit e enviar para o GitHub |
+| 01 | [Git e GitHub](./01-git-and-github.md) | Criar o repositório, escrever um bom README, fazer commit, enviar para o GitHub e saber quando usar branch |
 | 02 | [Criando o site](./02-creating-the-site.md) | Gerar o projeto, subir o servidor e entender cada pasta |
 
 ### Conteúdo
@@ -79,7 +79,7 @@ e tags, busca funcionando, componentes React próprios e o site publicado no ar.
 |---|---|---|
 | 10 | [Blog e páginas](./10-blog-and-pages.md) | Posts com autor e tag; páginas fora da documentação |
 | 11 | [Recursos avançados](./11-advanced-features.md) | Busca, diagramas Mermaid, versionamento e tradução |
-| 12 | [Build e publicação](./12-build-and-deploy.md) | `url` e `baseUrl`, GitHub Pages e publicação automática |
+| 12 | [Build e publicação](./12-build-and-deploy.md) | `url` e `baseUrl`, GitHub Pages, publicação automática e o fluxo de branch + Pull Request |
 
 ### Consulta
 

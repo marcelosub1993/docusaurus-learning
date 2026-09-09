@@ -51,7 +51,7 @@ a checkpoint, and an exercise. Modules build on each other in order.
 | # | Module | Topic |
 | --- | --- | --- |
 | 00 | [Preparando o ambiente](guide/00-environment-setup.md) | Node.js, VS Code, Git, project folder |
-| 01 | [Git e GitHub](guide/01-git-and-github.md) | Repository, commits, README, `.gitignore` |
+| 01 | [Git e GitHub](guide/01-git-and-github.md) | Repository, commits, README, `.gitignore`, branches |
 | 02 | [Criando o site](guide/02-creating-the-site.md) | Scaffolding, dev server, folder tour |
 | 03 | [Sua primeira página](guide/03-first-page.md) | Front matter, categories, URLs |
 | 04 | [Escrevendo em Markdown](guide/04-writing-markdown.md) | Syntax, tables, links, anchors |
@@ -62,7 +62,7 @@ a checkpoint, and an exercise. Modules build on each other in order.
 | 09 | [Identidade visual](guide/09-visual-identity.md) | Colors, logo, fonts, dark mode |
 | 10 | [Blog e páginas](guide/10-blog-and-pages.md) | Posts, authors, tags, standalone pages |
 | 11 | [Recursos avançados](guide/11-advanced-features.md) | Search, Mermaid, versioning, i18n |
-| 12 | [Build e publicação](guide/12-build-and-deploy.md) | `baseUrl`, GitHub Pages, CI |
+| 12 | [Build e publicação](guide/12-build-and-deploy.md) | `baseUrl`, GitHub Pages, CI, pull requests |
 | 99 | [Solução de problemas](guide/99-troubleshooting.md) | Errors by symptom, with fixes |
 
 Start at [Module 00](guide/00-environment-setup.md), or read the

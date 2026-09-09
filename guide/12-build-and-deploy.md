@@ -253,8 +253,12 @@ jobs:
       - run: npm run build
 ```
 
-Com os dois no lugar: nenhum pull request com link quebrado consegue ser mesclado
-sem você ver o ❌ antes.
+Repare no gatilho: `on: pull_request`. Este workflow **não roda** em push direto
+na `main` — ele só existe para verificar mudanças *antes* de elas entrarem.
+
+Ou seja: enquanto você commitar direto na `main`, ele nunca vai disparar. É por
+isso que o Passo 9 muda o seu fluxo de trabalho. Sem PR, este arquivo é
+decoração.
 
 ---
 
@@ -309,7 +313,141 @@ Agora sim: o badge existe de verdade e diz a verdade.
 
 ---
 
-## Passo 9 — As outras formas de publicar
+## Passo 9 — A partir de agora: branch e Pull Request
+
+Alguma coisa mudou de verdade nos últimos passos, e vale parar para reconhecer.
+
+Até o Módulo 11, quebrar a `main` não custava nada: o erro aparecia no seu
+terminal, você consertava, ninguém via. Agora **todo push na `main` republica o
+site público**. O mesmo link quebrado passa a ser um 404 que outras pessoas
+encontram.
+
+É exatamente a fronteira das duas fases do
+[Módulo 01, Passo 11](./01-git-and-github.md#a-regra-deste-guia-duas-fases). Daqui
+pra frente, você trabalha em branch e mescla por Pull Request — e o
+`test-deploy.yml` do Passo 6, que até agora nunca rodou, finalmente ganha função.
+
+### O ciclo, uma vez, de verdade
+
+Vamos fazer uma mudança real: acrescentar o link do site publicado no README.
+
+💻 **1. Crie a branch e entre nela**
+
+```powershell
+cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+git switch -c docs/add-live-site-link
+```
+
+👀 `Switched to a new branch 'docs/add-live-site-link'`
+
+O `-c` é de *create*. Sem ele, o `switch` só troca para uma branch que já existe.
+
+📄 **2. Faça a mudança**
+
+No `README.md`, na seção "What's in here", adicione uma linha apontando para o
+site no ar:
+
+```md
+🌐 **[Live site](https://marcelosub1993.github.io/docusaurus-learning/)** — the
+practice site, published automatically from `main`.
+```
+
+💻 **3. Commite e envie a branch**
+
+```powershell
+git add .
+git commit -m "docs: link the published site from the README"
+git push -u origin docs/add-live-site-link
+```
+
+⚠️ O `-u origin <branch>` é necessário aqui. A branch é nova e o GitHub ainda não
+a conhece — sem isso, o Git responde
+`fatal: The current branch has no upstream branch` e te dá o comando certo.
+
+👀 A saída do push traz um link pronto:
+
+```
+remote: Create a pull request for 'docs/add-live-site-link' on GitHub by visiting:
+remote:      https://github.com/marcelosub1993/docusaurus-learning/pull/new/docs/add-live-site-link
+```
+
+🌐 **4. Abra o Pull Request**
+
+Clique naquele link (ou vá no repositório — aparece um banner amarelo
+"Compare & pull request").
+
+Na tela do PR:
+
+- **Title** — o GitHub sugere a mensagem do commit. Serve.
+- **Description** — escreva o *porquê*, não o *o quê*. O diff já mostra o quê.
+- Clique em **Create pull request**
+
+👀 **5. Espere o check**
+
+Na parte de baixo do PR aparece uma caixa de verificações. O `test-deploy.yml`
+está rodando:
+
+| Estado | Significa |
+|---|---|
+| 🟡 `Test build — In progress` | Buildando. Leva 2 a 4 minutos. |
+| ✅ `All checks have passed` | O build passou. Pode mesclar. |
+| ❌ `Test build — Failing` | O build quebrou. **Não mescle.** Clique em "Details" e leia o log. |
+
+Este é o ponto do módulo inteiro: o build rodou **antes** de a `main` ser tocada.
+O site público continua intacto enquanto o PR está aberto.
+
+🌐 **6. Mescle**
+
+Com o check verde, clique em **Merge pull request** → **Confirm merge**.
+
+👀 O GitHub oferece **Delete branch** logo depois. Aceite — a branch já cumpriu o
+papel dela, e branch morta acumulada é sujeira.
+
+👀 Vá em Actions. Agora sim o `Deploy to GitHub Pages` disparou, porque houve um
+push na `main`. Em poucos minutos o site republica com o README novo.
+
+💻 **7. Volte para a `main` e sincronize**
+
+Este passo é fácil de esquecer e gera confusão depois: sua `main` local ainda não
+tem o merge que aconteceu no GitHub.
+
+```powershell
+git switch main
+git pull
+git branch -d docs/add-live-site-link
+```
+
+👀 `git log --oneline -3` mostra o commit do README no topo.
+
+O `git branch -d` apaga a cópia local da branch. Ele só funciona se as mudanças
+já estiverem incorporadas — se você errar a branch, o Git recusa e avisa. É uma
+proteção, não um obstáculo.
+
+### Opcional: fazer o GitHub cobrar isso de você
+
+Enquanto for só disciplina, um dia você vai commitar direto na `main` no
+automático. Dá para o GitHub impedir.
+
+1. Vá em **Settings → Branches** (em algumas contas o caminho é
+   **Settings → Rules → Rulesets**)
+2. Crie uma regra para a branch `main`
+3. Marque:
+   - **Require a pull request before merging**
+   - **Require status checks to pass before merging** → e selecione **Test build**
+
+👀 A partir daí, `git push` direto na `main` é **recusado pelo servidor**, com
+uma mensagem explicando que a branch é protegida.
+
+⚠️ Faça isso só depois de o `test-deploy.yml` ter rodado pelo menos uma vez —
+o GitHub só lista um check na configuração depois de conhecê-lo.
+
+> **Vale a pena num repositório de uma pessoa só?** Vale, por um motivo: você está
+> aprendendo o fluxo que vai usar em equipe. Deixar a regra ligada aqui faz o
+> hábito se formar sozinho, sem depender de você lembrar.
+
+---
+
+## Passo 10 — As outras formas de publicar
 
 GitHub Pages não é a única opção. Se um dia o destino for outro:
 
@@ -362,7 +500,7 @@ estilo, o problema quase sempre é `baseUrl` ou MIME type — não o Docusaurus.
 
 ---
 
-## Passo 10 — Manutenção
+## Passo 11 — Manutenção
 
 **Atualizar o Docusaurus:**
 
@@ -400,7 +538,11 @@ compatibilidade são sempre documentadas lá.
 - [ ] Os dois workflows commitados em `.github/workflows/`
 - [ ] O site abre em `https://marcelosub1993.github.io/docusaurus-learning/`
 - [ ] O badge do README está verde
+- [ ] Você abriu, viu o check ficar verde, e mesclou pelo menos um Pull Request
+- [ ] Sua `main` local está sincronizada (`git pull` depois do merge)
+- [ ] A branch mesclada foi apagada, local e no GitHub
 - [ ] Você entende por que `npm ci` e não `npm install` no CI
+- [ ] Você sabe dizer por que o `test-deploy.yml` nunca rodava antes do Passo 9
 
 ---
 
@@ -425,15 +567,62 @@ estão dando 404, num caminho que não existe.
 
 📄 Agora desfaça e confirme que voltou.
 
-**2. Quebre o build no CI**
+**2. Quebre o build dentro de um Pull Request**
 
-📄 Adicione um link para uma página inexistente em `docs/intro.mdx`, commite e
-faça push — **sem** rodar `npm run build` antes.
+Agora que você tem o fluxo do Passo 9, este exercício acontece onde deveria: numa
+branch, com o site público protegido o tempo todo.
 
-👀 Vá em Actions. O workflow falha em vermelho, e o e-mail do GitHub chega. Leia o
-log: a mensagem é idêntica à que você veria local.
+💻 Crie a branch:
 
-📄 Conserte, faça push, e veja ficar verde.
+```powershell
+git switch -c experiment/break-the-build
+```
+
+📄 Adicione um link para uma página inexistente em `website/docs/intro.mdx`:
+
+```mdx
+[This page does not exist](./ghost-page.mdx)
+```
+
+💻 Commite e envie — **sem** rodar `npm run build` antes. A graça é deixar o robô
+achar:
+
+```powershell
+git add .
+git commit -m "docs: add a deliberately broken link"
+git push -u origin experiment/break-the-build
+```
+
+🌐 Abra o Pull Request pelo link que o push imprimiu.
+
+👀 Espere o check. Ele fica **❌ vermelho**, e o e-mail do GitHub chega. Clique em
+**Details** e leia o log: a mensagem é idêntica à que você veria rodando
+`npm run build` na sua máquina.
+
+👀 Agora repare em duas coisas, que são o ponto do exercício:
+
+1. O botão de merge está desencorajado (ou **bloqueado**, se você criou a regra
+   de proteção do Passo 9).
+2. **O site público continua no ar, intacto.** Você quebrou o build e nenhum
+   visitante viu nada. Compare com o que teria acontecido num push direto na
+   `main`.
+
+📄 Conserte na mesma branch — apague a linha do link:
+
+```powershell
+git add .
+git commit -m "fix: remove the broken link"
+git push
+```
+
+👀 O PR **atualiza sozinho** e o check roda de novo. Verde. Agora mescle, apague
+a branch, e volte:
+
+```powershell
+git switch main
+git pull
+git branch -d experiment/break-the-build
+```
 
 **3. Confirme que o `.gitignore` está fazendo o trabalho**
 
@@ -456,20 +645,27 @@ Compress-Archive -Path build\* -DestinationPath ..\site.zip -Force
 Abra o zip e confirme que `index.html` está na **raiz** dele, não dentro de uma
 pasta `build`. Depois apague o zip — ele não vai para o Git.
 
-**5. Escreva o post final**
+**5. Escreva o post final — pelo fluxo completo**
 
-📄 Crie um último post no blog anunciando que o site está no ar, com o link real.
-Commite e faça push.
+Este é o último, e é para você fazer o ciclo inteiro sozinho, sem consultar o
+Passo 9.
 
-👀 Espere o workflow terminar e veja seu próprio post publicado, no ar, escrito
-por você, no site que você construiu.
+📄 Numa branch nova (`docs/launch-post`), crie um post no blog anunciando que o
+site está no ar, com o link real. Abra o PR, espere o verde, mescle, apague a
+branch e sincronize a `main`.
+
+👀 Espere o `Deploy to GitHub Pages` terminar e veja seu próprio post publicado,
+no ar, escrito por você, no site que você construiu.
 
 **Como saber que deu certo:**
 
 - O site público abre com estilo, em `https://marcelosub1993.github.io/docusaurus-learning/`
-- A busca funciona no site publicado
-- O modo escuro funciona no site publicado
+- A busca e o modo escuro funcionam no site publicado
 - O badge do README está verde
+- A aba **Pull requests** do repositório mostra **3 PRs fechados** (o do Passo 9,
+  o do build quebrado e o do post final)
+- Você viu, pelo menos uma vez, o check vermelho **sem** o site público quebrar
+- `git branch` lista só `main` — nenhuma branch morta sobrou
 - `git status` na raiz responde `working tree clean`
 
 ---
@@ -478,8 +674,13 @@ por você, no site que você construiu.
 
 O build gera HTML estático, hospedável em qualquer lugar. `url` e `baseUrl`
 precisam corresponder ao endereço final, e errar isso é o problema de publicação
-mais comum. Um workflow no GitHub Actions publica sozinho a cada push, e um
-segundo workflow só de build vira sua rede de segurança contra links quebrados.
+mais comum. Um workflow no GitHub Actions publica sozinho a cada push na `main`,
+e um segundo workflow, que roda no Pull Request, é sua rede de segurança contra
+links quebrados.
+
+E foi aqui que o fluxo de trabalho mudou: com o site no ar, quebrar a `main`
+passou a ter plateia. Branch + PR deixou de ser cerimônia e virou o mecanismo que
+segura o erro antes de ele chegar no público.
 
 ---
 
@@ -495,5 +696,6 @@ Do zero até um site publicado, com tudo registrado no Git. O que fazer agora:
 - **Mantenha o `guide/NOTES.md`.** Daqui a seis meses, ele vale mais que o guia.
 
 E o repositório que você construiu é, ele próprio, um exemplo de repositório bem
-feito: README que explica, licença, `.gitignore` correto, histórico legível e
-publicação automática. Isso é reaproveitável em todo projeto seu daqui pra frente.
+feito: README que explica, licença, `.gitignore` correto, histórico legível,
+publicação automática e mudanças verificadas antes de entrar. Isso é reaproveitável
+em todo projeto seu daqui pra frente.
