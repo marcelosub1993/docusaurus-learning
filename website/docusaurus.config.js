@@ -83,9 +83,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'My Site',
+        title: 'Nimbus',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Nimbus logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -111,7 +111,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/docs/',
               },
             ],
           },
