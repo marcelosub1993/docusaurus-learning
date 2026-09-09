@@ -1,0 +1,406 @@
+# Módulo 03 — Sua primeira página
+
+> **Objetivo:** criar documentos do zero e controlar título, ordem, rótulo e URL.
+> **Tempo:** ~40 min
+> **Pré-requisito:** [Módulo 02](./02-creating-the-site.md), com `npm start` rodando.
+
+A partir daqui, tudo que você escrever **dentro de `website/`** é em inglês: nome
+de arquivo, nome de pasta, front matter e o texto das páginas. O guia continua em
+português.
+
+O assunto do site é o **Nimbus**, uma ferramenta de linha de comando fictícia
+para sincronizar dados. Não existe — serve só para você ter o que escrever.
+
+💻 Todos os comandos deste módulo rodam dentro de `website`:
+
+```powershell
+cd "C:\Users\marce\OneDrive\Documents\Docusaurus\website"
+```
+
+---
+
+## Passo 1 — Limpar o exemplo
+
+O template veio com um tutorial de demonstração. Vamos tirá-lo do caminho.
+
+💻
+
+```powershell
+Remove-Item -Recurse docs\tutorial-basics, docs\tutorial-extras
+```
+
+👀 O menu lateral no navegador perde as categorias "Tutorial - Basics" e
+"Tutorial - Extras" na hora. Sobrou só "intro".
+
+> Guarde o `docs/intro.mdx` por enquanto — vamos reaproveitá-lo no Passo 6.
+
+---
+
+## Passo 2 — Criar um documento
+
+📄 Crie `docs/installation.mdx` com este conteúdo:
+
+```mdx
+# Installation
+
+How to get Nimbus running on your machine.
+
+## Requirements
+
+- Windows 10 or later, macOS 13 or later, or any Linux with glibc 2.31+
+- 8 GB of RAM
+- Network access to your Nimbus workspace
+
+## Steps
+
+1. Download the installer from your workspace portal.
+2. Run it with administrator privileges.
+3. Restart your machine.
+4. Confirm the install by running `nimbus --version`.
+```
+
+👀 Salve e olhe o navegador: apareceu **Installation** no menu lateral, e a página
+está em `http://localhost:3000/docs/installation`.
+
+Repare em duas coisas:
+
+- **A URL veio do nome do arquivo**, não do título. `installation.mdx` →
+  `/docs/installation`.
+- **O rótulo no menu veio do `# Installation`**, o primeiro heading do arquivo.
+
+> **Por que `.mdx` e não `.md`?** É o que o template do Docusaurus 3 usa, e é o
+> que destrava componentes React mais adiante. O [Módulo 05](./05-admonitions-and-code.md#parte-c--md-vs-mdx)
+> explica a diferença de verdade — que não é a que a maioria das pessoas imagina.
+
+---
+
+## Passo 3 — O front matter
+
+Deixar o Docusaurus adivinhar funciona, mas você quer controle. O front matter é
+um bloco de metadados no topo do arquivo, entre duas linhas de `---`.
+
+📄 Edite `docs/installation.mdx` e coloque isto **na primeira linha do arquivo**,
+removendo o `# Installation`:
+
+```mdx
+---
+title: Installing Nimbus
+sidebar_label: Installation
+sidebar_position: 1
+description: Requirements and step-by-step instructions to install Nimbus.
+---
+
+How to get Nimbus running on your machine.
+
+## Requirements
+...
+```
+
+Note que **removi o `# Installation`**. Quando existe `title:` no front matter, o
+Docusaurus gera o `<h1>` sozinho — se você mantiver os dois, a página fica com
+dois títulos.
+
+👀 No navegador: o menu agora mostra "Installation" (vindo do `sidebar_label`), e
+o título da página é "Installing Nimbus".
+
+### Os campos que você mais vai usar
+
+| Campo | Efeito | Exemplo |
+|---|---|---|
+| `title` | Título da página e da aba do navegador | `title: Installing Nimbus` |
+| `sidebar_label` | Nome curto no menu lateral | `sidebar_label: Installation` |
+| `sidebar_position` | Ordem no menu (menor primeiro) | `sidebar_position: 1` |
+| `description` | Resumo para busca e preview de link | `description: Requirements and...` |
+| `slug` | Muda a URL | `slug: /get-started` |
+| `id` | Muda o identificador interno | `id: install-nimbus` |
+| `tags` | Etiquetas, com página de listagem própria | `tags: [setup]` |
+
+⚠️ **O front matter é YAML, e YAML se importa com espaços.** `title:Installation`
+(sem espaço depois dos dois-pontos) quebra o build. Valores com `:` no meio
+precisam de aspas: `title: "Nimbus: the basics"`.
+
+---
+
+## Passo 4 — Entendendo `slug` e `id`
+
+Estes dois causam confusão, então vale parar aqui.
+
+**Sem nada:** arquivo `docs/installation.mdx` → id `installation`, URL
+`/docs/installation`.
+
+**Com `slug: /get-started`:** o id continua `installation`, mas a URL vira
+`/get-started` — a barra inicial tira a página de dentro de `/docs/`. Sem barra
+(`slug: get-started`), a URL vira `/docs/get-started`.
+
+**Com `id: install-nimbus`:** a URL não muda, mas o nome que você usa no
+`sidebars.js` passa a ser `install-nimbus`, não `installation`.
+
+⚠️ **Este é o erro nº 1 de quem começa.** Você define `id:` no front matter,
+depois escreve `'installation'` no `sidebars.js`, e o build falha com:
+
+```
+Error: Invalid sidebar file at "sidebars.js".
+These sidebar document ids do not exist:
+- installation
+```
+
+A mensagem lista os ids válidos logo abaixo. Leia essa lista — a resposta está lá.
+
+💻 Teste você mesmo agora, enquanto é barato: adicione `id: install-nimbus` ao
+front matter, salve, e olhe o terminal do `npm start`.
+
+👀 Nada quebra — porque a sidebar ainda é `autogenerated`, que descobre os ids
+sozinha. O erro só aparece quando você assume o controle do `sidebars.js`, no
+Módulo 07. Guarde esta página na memória para quando isso acontecer.
+
+📄 Depois **remova** o `id:`. Não vamos precisar dele.
+
+---
+
+## Passo 5 — Organizando em pastas
+
+Uma pasta dentro de `docs/` vira uma **categoria** no menu.
+
+💻
+
+```powershell
+mkdir docs\configuration
+```
+
+📄 Crie `docs/configuration/basic-setup.mdx`:
+
+```mdx
+---
+title: Basic setup
+sidebar_position: 1
+description: The minimum configuration to get Nimbus syncing.
+---
+
+The three settings Nimbus needs before it can sync anything.
+
+## Workspace
+
+Point the CLI at your workspace so it knows where to send data.
+
+## Credentials
+
+Nimbus reads credentials from the system keychain, never from a plain file.
+
+## Sync interval
+
+The default is every 15 minutes. Anything below 5 minutes is rejected.
+```
+
+📄 E `docs/configuration/advanced-setup.mdx`:
+
+```mdx
+---
+title: Advanced setup
+sidebar_position: 2
+description: Filters, retries and proxies for specific scenarios.
+---
+
+Settings you only need once the basics are working.
+
+## Filters
+
+Exclude files by glob pattern so large build folders never leave the machine.
+
+## Retry policy
+
+How many times Nimbus retries a failed upload, and how long it waits.
+
+## Proxy
+
+Corporate networks usually need an explicit proxy here.
+```
+
+👀 O menu ganhou uma categoria **Configuration**, com dois itens dentro, na ordem
+que você definiu. A URL da primeira é `/docs/configuration/basic-setup`.
+
+### Dando nome e ordem à categoria
+
+O nome da categoria veio do nome da pasta. Para controlar isso — e a ordem, e o
+que acontece ao clicar nela — existe um arquivo especial dentro da própria pasta.
+
+📄 Crie `docs/configuration/_category_.json`:
+
+```json
+{
+  "label": "Configuration",
+  "position": 2,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Everything you can adjust in Nimbus."
+  }
+}
+```
+
+👀 Agora a categoria aparece já expandida, e **clicar no nome dela abre uma página
+de índice** com um card para cada filho — gerada automaticamente, sem você
+escrever nada.
+
+| Campo | Efeito |
+|---|---|
+| `label` | Nome exibido |
+| `position` | Ordem da categoria entre os outros itens |
+| `collapsed` | `false` = já vem aberta |
+| `collapsible` | `false` = não deixa fechar |
+| `link.type: "generated-index"` | Cria a página de índice automática |
+| `link.type: "doc"` + `"id"` | Aponta para um documento seu como capa da seção |
+
+> **Por que `_category_.json` e não front matter?** Porque a categoria é a pasta,
+> e uma pasta não tem front matter. O arquivo começa com `_` para o Docusaurus
+> saber que ele não é uma página.
+
+---
+
+## Passo 6 — Arrumando a home da documentação
+
+📄 Edite `docs/intro.mdx`. Apague todo o conteúdo e coloque:
+
+```mdx
+---
+title: Overview
+sidebar_position: 0
+slug: /
+description: What Nimbus does and where to start.
+---
+
+Nimbus keeps a folder on your machine in sync with your team workspace,
+without a UI and without a background service you have to babysit.
+
+## Where to start
+
+- [Installation](./installation.mdx) — get it running
+- [Basic setup](./configuration/basic-setup.mdx) — the three required settings
+```
+
+O `slug: /` faz esta página virar a raiz da documentação: `/docs/` em vez de
+`/docs/intro`.
+
+👀 Repare que os links usam o **caminho do arquivo** (`./installation.mdx`), não a
+URL. Guarde isso — é a forma recomendada, e o
+[Módulo 04](./04-writing-markdown.md#passo-7--links-a-parte-importante) explica
+por quê.
+
+💻 Valide antes de seguir. Pare o servidor (`Ctrl+C`) e rode:
+
+```powershell
+npm run build
+```
+
+👀 `[SUCCESS] Generated static files in "build".` Se falhar, a mensagem diz qual
+arquivo e qual linha — quase sempre é indentação de YAML no front matter.
+
+💻 Suba de novo: `npm start`
+
+---
+
+## Passo 7 — Registrar no Git
+
+💻
+
+```powershell
+cd ..
+git add .
+git commit -m "feat: add installation and configuration docs"
+git push
+cd website
+```
+
+---
+
+## ✅ Checkpoint
+
+- [ ] Você tem 4 páginas: Overview, Installation, Basic setup, Advanced setup
+- [ ] O menu lateral está na ordem que você quis
+- [ ] A categoria "Configuration" já vem expandida
+- [ ] Clicar em "Configuration" abre uma página de índice com cards
+- [ ] `/docs/` abre a Overview (por causa do `slug: /`)
+- [ ] Você sabe explicar a diferença entre `id`, `slug` e `sidebar_label`
+- [ ] `npm run build` passa
+- [ ] Commit feito
+
+---
+
+## 🎯 Exercício
+
+Você vai criar a seção de FAQ. Ela reaparece nos Módulos 04 e 07, então vale
+fazer com calma.
+
+**1. Crie a pasta e três perguntas**
+
+Uma pergunta por arquivo, em `docs/faq/`:
+
+| Arquivo | Assunto |
+|---|---|
+| `licensing.mdx` | Quantas máquinas uma licença cobre |
+| `performance.mdx` | Por que a primeira sincronização é lenta |
+| `data-retention.mdx` | Por quanto tempo os arquivos apagados ficam recuperáveis |
+
+Use este esqueleto para cada um — preencha o corpo com 3 a 5 linhas inventadas,
+mas plausíveis:
+
+```mdx
+---
+title: (a pergunta, como frase completa, em inglês)
+sidebar_label: (2 ou 3 palavras)
+sidebar_position: (1, 2 ou 3)
+description: (uma frase resumindo a resposta)
+---
+
+(a resposta)
+```
+
+**2. Nomeie e posicione a categoria**
+
+📄 Crie `docs/faq/_category_.json`. Ela deve se chamar **"Frequently asked
+questions"** e ficar **por último** no menu. Você precisa de dois campos do Passo
+5 — `label` e `position`.
+
+Dica de `position`: a Configuration está em `2`. Escolha um número maior.
+
+**3. Dê uma URL curta a uma das páginas**
+
+A pergunta de licenciamento é a mais compartilhada. Faça a URL dela ser
+`/faq-licensing`, direto na raiz do site, sem o `/docs/` na frente.
+
+Releia o Passo 4 se travar: a diferença está na barra inicial.
+
+**4. Ligue o FAQ à Overview**
+
+📄 Em `docs/intro.mdx`, adicione um terceiro item na lista "Where to start",
+apontando para a pergunta de licenciamento pelo **caminho do arquivo**.
+
+⚠️ Cuidado: essa página tem `slug`. O link por caminho de arquivo continua sendo
+`./faq/licensing.mdx` — o Docusaurus resolve o `slug` sozinho. É exatamente por
+isso que linkar por arquivo é melhor.
+
+**5. Valide e commite**
+
+```powershell
+npm run build
+```
+
+**Como saber que deu certo:**
+
+- O menu mostra, nesta ordem: Overview, Installation, Configuration, Frequently
+  asked questions
+- `http://localhost:3000/faq-licensing` abre a página de licenciamento
+- `http://localhost:3000/docs/faq/licensing` dá 404 — a página **mudou** de
+  endereço, não ganhou um segundo
+- O link na Overview funciona e leva para `/faq-licensing`
+- `npm run build` termina com SUCCESS
+- `git log --oneline` mostra o commit do exercício
+
+---
+
+## 📌 O que você aprendeu
+
+Arquivo = página. Pasta = categoria. O front matter controla título, rótulo,
+ordem e URL; o `_category_.json` faz o mesmo para categorias. O nome do arquivo
+define a URL e o `id` — e o `id` é o que o `sidebars.js` vai enxergar no Módulo 07.
+
+➡️ Próximo: [Módulo 04 — Escrevendo em Markdown](./04-writing-markdown.md)
