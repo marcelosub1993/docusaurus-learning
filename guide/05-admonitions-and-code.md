@@ -372,15 +372,15 @@ cd website
 
 ## ✅ Checkpoint
 
-- [ ] Sua página de referência tem os 5 tipos de admonition
-- [ ] Uma admonition com título customizado e uma aninhada
-- [ ] `additionalLanguages: ['powershell']` no config, e os blocos PowerShell
+- [x] Sua página de referência tem os 5 tipos de admonition
+- [x] Uma admonition com título customizado e uma aninhada
+- [x] `additionalLanguages: ['powershell']` no config, e os blocos PowerShell
       aparecem coloridos
-- [ ] Um bloco com `title=` e outro com linhas destacadas
-- [ ] Um grupo de abas funcionando, com `groupId`
-- [ ] Você conseguiu explicar por que `<!-- -->` quebra até num arquivo `.md`
-- [ ] `npm run build` passa
-- [ ] Commit feito
+- [x] Um bloco com `title=` e outro com linhas destacadas
+- [x] Um grupo de abas funcionando, com `groupId`
+- [x] Você conseguiu explicar por que `<!-- -->` quebra até num arquivo `.md`
+- [x] `npm run build` passa
+- [x] Commit feito
 
 ---
 
