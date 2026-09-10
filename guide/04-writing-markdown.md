@@ -71,10 +71,40 @@ Cada título vira um link automático (`/docs/reference#a-subsection`). Se você
 mudar o texto do título, esse link quebra para quem salvou. Para evitar, fixe o id:
 
 ```mdx
-### Installing on Windows {#windows-install}
+### Installing on Windows {/* #windows-install */}
 ```
 
 Agora a âncora é `#windows-install` para sempre, mesmo que o texto mude.
+
+Repare que o id vai dentro de um **comentário MDX** — o mesmo `{/* */}` do
+[Passo 10](#passo-10--comentários). Não é coincidência: como o comentário some da
+página, o Docusaurus aproveita esse espaço para carregar o id sem sujar o título.
+
+⚠️ **A sintaxe que você vai ver por aí não funciona mais.** Quase todo tutorial
+mostra assim:
+
+```mdx
+### Installing on Windows {#windows-install}
+```
+
+Isso derruba o build com:
+
+```
+Error: MDX compilation failed
+Cause: Could not parse expression with acorn
+```
+
+O motivo é o mesmo do comentário HTML: em MDX, `{` abre uma expressão JavaScript,
+e `#windows-install` não é JavaScript válido. A documentação oficial é explícita —
+*"For MDX files, the `{#id}` syntax should be avoided. Since Docusaurus v3 and MDX
+v2, it is not valid MDX syntax anymore."*
+
+| Sintaxe | Funciona em |
+|---|---|
+| `{/* #meu-id */}` | MDX — ou seja, **tudo**, por padrão |
+| `{#meu-id}` | Só em CommonMark puro (`markdown.format: 'detect'` + arquivo `.md`) |
+
+💡 Na dúvida, use sempre a de comentário. Ela funciona nos dois modos.
 
 ⚠️ Use âncora fixa em todo título que você vai linkar de outro lugar. É barato
 agora e caro depois.
@@ -385,13 +415,13 @@ description: What a Nimbus seat includes and how to move it between machines.
 
 (resposta curta, 2 linhas)
 
-## What a seat includes {#seat}
+## What a seat includes {/* #seat */}
 
 | Plan | Machines per seat | Concurrent syncs |
 | --- | :---: | :---: |
 | | | |
 
-## Moving a seat to a new machine {#transfer}
+## Moving a seat to a new machine {/* #transfer */}
 
 <details>
   <summary>Step-by-step transfer</summary>

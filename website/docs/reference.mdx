@@ -1,0 +1,96 @@
+---
+title: Syntax Reference
+sidebar_label: Syntax Reference
+sidebar_position: 4
+description: A page where every Markdown feature is demonstrated.
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+A living page where each formatting feature is show in use.
+
+## Headings
+
+### A subsection
+
+#### A detail
+
+### Installing on Windows {/* #windows-install */}
+
+## Text Formatting
+
+**bold**, _italic_, **_both_**, ~~strikethrough~~, `inline code`.
+
+One Line.
+Another line - same paragraph!
+
+A blank line starts a new paragraph.
+
+Or end the line with a backslash: \
+like this.
+
+## Lists
+
+- A simple item
+- Another item
+    - Nested (indent with 2 spaces)
+        - Even deeper
+
+1. First
+2. Second
+    1. Numbered sub-item
+3. Third
+
+- [x] Completed task
+- [ ] Pending task
+
+1. Install the dependencies
+
+    ```powershell
+    npm install
+    ```
+
+2. Start the project.
+
+## Quotes
+
+> A quote.
+> 
+> With two paragraphs.
+
+___
+
+## Tables
+
+| Command | What it does | How often |
+| --- | --- | :---: |
+| `nimbus sync` | Syncs the workspace now | Daily |
+| `nimbus status` | Shows pending changes | Often |
+| `nimbus doctor` | Diagnoses the local setup | When something breaks |
+
+## Links
+
+1. [File path](./installation.mdx)
+2. [Site URL](/docs/installation)
+3. [External](https://docusaurus.io)
+
+## Footnotes
+
+Nimbus stores credentials in the system keychain[^1].
+
+[^1]: Keychain on macOs, Credential Manager on Windows, and Secret Service on Linux.
+
+## Collapsible blocks
+
+<details>
+    <summary>What to do when port 3000 is already in use</summary>
+
+    Start the server on another port:
+
+    ```powershell
+    npm start -- --port 3001
+    ```
+
+</details>
+
+{/* This does not show up on the site */}

@@ -284,6 +284,30 @@ com `\{`.
 ⚠️ Isso vale para arquivos `.md` também — no Docusaurus 3 eles passam pelo MDX
 por padrão. Veja o [Módulo 05, Passo 8](./05-admonitions-and-code.md#passo-8--o-que-realmente-acontece).
 
+#### O caso mais comum: âncora fixa em título
+
+Se o erro aponta para a linha de um `##`, quase certamente é a sintaxe antiga de
+id explícito:
+
+```mdx
+## Minha seção {#minha-secao}     ← quebra
+## Minha seção {/* #minha-secao */}  ← certo
+```
+
+A `{#id}` deixou de ser MDX válido no Docusaurus 3 / MDX v2, mas continua
+aparecendo em praticamente todo tutorial. Veja o
+[Módulo 04](./04-writing-markdown.md#âncoras-fixas).
+
+Como ler o erro: ele diz `line` e `column` do arquivo `.mdx`, e a coluna aponta
+para a chave de abertura.
+
+```
+Error: MDX compilation failed for file "...\docs\reference.mdx"
+Cause: Could not parse expression with acorn
+  "line": 18,
+  "column": 28
+```
+
 ### O comentário HTML quebrou o build
 
 **Causa:** `<!-- comentário -->` não existe em MDX. E como no Docusaurus 3 todo
