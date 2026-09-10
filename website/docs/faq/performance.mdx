@@ -6,3 +6,16 @@ description: Explanation of the initial synchronization process and its performa
 ---
 
 Because Nimbus needs to download all the files from the cloud to your local machine during the first synchronization, it can take a significant amount of time, especially if you have a large number of files or a slow internet connection. Subsequent synchronizations will be faster as only changes will be downloaded.
+
+## How to improve the first synchronization speed {/* #improve */}
+
+Execute the following commands:
+
+| Command | Description |
+| :---: | --- |
+| `nimbus sync --force` | Forces a full synchronization |
+| `nimbus sync --incremental` | Performs an incremental synchronization |
+
+## Data Clean Up
+
+[How to clean up the purged files immediately](./data-retention.mdx#cleanup)

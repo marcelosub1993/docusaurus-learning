@@ -242,13 +242,26 @@ Existem três formas, e a diferença entre elas importa:
 
 Quando você escreve `./installation.mdx`, o Docusaurus **resolve isso no build**:
 procura o arquivo, descobre a URL final dele (respeitando `slug`, `baseUrl`,
-versionamento e idioma) e substitui. Se o arquivo não existir, **o build falha e
-avisa**.
+versionamento e idioma) e substitui.
 
-Com a URL escrita à mão, o link só quebra silenciosamente quando alguém renomeia
-a página. Você viu isso no exercício do Módulo 03: `licensing.mdx` tem
-`slug: /faq-licensing`, e mesmo assim o link por caminho de arquivo continuou
-funcionando.
+A URL escrita à mão também é verificada — `onBrokenLinks: 'throw'` pega as duas
+formas. A diferença não é *ser avisado*, é **quem faz o trabalho**:
+
+| | Caminho de arquivo | URL à mão |
+|---|---|---|
+| Você muda o `slug` da página de destino | Nada acontece. O build resolve de novo. | **Todos** os links para ela quebram, e você conserta um por um. |
+| Você renomeia o arquivo | O build falha e diz onde | O build falha e diz onde |
+| Link para página inexistente | O build falha | O build falha |
+
+Ou seja: nos dois casos o build te protege. Mas o caminho de arquivo **se
+atualiza sozinho** quando o endereço muda, e a URL não.
+
+💡 Isso importa mais do que parece: mudar um `slug` é comum, e num site com 40
+páginas a diferença é entre "salvar o arquivo" e "caçar 12 referências".
+
+⚠️ E existe um caso em que a URL quebra **de verdade em silêncio**: dentro de
+prop JSX (`<Card to="..." />`) apontando para uma rota que existe mas é a errada,
+e em links externos, que o Docusaurus não tem como verificar.
 
 ### O erro clássico
 
@@ -382,11 +395,11 @@ A página `docs/reference.mdx` deve ter, funcionando: títulos com âncora fixa,
 texto formatado, lista com bloco de código dentro, tabela alinhada, os três tipos
 de link, uma nota de rodapé, um bloco `<details>` e um comentário.
 
-- [ ] O índice lateral (direita) reflete seus títulos
-- [ ] Você criou um link quebrado, viu o build falhar, e consertou
-- [ ] `npm run build` passa
-- [ ] Você consegue explicar por que `./page.mdx` é melhor que `/docs/page`
-- [ ] Commit feito
+- [x] O índice lateral (direita) reflete seus títulos
+- [x] Você criou um link quebrado, viu o build falhar, e consertou
+- [x] `npm run build` passa
+- [x] Você consegue explicar por que `./page.mdx` é melhor que `/docs/page`
+- [x] Commit feito
 
 ---
 
@@ -446,11 +459,11 @@ a ler as mensagens de erro.
 
 Faça as três quebras, uma de cada vez, rodando `npm run build` entre elas:
 
-| Quebra | O que escrever | O que esperar |
-|---|---|---|
-| Link para arquivo inexistente | `[x](./nope.mdx)` | Build falha, lista o link e a origem |
-| Âncora que não existe | `[x](./licensing.mdx#nope)` | Build **passa**, com aviso no terminal |
-| Barra na frente | `[x](/licensing.mdx)` | Build falha, mensagem diferente da primeira |
+| Quebra                        | O que escrever              | O que esperar                               |
+| ----------------------------- | --------------------------- | ------------------------------------------- |
+| Link para arquivo inexistente | `[x](./nope.mdx)`           | Build falha, lista o link e a origem        |
+| Âncora que não existe         | `[x](./licensing.mdx#nope)` | Build **passa**, com aviso no terminal      |
+| Barra na frente               | `[x](/licensing.mdx)`       | Build falha, mensagem diferente da primeira |
 
 Leia cada mensagem com calma antes de consertar. Repare que a segunda só **avisa**
 — é a diferença entre `onBrokenLinks: 'throw'` e `onBrokenAnchors: 'warn'` do
