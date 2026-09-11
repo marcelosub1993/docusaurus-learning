@@ -5,17 +5,134 @@ sidebar_position: 1
 description: Requirements and step-by-step instructions to install Nimbus.
 ---
 
-How to get Nimbus running in your machine.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-## Requirements
+How to get Nimbus running on your machine.
 
-- Windows 10 or later, macOs 13 or later, or any linux with glibc 2.31+
-- 8 GB of RAM
-- Network access to your Nimbus workspace
+:::info
 
-## Steps
+The installation takes ~5 minutes and requires a reboot.
 
-1. Download the installer from your workspace portal.
-2. Run it with administrator privileges.
-3. Restart your machine.
-4. Confirm the install by running 'nimbus --version'.
+:::
+
+<Tabs groupId="operating-system">
+    <TabItem value="windows" label="Windows" default>
+
+    |Requirements|
+    | :---: |
+    | Windows 10 or later |
+    | 8 GB of RAM |
+    | Network access to your Nimbus workspace |
+
+    ---
+    
+    #### Steps
+
+    1. Run the command below on PowerShell
+
+        :::warning
+        Run it with administrator privileges
+        :::
+
+        ```powershell title="PowerShell" showLineNumbers
+        winget install Nimbus.CLI
+        ```
+
+    2. Restart your machine.
+    3. Confirm the install by running:
+
+        ```powershell title="PowerShell" showLineNumbers
+        nimbus --version
+        ```
+    4. Configure your environment
+
+        ```yaml title="~/.nimbus/config.yml" showLineNumbers
+        # highlight-next-line
+        workspace: replace-with-your-workspace-id
+        interval: 15m
+        retries: 3
+        ```
+
+
+    </TabItem>
+
+    <TabItem value="macos" label="macOS">
+
+    |Requirements|
+    | :---: |
+    | macOs 13 or later |
+    | 8 GB of RAM |
+    | Network access to your Nimbus workspace |
+
+    ---
+    
+    #### Steps
+
+    1. Run the command below on Terminal
+
+        ```bash title="Terminal" showLineNumbers
+        brew install nimbus
+        ```
+
+    2. Restart your machine.
+    3. Confirm the install by running:
+
+        ```bash title="Terminal" showLineNumbers
+        nimbus --version
+        ```
+    4. Configure your environment
+
+        ```yaml title="~/.nimbus/config.yml" showLineNumbers
+        # highlight-next-line
+        workspace: replace-with-your-workspace-id
+        interval: 15m
+        retries: 3
+        ```
+
+    </TabItem>
+
+    <TabItem value="linux" label="Linux">
+
+    |Requirements|
+    | :---: |
+    | any linux with glibc 2.31+ |
+    | 8 GB of RAM |
+    | Network access to your Nimbus workspace |
+
+    ---
+    
+    #### Steps
+
+    1. Run the command below on Terminal
+
+        ```bash title="Terminal" showLineNumbers
+        curl -fsSL https://get.nimbus.example/install.sh | sh
+        ```
+
+    2. Restart your machine.
+    3. Confirm the install by running:
+
+        ```bash title="Terminal" showLineNumbers
+        nimbus --version
+        ```
+    4. Configure your environment
+
+        ```yaml title="~/.nimbus/config.yml" showLineNumbers
+        # highlight-next-line
+        workspace: replace-with-your-workspace-id
+        interval: 15m
+        retries: 3
+        ```
+
+    </TabItem>
+</Tabs>
+
+
+:::tip[This command diagnoses the setup for you!]
+
+    ```powershell title="PowerShell or Terminal" showLineNumbers
+    nimbus doctor
+    ```
+
+:::

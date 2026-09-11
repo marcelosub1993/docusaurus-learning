@@ -335,6 +335,63 @@ cru. É o erro mais comum de quem começa com abas.
 ⚠️ Os `import` ficam **depois** do front matter e **antes** do primeiro texto.
 Um `import` no meio da página funciona, mas é confuso — mantenha todos no topo.
 
+#### Duas armadilhas que o build não pega
+
+Nenhuma das duas quebra a compilação. As duas estragam a página.
+
+**1. Não use `##` dentro de uma aba.**
+
+O índice lateral é montado a partir dos títulos do arquivo, e ele **não sabe qual
+aba está aberta**. Se você puser `## Requirements` só na aba Windows, quem estiver
+lendo na aba macOS vê "Requirements" no índice da direita apontando para um
+conteúdo que não está na tela.
+
+Prefira negrito ou uma lista para separar assuntos dentro da aba, e deixe os `##`
+do lado de fora do `<Tabs>`.
+
+**2. Cuidado com admonition no meio de uma lista.**
+
+Isto parece certo e não é:
+
+````mdx
+1. Run the installer:
+
+:::warning[Run as administrator]
+It fails silently otherwise.
+:::
+
+   ```powershell
+   winget install Nimbus.CLI
+   ```
+
+2. Restart the machine.
+````
+
+A admonition não está indentada, então ela **encerra a lista**. O bloco de código
+que vem depois fica solto, alinhado à margem em vez de recuado sob o item 1 — é a
+mesma pegadinha do [Módulo 04, Passo 4](./04-writing-markdown.md#passo-4--listas),
+com outra roupa.
+
+Duas saídas: ponha a admonition **antes** da lista, ou indente-a com 3 espaços
+para ela virar parte do item:
+
+````mdx
+1. Run the installer:
+
+   :::warning[Run as administrator]
+   It fails silently otherwise.
+   :::
+
+   ```powershell
+   winget install Nimbus.CLI
+   ```
+
+2. Restart the machine.
+````
+
+💻 Como conferir: no navegador, veja se o bloco de código está recuado no mesmo
+nível do texto do item. Se estiver colado na margem esquerda, escapou.
+
 ### Passo 11 — Abas sincronizadas
 
 📄 Adicione `groupId` a todos os grupos que tratam do mesmo assunto:

@@ -293,6 +293,8 @@ import {FiGithub, FiPackage} from 'react-icons/fi';
 <FiGithub size={20} /> Repository
 ```
 
+🔗 https://cdn.jsdelivr.net/npm/react-icons@3.2.1/fi/index.d.ts  (Nomes de Icons do repositório fi)
+
 ⚠️ Depois de instalar qualquer pacote, **pare e reinicie** o `npm start`.
 
 💻 E lembre de commitar o `package.json` **e** o `package-lock.json` — os dois
