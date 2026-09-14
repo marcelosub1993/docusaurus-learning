@@ -2,11 +2,31 @@
 title: Installing Nimbus
 sidebar_label: Installation
 sidebar_position: 1
+pagination_next: configuration/basic-setup
 description: Requirements and step-by-step instructions to install Nimbus.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+
+<ThemedImage
+    sources={{
+        light: useBaseUrl('/img/undraw_docusaurus_mountain.svg'),
+        dark: useBaseUrl('/img/undraw_docusaurus_react.svg'),
+    }}
+    alt= "Themed Image Example"
+    style={{width: '50%'}}
+/>
+
+<figure>
+    <img src={require('/img/install-wizard.jpg').default} alt="Wizard Image" style={{width: '50%'}}/>
+    <figcaption style={{textAlign: 'center', fontSize: '.85rem', opacity: '0.7' , width: '50%'}}>
+        Install Wizard Image
+    </figcaption>
+</figure>
 
 How to get Nimbus running on your machine.
 
@@ -15,6 +35,15 @@ How to get Nimbus running on your machine.
 The installation takes ~5 minutes and requires a reboot.
 
 :::
+
+| Platform | Status | Notes |
+|---|:---:|---|
+| Windows 11 | ✅ | Fully supported |
+| Windows 10 | ⚠️ | Supported until January 2027 |
+| macOS 14+ | ✅ | Fully supported |
+| macOS 13 | ⚠️ | Security fixes only |
+| Ubuntu 22.04+ | ✅ | Fully supported |
+| Linux, glibc < 2.31 | ❌ | Not supported |
 
 <Tabs groupId="operating-system">
     <TabItem value="windows" label="Windows" default>
@@ -26,8 +55,8 @@ The installation takes ~5 minutes and requires a reboot.
     | Network access to your Nimbus workspace |
 
     ---
-    
-    #### Steps
+
+    #### <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-waypoints"> <path d="m10.586 5.414-5.172 5.172"/> <path d="m18.586 13.414-5.172 5.172"/> <path d="M6 12h12"/> <circle cx="12" cy="20" r="2"/> <circle cx="12" cy="4" r="2"/> <circle cx="20" cy="12" r="2"/> <circle cx="4" cy="12" r="2"/> </svg> Steps {/* #steps-windows */}
 
     1. Run the command below on PowerShell
 
@@ -66,8 +95,7 @@ The installation takes ~5 minutes and requires a reboot.
     | Network access to your Nimbus workspace |
 
     ---
-    
-    #### Steps
+    #### <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-waypoints"> <path d="m10.586 5.414-5.172 5.172"/> <path d="m18.586 13.414-5.172 5.172"/> <path d="M6 12h12"/> <circle cx="12" cy="20" r="2"/> <circle cx="12" cy="4" r="2"/> <circle cx="20" cy="12" r="2"/> <circle cx="4" cy="12" r="2"/> </svg> Steps {/* #steps-macos */}
 
     1. Run the command below on Terminal
 
@@ -101,8 +129,8 @@ The installation takes ~5 minutes and requires a reboot.
     | Network access to your Nimbus workspace |
 
     ---
+    #### <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-waypoints"> <path d="m10.586 5.414-5.172 5.172"/> <path d="m18.586 13.414-5.172 5.172"/> <path d="M6 12h12"/> <circle cx="12" cy="20" r="2"/> <circle cx="12" cy="4" r="2"/> <circle cx="20" cy="12" r="2"/> <circle cx="4" cy="12" r="2"/> </svg> Steps {/* #steps-linux */}
     
-    #### Steps
 
     1. Run the command below on Terminal
 

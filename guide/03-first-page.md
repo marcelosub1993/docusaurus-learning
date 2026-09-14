@@ -140,7 +140,7 @@ A regra que explica tudo, e que quase nenhum tutorial diz:
 É uma cascata de três degraus:
 
 ```
-nome do arquivo  →  id  →  slug  →  URL
+file name  →  id  →  slug  →  URL
                     ↑       ↑
               front matter  front matter
 ```
@@ -341,6 +341,11 @@ escrever nada.
 > e uma pasta não tem front matter. O arquivo começa com `_` para o Docusaurus
 > saber que ele não é uma página.
 
+💡 Este arquivo configura a **autogeração** do menu. No
+[Módulo 07](./07-navigation-and-sidebar.md#o-_category_json-para-de-valer-aqui) você
+assume o controle do `sidebars.js`, e a partir de lá ele deixa de ser lido para as
+categorias que você escrever à mão. Por enquanto, ele é quem manda.
+
 ---
 
 ## Passo 6 — Arrumando a home da documentação
@@ -401,7 +406,7 @@ procure `label: 'Tutorial'`:
 ```js
 {
   label: 'Tutorial',
-  to: '/docs/intro',     // ← troque para '/docs/'
+  to: '/docs/intro',     // ← change this to '/docs/'
 },
 ```
 
@@ -411,7 +416,7 @@ do banner:
 ```jsx
 <Link
   className="button button--secondary button--lg"
-  to="/docs/intro">        {/* ← troque para "/docs/" */}
+  to="/docs/intro">        {/* ← change this to "/docs/" */}
   Docusaurus Tutorial - 5min ⏱️
 </Link>
 ```
@@ -487,13 +492,13 @@ mas plausíveis:
 
 ```mdx
 ---
-title: (a pergunta, como frase completa, em inglês)
-sidebar_label: (2 ou 3 palavras)
-sidebar_position: (1, 2 ou 3)
-description: (uma frase resumindo a resposta)
+title: (the question, as a full sentence)
+sidebar_label: (2 or 3 words)
+sidebar_position: (1, 2 or 3)
+description: (one sentence summarizing the answer)
 ---
 
-(a resposta)
+(the answer)
 ```
 
 **2. Nomeie e posicione a categoria**

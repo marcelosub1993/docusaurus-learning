@@ -321,8 +321,8 @@ plugins: [
     '@docusaurus/plugin-content-docs',
     {
       id: 'api',
-      path: 'api',                 // a pasta api/ na raiz de website/
-      routeBasePath: 'api',        // URLs em /api/...
+      path: 'api',                 // the api/ folder at the root of website/
+      routeBasePath: 'api',        // URLs under /api/...
       sidebarPath: './sidebars-api.js',
     },
   ],
@@ -438,7 +438,7 @@ sequenceDiagram
     A->>P: PUT /files/report.csv
     P->>S: PUT /files/report.csv
     S--)P: 503 Service Unavailable
-    Note over A,S: (complete o retry aqui)
+    Note over A,S: (complete the retry here)
 ```
 ````
 

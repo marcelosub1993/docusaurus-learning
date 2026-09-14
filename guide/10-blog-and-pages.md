@@ -30,7 +30,7 @@ Get-ChildItem blog
 👀 Seis itens:
 
 ```
-2021-08-26-welcome/              ← uma pasta, não um arquivo
+2021-08-26-welcome/              <- a folder, not a file
 2019-05-28-first-blog-post.mdx
 2019-05-29-long-blog-post.mdx
 2021-08-01-mdx-blog-post.mdx
@@ -246,10 +246,10 @@ blog: {
   blogDescription: 'Release notes and announcements',
   postsPerPage: 10,
   blogSidebarTitle: 'Recent posts',
-  blogSidebarCount: 5,            // 'ALL' para listar todos
+  blogSidebarCount: 5,            // 'ALL' lists every post
   feedOptions: {
     type: ['rss', 'atom'],
-    xslt: true,                   // deixa o feed legível no navegador
+    xslt: true,                   // makes the feed readable in a browser
   },
   editUrl: 'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
   onInlineTags: 'warn',

@@ -21,12 +21,12 @@ npm run build
 build/
 ├── index.html
 ├── docs/
-│   ├── index.html              ← a Overview, por causa do slug: /
+│   ├── index.html              <- the Overview, because of slug: /
 │   ├── installation/index.html
 │   └── ...
 ├── blog/
-├── assets/          ← CSS e JS com hash no nome
-├── img/             ← cópia de static/
+├── assets/          <- CSS and JS with a hash in the name
+├── img/             <- a copy of static/
 └── sitemap.xml
 ```
 

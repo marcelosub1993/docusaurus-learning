@@ -27,14 +27,21 @@ E três símbolos aparecem o tempo todo:
 
 Elas parecem detalhe e evitam retrabalho:
 
-1. **O guia é em português.** Toda a explicação, os avisos e os exercícios.
-2. **Tudo dentro do site é em inglês.** Nome de pasta, nome de arquivo, front
-   matter, títulos, texto das páginas, nome de componente, nome de branch e
-   mensagem de commit.
+1. **O guia é em português.** Toda a explicação, os avisos e os exercícios — ou
+   seja, tudo que está **fora** de um bloco de código.
+2. **Todo bloco de código é em inglês.** Nome de pasta, nome de arquivo, front
+   matter, títulos, texto das páginas, nome de componente, nome de branch,
+   mensagem de commit — e **os comentários dentro do código**, inclusive os que
+   servem só de anotação.
 
-O motivo da segunda regra é prático: nome de arquivo com acento (`configuração.md`)
+A regra 2 vale mesmo para comando de terminal que você digita uma vez e não
+salva. É mais fácil seguir "código é em inglês, ponto" do que decidir caso a caso
+o que vira arquivo e o que não vira.
+
+O motivo da regra 2 é prático: nome de arquivo com acento (`configuração.md`)
 quebra em servidor Linux, em URL e em Git. E como o repositório vai ser público,
-inglês é o padrão que o resto do mundo consegue ler.
+inglês é o padrão que o resto do mundo consegue ler — incluindo os comentários,
+que são a primeira coisa que alguém lê ao abrir seu código.
 
 ## O site que você vai construir
 

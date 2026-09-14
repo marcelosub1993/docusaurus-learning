@@ -26,8 +26,8 @@ Existe porque nem tudo que você mexeu pertence ao mesmo assunto — dá para
 commitar duas mudanças separadamente, cada uma com sua explicação.
 
 ```
-Você edita          →  git add        →  git commit      →  git push
-(working directory)    (staging area)    (histórico local)   (GitHub)
+You edit            →  git add        →  git commit      →  git push
+(working directory)    (staging area)    (local history)    (GitHub)
 ```
 
 **Remote** é uma cópia do repositório em outro lugar — no nosso caso, o GitHub.
@@ -62,7 +62,7 @@ GitHub resolve isso dando um endereço de encaminhamento.
    `12345678+marcelosub1993@users.noreply.github.com` — copie
 
 ```powershell
-git config --global user.email "COLE_AQUI_O_ENDERECO_NOREPLY"
+git config --global user.email "PASTE_YOUR_NOREPLY_ADDRESS_HERE"
 ```
 
 💻 Mais três ajustes que evitam problema:
@@ -99,7 +99,7 @@ Faça pelo site, uma vez só.
 | Campo                 | Valor                                                               | Por quê                                                                      |
 | --------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | **Repository name**   | `docusaurus-learning`                                               | Minúsculas, com hífen, sem acento. É o padrão do GitHub e vira parte da URL. |
-| **Description**       | `Curso prático de Docusaurus em português, com o site de exercício` | Aparece na busca e no topo da página. Uma frase.                             |
+| **Description**       | `Hands-on Docusaurus course in Portuguese, with the practice site` | Aparece na busca e no topo da página. Uma frase.                             |
 | **Public**            | marcado                                                             | Repositório público tem GitHub Pages de graça, que o Módulo 12 usa.          |
 | **Add a README file** | **desmarcado**                                                      | Você já tem um README local.                                                 |
 | **Add .gitignore**    | **None**                                                            | Você já tem um `.gitignore` local.                                           |
@@ -373,10 +373,10 @@ some da busca.
 Daqui em diante, no fim de cada módulo, você repete quatro comandos:
 
 ```powershell
-git status                                    # 1. o que mudou?
+git status                                    # 1. what changed?
 git add .                                     # 2. quero tudo na próxima foto
-git commit -m "docs: finish module 02"        # 3. tira a foto
-git push                                      # 4. manda pro GitHub
+git commit -m "docs: finish module 02"        # 3. take the snapshot
+git push                                      # 4. send it to GitHub
 ```
 
 Comandos de consulta que valem conhecer:
@@ -452,11 +452,11 @@ Uma branch é uma linha paralela de commits. Você trabalha nela sem tocar na
 `main`, e depois traz de volta.
 
 ```powershell
-git switch -c experiment/dark-theme   # cria e entra na branch
+git switch -c experiment/dark-theme   # create the branch and switch to it
 # ... edita, add, commit ...
 git switch main                       # volta
-git merge experiment/dark-theme       # traz as mudanças
-git branch -d experiment/dark-theme   # apaga a branch, já incorporada
+git merge experiment/dark-theme       # bring the changes in
+git branch -d experiment/dark-theme   # delete the branch, already merged
 ```
 
 Nome de branch segue o mesmo padrão dos arquivos: minúsculas, hífen, inglês.
@@ -520,7 +520,7 @@ Anotações pessoais enquanto sigo o guia.
 
 ## Doubts
 
-- (algo que ficou meio nebuloso)
+- (something that still feels fuzzy)
 
 ## Commands I keep forgetting
 

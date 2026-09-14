@@ -190,27 +190,27 @@ Compare com a tabela abaixo. Não precisa entender tudo agora — volte aqui qua
 um módulo mencionar um arquivo.
 
 ```
-Docusaurus/                     ← a raiz do repositório Git
+Docusaurus/                     <- the Git repository root
 ├── .gitignore
 ├── README.md
 ├── LICENSE
-├── guide/                      📖 este guia
-└── website/                    ← o site Docusaurus
-    ├── blog/                   📝 Posts do blog
-    ├── docs/                   📚 A documentação (o coração do site)
+├── guide/                      📖 this guide
+└── website/                    <- the Docusaurus site
+    ├── blog/                   📝 Blog posts
+    ├── docs/                   📚 The documentation (the heart of the site)
     ├── src/
-    │   ├── components/         ⚛️  Componentes React que você cria
-    │   ├── css/custom.css      🎨 CSS global e cores do tema
-    │   └── pages/              📄 Páginas soltas (fora de /docs e /blog)
-    ├── static/                 📦 Arquivos servidos como estão (imagens, PDFs)
+    │   ├── components/         ⚛️  React components you write
+    │   ├── css/custom.css      🎨 Global CSS and theme colors
+    │   └── pages/              📄 Standalone pages (outside /docs and /blog)
+    ├── static/                 📦 Files served as-is (images, PDFs)
     │   └── img/
-    ├── docusaurus.config.js    ⚙️  Configuração do site inteiro
-    ├── sidebars.js             🧭 O menu lateral da documentação
-    ├── package.json            📋 Dependências e comandos
-    ├── package-lock.json       🔒 As versões exatas instaladas — vai pro Git
-    ├── node_modules/           🚫 Dependências instaladas
-    ├── .docusaurus/            🚫 Cache de build
-    └── build/                  🚫 O site gerado — aparece no primeiro build
+    ├── docusaurus.config.js    ⚙️  Whole-site configuration
+    ├── sidebars.js             🧭 The docs sidebar menu
+    ├── package.json            📋 Dependencies and commands
+    ├── package-lock.json       🔒 Exact installed versions — goes into Git
+    ├── node_modules/           🚫 Installed dependencies
+    ├── .docusaurus/            🚫 Build cache
+    └── build/                  🚫 The generated site — appears on first build
 ```
 
 🚫 = **gerada**, não escrita por você. Nunca edite à mão, nunca commite. As três

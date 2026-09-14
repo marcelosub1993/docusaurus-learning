@@ -18,7 +18,7 @@ essencial:
 :root {
   --ifm-color-primary: #2e8555;
   --ifm-color-primary-dark: #29784c;
-  /* ... mais 5 tons ... */
+  /* ... 5 more shades ... */
   --ifm-code-font-size: 95%;
 }
 
@@ -75,13 +75,13 @@ Além das cores, o Infima expõe centenas de variáveis. As que você mais vai m
 
 ```css
 :root {
-  /* Tipografia */
+  /* Typography */
   --ifm-font-family-base: 'Segoe UI', system-ui, sans-serif;
   --ifm-font-size-base: 16px;
   --ifm-line-height-base: 1.65;
   --ifm-heading-font-weight: 700;
 
-  /* Código */
+  /* Code */
   --ifm-code-font-size: 95%;
   --ifm-font-family-monospace: 'Cascadia Code', Consolas, monospace;
 
@@ -115,10 +115,10 @@ themeConfig: {
     logo: {
       alt: 'Nimbus logo',
       src: 'img/logo.svg',
-      srcDark: 'img/logo-dark.svg',   // opcional: versão para modo escuro
+      srcDark: 'img/logo-dark.svg',   // optional: dark mode version
       width: 32,
       height: 32,
-      href: '/',                       // para onde o logo leva
+      href: '/',                       // where the logo links to
     },
   },
 },
@@ -181,8 +181,8 @@ fora do seu domínio.
 themeConfig: {
   colorMode: {
     defaultMode: 'light',
-    disableSwitch: false,            // true remove o botão de tema
-    respectPrefersColorScheme: true, // segue a preferência do sistema
+    disableSwitch: false,            // true removes the theme toggle
+    respectPrefersColorScheme: true, // follows the system preference
   },
 },
 ```
@@ -226,23 +226,23 @@ o anterior nunca verá o próximo.
 Algumas customizações não têm variável. Aí é CSS mesmo, no `custom.css`:
 
 ```css
-/* Deixar a sidebar mais compacta */
+/* Make the sidebar more compact */
 .menu__link {
   font-size: 0.9rem;
 }
 
-/* Tirar a sombra da navbar */
+/* Remove the navbar shadow */
 .navbar {
   box-shadow: none;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
 }
 
-/* Destacar o cabeçalho das tabelas */
+/* Highlight table headers */
 .markdown table th {
   background-color: var(--ifm-color-emphasis-100);
 }
 
-/* Largura máxima confortável de leitura */
+/* Comfortable maximum reading width */
 .markdown {
   max-width: 900px;
 }

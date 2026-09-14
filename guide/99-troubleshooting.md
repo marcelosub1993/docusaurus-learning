@@ -12,12 +12,12 @@
 Na dúvida, nesta ordem:
 
 ```powershell
-npm run clear      # 1. limpa o cache
-npm run build      # 2. mostra os erros de verdade (o start esconde alguns)
+npm run clear      # 1. clear the cache
+npm run build      # 2. surfaces the real errors (start hides some)
 ```
 
 ```powershell
-Remove-Item -Recurse -Force node_modules, package-lock.json   # 3. último recurso
+Remove-Item -Recurse -Force node_modules, package-lock.json   # 3. last resort
 npm install
 ```
 
@@ -179,6 +179,55 @@ documento. Quase sempre porque:
 tendo o id `faq/licensing`. Veja o
 [Módulo 07, Passo 2](./07-navigation-and-sidebar.md#passo-2--descobrir-os-ids).
 
+### `"docs.breadcrumbs" is not allowed` / `is not allowed` em geral
+
+```
+details: [ { message: '"docs.breadcrumbs" is not allowed',
+             path: [ 'docs', 'breadcrumbs' ], type: 'object.unknown' } ]
+```
+
+**Causa:** a opção existe, mas você a colocou no bloco errado do
+`docusaurus.config.js`. Há **dois** blocos chamados `docs`, com conteúdos
+diferentes:
+
+| Bloco | Aceita |
+|---|---|
+| `presets` → `classic` → `docs` | `sidebarPath`, `editUrl`, `routeBasePath`, **`breadcrumbs`**, `tags`, `versions`… |
+| `themeConfig` → `docs` | Só `versionPersistence`, `sidebar.hideable`, `sidebar.autoCollapseCategories` |
+
+**Como ler a mensagem:** o `path` diz o caminho dentro do objeto que falhou na
+validação. `[ 'docs', 'breadcrumbs' ]` num erro de `themeConfig` significa "o
+`docs` do `themeConfig` não conhece `breadcrumbs`" — logo, é do outro bloco.
+
+**Conserto:** mova a opção. Veja o mapa no
+[Módulo 07, Passo 8](./07-navigation-and-sidebar.md#antes-existem-dois-blocos-chamados-docs-no-config).
+
+⚠️ O mesmo vale para qualquer `is not allowed`: a opção quase nunca está errada,
+está no nível errado.
+
+### `Nested dropdowns are not allowed`
+
+**Causa:** um item que o Docusaurus trata como dropdown ficou **dentro** do
+`items` de outro dropdown na navbar. O caso mais comum é `{type: 'search'}`, que é
+item de primeiro nível.
+
+**Conserto:** mova o item para o array `items` da navbar, não para o do dropdown:
+
+```js
+navbar: {
+  items: [
+    {type: 'dropdown', label: 'Resources', items: [
+      {type: 'doc', docId: 'reference', label: 'Syntax reference'},
+    ]},
+    {type: 'search', position: 'right'},   // ← aqui, no primeiro nível
+  ],
+},
+```
+
+⚠️ `{type: 'search'}` só **posiciona** a caixa de busca — ele não instala busca
+nenhuma. Sem um plugin de busca ([Módulo 11](./11-advanced-features.md#passo-1--busca))
+ele não faz nada visível.
+
 ### `Can't find any sidebar with id "tutorialSidebar"`
 
 **Causa:** você renomeou a sidebar no `sidebars.js` e esqueceu de atualizar o
@@ -207,8 +256,8 @@ O build lista cada link e a página de origem. Causas, em ordem de frequência:
 **1. Barra na frente do caminho de arquivo**
 
 ```mdx
-[Errado](/installation.mdx)
-[Certo](./installation.mdx)
+[Wrong](/installation.mdx)
+[Right](./installation.mdx)
 ```
 
 Com barra, o Docusaurus entende URL, não caminho de arquivo.
@@ -216,8 +265,8 @@ Com barra, o Docusaurus entende URL, não caminho de arquivo.
 **2. Caminho de arquivo dentro de prop JSX**
 
 ```jsx
-<Card to="./installation.mdx">     ← não funciona
-<Card to="/docs/installation">     ← certo
+<Card to="./installation.mdx">     ← does not work
+<Card to="/docs/installation">     ← correct
 ```
 
 A conversão caminho→URL só acontece em links **Markdown**. Props recebem o valor
@@ -290,8 +339,8 @@ Se o erro aponta para a linha de um `##`, quase certamente é a sintaxe antiga d
 id explícito:
 
 ```mdx
-## Minha seção {#minha-secao}     ← quebra
-## Minha seção {/* #minha-secao */}  ← certo
+## My section {#my-section}            ← breaks
+## My section {/* #my-section */}      ← correct
 ```
 
 A `{#id}` deixou de ser MDX válido no Docusaurus 3 / MDX v2, mas continua
@@ -307,6 +356,38 @@ Cause: Could not parse expression with acorn
   "line": 18,
   "column": 28
 ```
+
+### `Unexpected end of file in name` / `unexpected-eof`
+
+```
+Cause: Unexpected end of file in name, expected a name character such as
+letters, digits, `$`, or `_`; whitespace before attributes; or the end of the tag
+ruleId: unexpected-eof
+```
+
+**Causa:** uma tag JSX aberta que o parser nunca vê fechar. O caso mais comum é
+**JSX de várias linhas dentro de um título**:
+
+````mdx
+#### <svg
+  width="24" viewBox="0 0 24 24">
+  <path d="..." />
+</svg> Steps
+````
+
+Título em Markdown é um bloco de **uma linha só**. Tudo depois da quebra já não
+pertence a ele, então o `<svg` fica aberto e o parser chega ao fim.
+
+**Conserto:** tire o JSX do título, ou colapse tudo numa linha, ou transforme em
+componente. Veja o
+[Módulo 06](./06-images-and-icons.md#se-você-tentar-pôr-o-ícone-no-título).
+
+⚠️ Se colapsar numa linha, fixe o id do título — senão o slug vira algo como
+`---------steps`, montado a partir de um título sem texto.
+
+**Outras causas da mesma mensagem:** tag sem fechar em qualquer lugar
+(`<div>` sem `</div>`), ou `<` solto no texto que o MDX entendeu como início de
+tag.
 
 ### O comentário HTML quebrou o build
 
@@ -515,6 +596,66 @@ técnicas para excluir só essas pastas da sincronização e nenhuma se sustenta
 
 ## Erros de servidor e build
 
+### `Docusaurus static site generation process emitted warnings`
+
+```
+[WARNING] Docusaurus static site generation process emitted warnings for 9 paths
+This is non-critical and can be disabled with DOCUSAURUS_IGNORE_SSG_WARNINGS=true
+
+- "/docs/":
+  - [HTML minifier diagnostic - error] Missing whitespace between attributes
+    {"primary_spans":[{"end":10690,"start":10689}]}
+```
+
+**Não derruba o build**, e por isso é fácil conviver com ele. Mas é HTML malformado
+chegando no site.
+
+**Causa:** HTML inválido em algum lugar. O minificador tenta processar e reclama.
+As mensagens mais comuns:
+
+| Mensagem | Quase sempre é |
+|---|---|
+| `Missing whitespace between attributes` | Pontuação solta encostada nas aspas: `<hr style="..."; />` |
+| `Unexpected closing tag` | Tag fechada duas vezes, ou `</div>` sobrando |
+| `Unexpected character in attribute name` | Aspas desbalanceadas dentro de um atributo |
+
+**Como localizar — duas dicas que economizam tempo:**
+
+**1. Ignore os números de `start`/`end`.** Eles apontam para o HTML **antes** da
+minificação, e o arquivo em `build/` já está minificado. Procurar aquele byte no
+arquivo final leva ao lugar errado.
+
+**2. Olhe a lista de páginas, não as posições.** Ela é o diagnóstico de verdade:
+
+| Quais páginas aparecem | Onde procurar |
+|---|---|
+| **Todas** as páginas do site | Navbar, footer, ou um client module |
+| Todas as de `/docs/` | Sidebar — quase sempre um item `type: 'html'` |
+| Uma ou duas páginas | O conteúdo `.mdx` daquelas páginas |
+
+💻 Sabendo a área, procure o HTML suspeito no arquivo gerado:
+
+```powershell
+npm run build
+Select-String -Path "build\docs\index.html" -Pattern "<hr|<div style"
+```
+
+👀 Leia o que sair. No caso mais comum, o erro salta aos olhos quando você vê o
+HTML renderizado em vez da string no `.js`:
+
+```
+<hr style="margin:0.75rem 1rem; opacity:0.2" ;/>
+                                             ↑ este ponto e vírgula
+```
+
+**Conserto:** arrume o HTML. Veja o
+[Módulo 07](./07-navigation-and-sidebar.md#o-type-html-não-tem-rede-de-segurança)
+para as armadilhas de `type: 'html'` na sidebar.
+
+⚠️ **Não use o `DOCUSAURUS_IGNORE_SSG_WARNINGS=true`** que a mensagem sugere, a
+não ser que você já tenha investigado. Ele silencia o sintoma e mantém o HTML
+quebrado no ar.
+
 ### `Port 3000 is already in use`
 
 **Causa:** um `npm start` anterior ficou rodando, ou outro programa ocupou a porta.
@@ -616,7 +757,7 @@ npm config set registry https://registry.npmjs.org/
 Se o erro for de certificado, o time pode fornecer o CA da empresa:
 
 ```powershell
-npm config set cafile C:\caminho\para\certificado.pem
+npm config set cafile C:\path\to\certificate.pem
 ```
 
 ⚠️ **Não use `npm config set strict-ssl false`.** Ele resolve desligando a

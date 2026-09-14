@@ -266,10 +266,10 @@ e em links externos, que o Docusaurus não tem como verificar.
 ### O erro clássico
 
 ```mdx
-[Errado](/installation.mdx)          ← barra na frente + extensão .mdx
-[Certo](./installation.mdx)          ← ponto-barra
-[Certo](../faq/licensing.mdx)        ← subir uma pasta
-[Certo](./installation.mdx#requirements)  ← com âncora
+[Wrong](/installation.mdx)                ← leading slash + .mdx extension
+[Right](./installation.mdx)               ← dot-slash
+[Right](../faq/licensing.mdx)             ← go up one folder
+[Right](./installation.mdx#requirements)  ← with an anchor
 ```
 
 Com a barra na frente, o Docusaurus entende que é URL, não caminho de arquivo — e
@@ -426,7 +426,7 @@ slug: /faq-licensing
 description: What a Nimbus seat includes and how to move it between machines.
 ---
 
-(resposta curta, 2 linhas)
+(short answer, 2 lines)
 
 ## What a seat includes {/* #seat */}
 
@@ -439,7 +439,7 @@ description: What a Nimbus seat includes and how to move it between machines.
 <details>
   <summary>Step-by-step transfer</summary>
 
-(os passos aqui)
+(the steps go here)
 
 </details>
 ```

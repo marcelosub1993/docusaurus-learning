@@ -268,9 +268,22 @@ Para um ícone único, sem virar arquivo. Note o `stroke="currentColor"`: ele fa
 </svg>
 ```
 
-⚠️ Em JSX os atributos são camelCase: `strokeWidth`, `strokeLinecap`, `viewBox`.
-Copiar SVG da internet e colar direto costuma quebrar por causa disso. Existem
-conversores online de "SVG para JSX" que resolvem em um clique.
+⚠️ **Um detalhe ao colar SVG da internet.** A maior parte cola e funciona: o React
+aceita `stroke-width` e `strokeWidth` igualmente em SVG, então os atributos com
+hífen não são problema.
+
+Só dois pegam:
+
+| Atributo | O que acontece |
+|---|---|
+| `class="..."` | Renderiza, mas o React reclama no console em desenvolvimento: *"Invalid DOM property `class`. Did you mean `className`?"* |
+| `viewbox` minúsculo | Não é reconhecido — o SVG aparece com tamanho errado ou não aparece |
+
+Ou seja: troque `class` por `className`, confirme que é `viewBox` com o B
+maiúsculo, e o resto pode ficar como veio.
+
+💻 Como conferir: `F12` → aba Console, com o `npm start` rodando. Aviso de
+`Invalid DOM property` aponta exatamente o atributo.
 
 Fontes de SVG gratuitos: [Feather](https://feathericons.com/),
 [Lucide](https://lucide.dev/), [Heroicons](https://heroicons.com/).
@@ -318,14 +331,14 @@ cd website
 
 ## ✅ Checkpoint
 
-- [ ] Uma imagem externa e uma de `static/img/`
-- [ ] Uma imagem redimensionada via JSX
-- [ ] Uma imagem via `require()`, e você **testou** que o build falha se ela sumir
-- [ ] Você viu que o caminho de `static/` errado **não** derruba o build
-- [ ] Um `ThemedImage` trocando com o botão de tema
-- [ ] Uma tabela com emoji e um SVG inline com `currentColor`
-- [ ] `npm run build` passa
-- [ ] Commit feito
+- [x] Uma imagem externa e uma de `static/img/`
+- [x] Uma imagem redimensionada via JSX
+- [x] Uma imagem via `require()`, e você **testou** que o build falha se ela sumir
+- [x] Você viu que o caminho de `static/` errado **não** derruba o build
+- [x] Um `ThemedImage` trocando com o botão de tema
+- [x] Uma tabela com emoji e um SVG inline com `currentColor`
+- [x] `npm run build` passa
+- [x] Commit feito
 
 ---
 
@@ -353,19 +366,87 @@ Use o bloco do Passo 7 como base, trocando o `src` pela forma do Passo 5.
 
 **3. Uma tabela de compatibilidade**
 
-📄 Reaproveite a tabela do Passo 8, adaptada para o que a página de instalação
-precisa: uma linha por sistema operacional, com ✅ / ⚠️ / ❌.
+⚠️ **Onde colocar importa, e talvez você tenha estranhado.** Se você seguiu o
+Módulo 05, a página já tem uma tabela de Requirements dentro de cada aba. Uma
+segunda tabela por sistema operacional pareceria repetição.
+
+Não é, porque ela responde **outra pergunta**:
+
+| Tabela                      | Responde                        | Onde vai              |
+| --------------------------- | ------------------------------- | --------------------- |
+| Requirements, dentro da aba | "O que preciso ter na máquina?" | Dentro do `<TabItem>` |
+| Compatibilidade             | "Meu sistema é suportado?"      | **Antes** do `<Tabs>` |
+|                             |                                 |                       |
+
+E tem um motivo prático para ela ficar de fora: quem está num sistema **não
+suportado** descobriria isso só depois de abrir as três abas. A matriz no topo
+resolve em dois segundos.
+
+📄 Logo abaixo do `:::info`, antes do `<Tabs>`:
+
+```mdx
+| Platform | Status | Notes |
+|---|:---:|---|
+| Windows 11 | ✅ | Fully supported |
+| Windows 10 | ⚠️ | Supported until January 2027 |
+| macOS 14+ | ✅ | Fully supported |
+| macOS 13 | ⚠️ | Security fixes only |
+| Ubuntu 22.04+ | ✅ | Fully supported |
+| Linux, glibc < 2.31 | ❌ | Not supported |
+```
+
+💡 Repare que os emojis continuam legíveis mesmo se o leitor não conseguir clicar
+nas abas — é o argumento do Passo 8 na prática: emoji funciona em qualquer lugar,
+sem depender de nada.
 
 **4. Um ícone que muda de cor sozinho**
 
-📄 Coloque o SVG do Passo 10 imediatamente antes do texto de um `##`, assim:
+📄 Coloque o SVG do Passo 10 na página, em qualquer lugar, e depois troque para o
+modo escuro.
 
-```jsx
-<h2><svg ... /> Requirements</h2>
+👀 O ícone tem que mudar de cor junto com o texto ao redor. Se ele ficar preto no
+fundo escuro, você trocou `currentColor` por uma cor fixa.
+
+### Se você tentar pôr o ícone no título
+
+Parece natural e **quebra**:
+
+````mdx
+#### <svg
+  width="24" height="24" viewBox="0 0 24 24"
+  stroke="currentColor">
+  <path d="..." />
+</svg> Steps
+````
+
+```
+Cause: Unexpected end of file in name, expected a name character...
+ruleId: unexpected-eof
 ```
 
-👀 Troque para o modo escuro. O ícone tem que mudar de cor junto com o texto. Se
-ele ficar preto no fundo escuro, você trocou `currentColor` por uma cor fixa.
+O motivo é uma regra do Markdown, não do Docusaurus: **um título é um bloco de
+uma linha só.** Tudo depois da quebra de linha já não pertence a ele — então o
+`<svg` fica aberto e o parser chega ao "fim do arquivo" ainda dentro da tag.
+
+Três saídas, da pior para a melhor:
+
+| Saída | Resultado |
+|---|---|
+| Colapsar o SVG em **uma linha** | Funciona, mas vira uma linha de 400 caracteres, impossível de editar |
+| Deixar o ícone na **linha de cima** do título | Legível, e é o que a maioria dos sites faz |
+| Transformar o ícone em **componente** | `#### <Waypoints /> Steps` — curto e reutilizável. É o [Módulo 08](./08-components-and-layout.md). |
+
+⚠️ E se você colapsar em uma linha, repare no id gerado: o Docusaurus tenta montar
+o slug a partir do conteúdo do título e produz algo como `---------steps`, porque
+o SVG não tem texto. Fixe o id à mão, com a sintaxe do
+[Módulo 04](./04-writing-markdown.md#âncoras-fixas):
+
+```mdx
+#### <svg ... /> Steps {/* #steps-linux */}
+```
+
+💡 Para este exercício, a segunda saída basta. A terceira é o caminho de verdade,
+e você chega nele em dois módulos.
 
 **5. Valide e commite**
 

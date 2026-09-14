@@ -49,8 +49,9 @@ const config = {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+          //breadcrumbs: false,
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
@@ -61,7 +62,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -82,6 +83,13 @@ const config = {
       colorMode: {
         respectPrefersColorScheme: true,
       },
+
+      docs: {
+        sidebar: {
+          hideable: true,
+        }
+      },
+
       navbar: {
         title: 'Nimbus',
         logo: {
@@ -93,9 +101,26 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Docs',
           },
+          
+          // Dropdown menu
+          {
+            type: 'dropdown',
+            label: 'Resources',
+            position: 'left',
+            items: [
+              {type: 'doc', docId: 'reference', label: 'Sintax reference'},
+              {to: '/docs/category/configuration', label: 'Configuration'},
+              {href: 'https://docusaurus.io', label: 'Docusaurus ↗'},
+            ],
+          },
+
+
           {to: '/blog', label: 'Blog', position: 'left'},
+
+          // positions the search bar
+
           {
             href: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',
@@ -103,51 +128,37 @@ const config = {
           },
         ],
       },
+
       footer: {
         style: 'dark',
+        logo: {alt: 'Nimbus logo', src: 'img/logo.svg', href: '/', width: 48},
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/',
-              },
+              {label: 'Get Started', to: '/docs/installation'},
+              {label: 'Configuration', to: '/docs/category/configuration'},
+              {label: 'Syntax reference', to: '/docs/reference'},
             ],
           },
           {
-            title: 'Community',
+            title: 'Support',
             items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
-              },
+              {label: 'Frequently asked questions', to: '/docs/faq-licensing'},
+              {label: 'Report an issue', href: 'https://github.com/marcelosub1993/docusaurus-learning/issues'},
             ],
           },
           {
             title: 'More',
             items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
+              {label: 'Blog', to: '/blog'},
+              {label: 'GitHub', href: 'https://github.com/marcelosub1993/docusaurus-learning'},
             ],
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Nimbus. Built with Docusaurus.`,
       },
+
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
