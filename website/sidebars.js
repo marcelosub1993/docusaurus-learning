@@ -17,7 +17,7 @@ import { IoTimeSharp } from 'react-icons/io5';
  @type {import('@docusaurus/plugin-content-docs').SidebarsConfig}
  */
 const sidebars = {
-  tutorialSidebar: [
+  guideSidebar: [
     // 1. Shorthand: a bare string means {type: 'doc', id: 'intro'}
     'intro',
 
@@ -44,7 +44,7 @@ const sidebars = {
       link: {
         type: 'generated-index',
         title: 'Configuration guides',
-        description: 'Everthing you can adjust in Nimbus',
+        description: 'Everything you can adjust in Nimbus',
         slug: '/category/configuration',
       },
       // Picks up every file in the folder, ordered by sidebar_position
@@ -58,6 +58,9 @@ const sidebars = {
       defaultStyle: false,
     },
 
+  ],
+
+  referenceSidebar: [
     'reference',
 
     {
@@ -73,7 +76,6 @@ const sidebars = {
       label: 'Docusaurus docs',
       href: 'https://docusaurus.io/docs',
     },
-
   ],
 };
 

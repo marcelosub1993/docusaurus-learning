@@ -61,6 +61,40 @@ porque não tem mensagem nenhuma.
 
 💻 Prove: troque um `className` por `class`, salve, olhe. Depois desfaça.
 
+### ⚠️ Classe errada também falha em silêncio
+
+O `className` está certo, mas o **nome da classe** tem duas armadilhas próprias — e
+nenhuma das duas gera erro:
+
+```jsx
+<a className="button buttom-primary button-lg">   ← as duas erradas
+<a className="button button--primary button--lg"> ← certo
+```
+
+| Erro | O que é |
+|---|---|
+| `buttom` | Typo. `m` no lugar do `n`. |
+| `button-primary` | **Um hífen só.** O Infima usa **dois**: `bloco--modificador`. |
+
+Com um hífen a classe simplesmente não existe. E como classe inexistente não é
+erro — o React repassa a string, o navegador ignora o que não conhece — você fica
+com a classe base aplicada e nenhum modificador.
+
+👀 O sintoma é característico: o elemento aparece **quase** certo. Um botão com
+essas classes erradas vira texto em negrito, sem fundo e sem borda. No modo escuro
+ele some.
+
+💻 Uma varredura que acha todos os hífens faltando no projeto:
+
+```powershell
+Select-String -Path docs\*.mdx, docs\**\*.mdx, src\**\*.js -Pattern "button-[a-z]|col-[0-9]|margin-[a-z]+-[a-z]+" |
+  Where-Object { $_.Line -notmatch "--" }
+```
+
+💡 **A regra para lembrar:** todo modificador do Infima tem dois hífens.
+`col--4`, `button--lg`, `padding--md`, `badge--warning`, `alert--info`. Se você
+escreveu um hífen só, não é modificador — é uma classe que não existe.
+
 ### Passo 2 — Espaçamento
 
 O Infima tem classes utilitárias no padrão `propriedade--tamanho`:

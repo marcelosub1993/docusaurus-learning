@@ -49,7 +49,7 @@ const config = {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          //breadcrumbs: false,
+          breadcrumbs: false,
           editUrl:
             'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
         },
@@ -99,9 +99,15 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'guideSidebar',
             position: 'left',
-            label: 'Docs',
+            label: 'Guide',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'referenceSidebar',
+            position: 'left',
+            label: 'Reference',
           },
           
           // Dropdown menu
@@ -110,7 +116,7 @@ const config = {
             label: 'Resources',
             position: 'left',
             items: [
-              {type: 'doc', docId: 'reference', label: 'Sintax reference'},
+              {type: 'doc', docId: 'reference', label: 'Syntax reference'},
               {to: '/docs/category/configuration', label: 'Configuration'},
               {href: 'https://docusaurus.io', label: 'Docusaurus ↗'},
             ],
@@ -122,7 +128,7 @@ const config = {
           // positions the search bar
 
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
             label: 'GitHub',
             position: 'right',
           },
