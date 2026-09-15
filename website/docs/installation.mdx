@@ -10,6 +10,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import Figure from '@site/src/components/Figure';
 
 
 <ThemedImage
@@ -21,12 +22,20 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
     style={{width: '50%'}}
 />
 
-<figure>
+{/* Without Function*/}
+{/*<figure>
     <img src={require('/img/install-wizard.jpg').default} alt="Wizard Image" style={{width: '50%'}}/>
     <figcaption style={{textAlign: 'center', fontSize: '.85rem', opacity: '0.7' , width: '50%'}}>
         Install Wizard Image
     </figcaption>
-</figure>
+</figure>*/}
+
+{/* With Function */}
+<Figure
+    src="/img/install-wizard.jpg"
+    alt= "The Nimbus install wizard, first screen"
+    caption="Figure 1 — the installer asks for your workspace ID."
+    width="500px"/>
 
 How to get Nimbus running on your machine.
 

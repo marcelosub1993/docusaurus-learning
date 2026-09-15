@@ -5,8 +5,22 @@ slug: /
 description: What Nimbus does and where to start.
 ---
 
+import { CardGrid, Card} from "@site/src/components/Cards";
+
 ## Where to Start
 
 - [Installation](./installation.mdx) - get it running
 - [Basic Setup](./configuration/basic-setup.mdx) - the three required settings
 - [Where to Start](./faq-licensing) - frequently asked questions about licensing and usage
+
+<CardGrid>
+    <Card icon="📦" title="Installation" to="/docs/installation">
+        Get Nimbus running on your machine.
+    </Card>
+    <Card icon="⚙️" title="Configuration" to="/docs/configuration/basic-setup">
+        The three setting you need first.
+    </Card>
+    <Card icon="❓" title="FAQ" to="/docs/faq-licensing">
+        Licensing, performance and data retention.
+    </Card>
+</CardGrid>

@@ -13,6 +13,7 @@ import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Logo from '@site/static/img/logo.svg';
 import {FiGithub, FiPackage, FiChrome, FiUmbrella} from 'react-icons/fi';
+import Figure from '@site/src/components/Figure'
 
 
 A living page where each formatting feature is show in use.
@@ -255,12 +256,21 @@ function sum(a,b) {
     style={{width: 320}}
 />
 
+{/* Without function */}
 <figure style={{margin:0}}>
     <img src="/img/nimbus-dashboard.jpg" alt="Sync architeture" style={{width:'100%'}} />
-    <figcaption style={{textAlign: 'center', fonteSize: '.85rem', opacity: 0.7}}>
+    <figcaption style={{textAlign: 'center', fontSize: '.85rem', opacity: 0.7}}>
         Figure 1 - How a sync round-trip works.
     </figcaption>
 </figure>
+
+{/* With Function */}
+<Figure
+    src = "/img/nimbus-dashboard.jpg"
+    alt = "Sync architeture"
+    caption = "Figure 1 - How a sync round-trip works"
+    width = "400px"
+/>
 
 ## Platform support
 

@@ -79,9 +79,11 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/image-site.jpg',
       colorMode: {
-        respectPrefersColorScheme: true,
+        defaultMode: 'dark',
+        disableSwitch: true, // true removes the theme toggle
+        respectPrefersColorScheme: true, // follows the system preference
       },
 
       docs: {
@@ -94,7 +96,11 @@ const config = {
         title: 'Nimbus',
         logo: {
           alt: 'Nimbus logo',
-          src: 'img/logo.svg',
+          src: 'img/google-keep.svg',
+          srcDark: 'img/google-keep.svg',   // optional: dark mode version
+          width: 32,
+          height: 32,
+          href: '/'
         },
         items: [
           {
@@ -137,7 +143,7 @@ const config = {
 
       footer: {
         style: 'dark',
-        logo: {alt: 'Nimbus logo', src: 'img/logo.svg', href: '/', width: 48},
+        logo: {alt: 'Nimbus logo', src: 'img/google-keep.svg', href: '/', width: 48},
         links: [
           {
             title: 'Documentation',
@@ -163,6 +169,15 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Nimbus. Built with Docusaurus.`,
+      },
+
+      announcementBar: {
+        id: 'release_2_0',
+        content:
+          '🚀 Nimbus 2.0 is out. <a href="/blog">Read the release notes</a>.',
+        backgroundColor: '#000000',
+        textColor: '#ffc629',
+        isCloseable: true,
       },
 
       prism: {

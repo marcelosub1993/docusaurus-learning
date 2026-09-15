@@ -5,8 +5,9 @@
 > **Tempo:** ~70 min
 > **Pré-requisito:** [Módulo 07](./07-navigation-and-sidebar.md)
 
-Este é o módulo com mais JavaScript. Não precisa saber React antes — vou explicar
-cada linha. Se travar, faça só a Parte A, commite, e volte para a B outro dia.
+Este é o módulo com mais código. Não precisa saber React **nem CSS** antes — o
+Passo 6 explica props linha a linha, e o Passo 7 tem um resumo de CSS para quem
+nunca escreveu. Se travar, faça só a Parte A, commite, e volte para a B outro dia.
 
 💻 Dentro de `website`.
 
@@ -184,7 +185,8 @@ export function Card({icon, title, to, children}) {
 
 ### Passo 6 — Entender o que você escreveu
 
-Linha por linha:
+Duas linhas de import, e depois a parte que importa de verdade: props e
+`children`.
 
 ```jsx
 import Link from '@docusaurus/Link';
@@ -199,20 +201,142 @@ import styles from './styles.module.css';
 Importa o CSS como um **objeto**. `styles.card` devolve o nome real da classe. O
 sufixo `.module.css` é o que ativa esse comportamento — Passo 8.
 
+---
+
+#### Componente é uma função
+
+Esta é a ideia que destrava o resto:
+
 ```jsx
-export function Card({icon, title, to, children}) {
+export function Card({icon, title, to, children}) { ... }
 ```
-Define o componente. `export` o torna importável em outros arquivos. As chaves
-`{icon, title, to, children}` são as **props** — os valores que quem usa o
-componente vai passar. `children` é especial: é o conteúdo escrito *entre* as tags
-de abertura e fechamento.
+
+`Card` é uma função JavaScript comum. Ela recebe valores de fora, faz algo com
+eles, e devolve o que aparece na tela.
+
+**Props são os argumentos dessa função.** A diferença para uma função normal é que
+você não passa por posição (`Card("📦", "Installation")`), passa por **nome** — e
+a sintaxe de passar por nome é a de atributo HTML.
+
+#### O mapeamento, lado a lado
+
+Quando você escreve isto numa página:
+
+```mdx
+<Card icon="📦" title="Installation" to="/docs/installation">
+  Get Nimbus running on your machine.
+</Card>
+```
+
+O React monta **um objeto** e chama sua função com ele:
+
+```js
+{
+  icon: "📦",
+  title: "Installation",
+  to: "/docs/installation",
+  children: "Get Nimbus running on your machine."
+}
+```
+
+| No uso | Chega no componente como |
+|---|---|
+| `icon="📦"` | `props.icon` |
+| `title="Installation"` | `props.title` |
+| `to="/docs/..."` | `props.to` |
+| o conteúdo **entre** as tags | `props.children` |
+
+#### As chaves em `{icon, title, to, children}`
+
+Isso não é sintaxe de React — é **desestruturação** do JavaScript, que pega campos
+de um objeto e cria variáveis com o mesmo nome.
+
+Sem ela, o componente seria assim, e funcionaria igual:
+
+```jsx
+export function Card(props) {
+  return (
+    <Link className={styles.card} to={props.to}>
+      <span className={styles.icon}>{props.icon}</span>
+      <span className={styles.title}>{props.title}</span>
+      <span className={styles.body}>{props.children}</span>
+    </Link>
+  );
+}
+```
+
+As chaves só evitam escrever `props.` em toda linha.
+
+⚠️ Por isso os nomes dentro das chaves **têm que bater** com os atributos do uso.
+Se o componente recebe `{titulo}` e a página passa `title=`, chega `undefined` — e
+o campo some da tela **sem erro nenhum**. É a causa nº 1 de "meu componente
+renderizou vazio".
+
+#### O que `children` tem de diferente
+
+Só uma coisa: **você não o escreve como atributo.** É o que está entre a tag de
+abertura e a de fechamento, e o React preenche sozinho.
+
+```
+<Card icon="📦" title="Installation">
+      └───────── props nomeadas ─────┘
+
+  Get Nimbus running on your machine.
+  └────────── children ──────────────┘
+
+</Card>
+```
+
+No componente, é esta linha que coloca o conteúdo na tela:
+
+```jsx
+<span className={styles.body}>{children}</span>
+```
+
+💻 Prove: apague essa linha, salve, e olhe os cards. O texto some — mesmo estando
+escrito na página. `children` não aparece por mágica; alguém precisa colocá-lo em
+algum lugar do JSX. Depois, devolva a linha.
+
+#### Por que existem os dois
+
+Porque atributo é ruim para conteúdo. Compare:
+
+```mdx
+<Card title="Installation" body="Run **nimbus --version** to check" />
+```
+
+Aquele `**negrito**` sairia como texto literal — atributo carrega string, não
+formatação. Já com `children`:
+
+```mdx
+<Card title="Installation">
+  Run `nimbus --version` to check, or see the [FAQ](/docs/faq-licensing).
+</Card>
+```
+
+Agora o conteúdo aceita negrito, link, imagem, até outro componente.
+
+💡 **A regra prática:**
+
+| O que você quer passar | Use |
+|---|---|
+| Valor curto e único: título, URL, ícone, tamanho | Prop nomeada |
+| Bloco de conteúdo que o autor escreve livremente | `children` |
+
+> **`children` é uma prop como as outras.** Dá até para escrever
+> `<Card children="texto" />` — funciona, e ninguém faz. A sintaxe de "entre as
+> tags" existe justamente porque é mais legível para conteúdo.
+
+---
+
+Duas notas sobre o resto do arquivo:
 
 ```jsx
   return (
     <Link className={styles.card} to={to}>
 ```
-O que aparece na tela. `{styles.card}` e `{to}` estão entre chaves porque são
-JavaScript; sem as chaves seriam o texto literal `styles.card`.
+`{styles.card}` e `{to}` estão entre chaves porque são JavaScript; sem as chaves
+seriam o texto literal `styles.card`.
 
 > **E o `import React from 'react'`?** Não precisa. O Docusaurus 3 usa o
 > "automatic JSX runtime", que injeta isso sozinho — repare que o componente
@@ -224,10 +348,74 @@ JavaScript; sem as chaves seriam o texto literal `styles.card`.
 
 > **Por que `function Card` e não `function card`?** Em JSX, nomes com letra
 > minúscula são interpretados como tags HTML. Componente **sempre** começa com
-> maiúscula. Essa regra causa erros silenciosos quando esquecida: o JSX vira uma
-> tag `<card>` que o navegador ignora.
+> maiúscula. Essa regra causa erros silenciosos quando esquecida: escrever
+> `<link>` em vez de `<Link>` gera a tag HTML `<link>`, que é invisível — os
+> cards somem e o build não reclama.
 
 ### Passo 7 — O CSS
+
+#### Se você nunca escreveu CSS
+
+Três minutos, e você consegue ler e escrever o que este módulo pede.
+
+**CSS não tem lógica, laço nem função.** É uma lista de configurações, agrupada
+por "a quem se aplica":
+
+```css
+.caption {              /* a quem — seletor: elementos com esta classe */
+  font-size: 0.85rem;   /* propriedade: valor; */
+  font-style: italic;   /* ponto e vírgula no fim de CADA linha */
+}
+```
+
+O `.` na frente significa **classe**. É o que liga esta regra ao
+`className={styles.caption}` do seu JSX.
+
+**As propriedades que aparecem neste guia:**
+
+| O que você quer | Propriedade |
+|---|---|
+| Espaço **fora** do elemento | `margin` |
+| Espaço **dentro**, entre a borda e o conteúdo | `padding` |
+| Largura / altura | `width` / `height` |
+| Cantos arredondados | `border-radius` |
+| Borda | `border: <espessura> <estilo> <cor>` |
+| Tamanho do texto | `font-size` |
+| Negrito / itálico | `font-weight` / `font-style` |
+| Alinhar **o texto** | `text-align` |
+| Cor do texto / do fundo | `color` / `background-color` |
+
+**Unidades:** prefira `rem` a `px`. `1rem` é o tamanho normal do texto do site, e
+`0.85rem` é 85% disso. Usar `rem` faz o layout acompanhar quem aumenta a fonte do
+navegador; `px` ignora essa preferência.
+
+⚠️ **Duas armadilhas que pegam todo mundo:**
+
+**1. "Centralizar" são duas coisas diferentes.**
+
+| O que centralizar | Como |
+|---|---|
+| O **texto dentro** de um elemento | `text-align: center` |
+| O **elemento** dentro da página | `margin-left: auto; margin-right: auto` |
+
+Usar `text-align` para centralizar um bloco não funciona, e é o erro nº 1 de quem
+está começando.
+
+**2. `margin` e `padding` aceitam 1, 2, 3 ou 4 valores:**
+
+```css
+margin: 10px;              /* os 4 lados */
+margin: 10px 20px;         /* cima-e-baixo | esquerda-e-direita */
+margin: 1px 2px 3px 4px;   /* cima | direita | baixo | esquerda, sentido horário */
+```
+
+A forma de **2 valores** é a mais usada, e `auto` é um valor válido nela.
+
+💡 **Como conferir sem adivinhar:** salve, abra a página, botão direito no
+elemento → **Inspecionar**. O painel mostra as regras que pegaram e **risca** as
+que não pegaram. É o `print()` do CSS — use sempre que algo não mudar.
+
+---
 
 📄 Crie `src/components/Cards/styles.module.css`:
 
@@ -401,14 +589,16 @@ cd website
 
 ## ✅ Checkpoint
 
-- [ ] Um grid do Infima com 3 colunas, que empilha no celular
-- [ ] Botões e badges na página de referência
-- [ ] O componente `Cards` criado e usado na Overview
-- [ ] Você sabe explicar o que é `children` e o que é uma prop
-- [ ] Você sabe por que o CSS é `.module.css`
-- [ ] Você testou `class` no lugar de `className` e viu o silêncio
-- [ ] `npm run build` passa
-- [ ] Commit feito
+- [x] Um grid do Infima com 3 colunas, que empilha no celular
+- [x] Botões e badges na página de referência
+- [x] O componente `Cards` criado e usado na Overview
+- [x] Você sabe explicar o que é uma prop, e por que os nomes têm que bater
+- [x] Você sabe dizer onde `children` é escrito no uso e onde é lido no componente
+- [x] Você apagou a linha do `{children}` e viu o texto dos cards sumir
+- [x] Você sabe por que o CSS é `.module.css`
+- [x] Você testou `class` no lugar de `className` e viu o silêncio
+- [x] `npm run build` passa
+- [x] Commit feito
 
 ---
 
@@ -452,13 +642,17 @@ Duas decisões suas:
 
 **3. O CSS**
 
+💡 Se você travar aqui, releia o
+[resumo de CSS do Passo 7](#se-você-nunca-escreveu-css) — em especial as duas
+armadilhas. Este exercício cai nas duas.
+
 📄 `src/components/Figure/styles.module.css` precisa de três classes. Requisitos:
 
-| Classe | Requisito |
-|---|---|
-| `.figure` | Sem margem lateral, centralizado, com respiro em cima e embaixo |
-| `.image` | Largura 100%, cantos arredondados, uma borda sutil usando `var(--ifm-color-emphasis-300)` |
-| `.caption` | Menor que o texto normal, itálico, centralizado, cor `var(--ifm-color-emphasis-600)` |
+| Classe     | Requisito                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| `.figure`  | Sem margem lateral, centralizado, com respiro em cima e embaixo                           |
+| `.image`   | Largura 100%, cantos arredondados, uma borda sutil usando `var(--ifm-color-emphasis-300)` |
+| `.caption` | Menor que o texto normal, itálico, centralizado, cor `var(--ifm-color-emphasis-600)`      |
 
 ⚠️ Nenhuma cor fixa. Se você escrever `#666`, a legenda vai sumir no modo escuro
 — e o objetivo do exercício é justamente não deixar isso acontecer.
