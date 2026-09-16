@@ -23,3 +23,18 @@ slorber:
     linkedin: sebastienlorber
     github: slorber
     newsletter: https://thisweekinreact.com
+
+marcelo:
+  name: Marcelo
+  title: Learning Docusaurus in public
+  url: https://github.com/marcelosub1993
+  image_url: https://github.com/marcelosub1993.png
+  page: true
+  socials:
+    github: marcelosub1993
+    linkedin: marcelo-fossá-0a932679
+  
+nimbus_team:
+  name: The Nimbus Team
+  title: Product and engineering
+  image_url: /img/google-keep.svg 

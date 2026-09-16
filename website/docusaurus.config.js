@@ -37,7 +37,11 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'pt-BR'],
+    localeConfigs: {
+      en: {label: 'English'},
+      'pt-BR': {label: 'Português'}
+    },
   },
 
   presets: [
@@ -50,11 +54,21 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           breadcrumbs: false,
+          lastVersion: '1.0',
+          versions: {
+                      current: {label: '2.0 (in development)', path: 'next'},
+                      '1.0': {label: '1.0 (stable)'},
+                    },
           editUrl:
             'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
         },
         blog: {
-          showReadingTime: true,
+          showReadingTime: true, // "5 min read..."
+          blogTitle: 'Nimbus news',
+          blogDescription: 'Release notes and announcements',
+          postsPerPage: 10,
+          blogSidebarTitle: 'Recent posts',
+          blogSidebarCount:5,
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
@@ -78,11 +92,18 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      zoom: {
+        selector: '.markdown img',
+        background: {
+          light: 'rgb(255, 255, 255)',
+          dark: 'rgb(27, 27, 29)',
+        },
+      },
       // Replace with your project's social card
       image: 'img/image-site.jpg',
       colorMode: {
-        defaultMode: 'dark',
-        disableSwitch: true, // true removes the theme toggle
+        //defaultMode: 'dark',
+        //disableSwitch: true, // true removes the theme toggle
         respectPrefersColorScheme: true, // follows the system preference
       },
 
@@ -122,7 +143,7 @@ const config = {
             label: 'Resources',
             position: 'left',
             items: [
-              {type: 'doc', docId: 'reference', label: 'Syntax reference'},
+              {type: 'doc', docId: 'syntax-reference', label: 'Syntax reference'},
               {to: '/docs/category/configuration', label: 'Configuration'},
               {href: 'https://docusaurus.io', label: 'Docusaurus ↗'},
             ],
@@ -130,6 +151,15 @@ const config = {
 
 
           {to: '/blog', label: 'Blog', position: 'left'},
+
+          {
+            type: 'docsVersionDropdown', 
+            position: 'right',
+          },
+
+          {type: 'localeDropdown', position: 'right'},
+
+
 
           // positions the search bar
 
@@ -150,7 +180,7 @@ const config = {
             items: [
               {label: 'Get Started', to: '/docs/installation'},
               {label: 'Configuration', to: '/docs/category/configuration'},
-              {label: 'Syntax reference', to: '/docs/reference'},
+              {label: 'Syntax reference', to: '/docs/syntax-reference'},
             ],
           },
           {
@@ -158,6 +188,7 @@ const config = {
             items: [
               {label: 'Frequently asked questions', to: '/docs/faq-licensing'},
               {label: 'Report an issue', href: 'https://github.com/marcelosub1993/docusaurus-learning/issues'},
+              {label: 'Contact', to: '/contact'}
             ],
           },
           {
@@ -172,9 +203,9 @@ const config = {
       },
 
       announcementBar: {
-        id: 'release_2_0',
+        id: 'release_2_2',
         content:
-          '🚀 Nimbus 2.0 is out. <a href="/blog">Read the release notes</a>.',
+          '🚀 Nimbus 2.2 is out. <a href="/blog">Read the release notes</a>.',
         backgroundColor: '#000000',
         textColor: '#ffc629',
         isCloseable: true,
@@ -185,6 +216,39 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
     }),
+
+  markdown: {
+    mermaid: true,
+  },
+
+  plugins: [
+    'docusaurus-plugin-image-zoom',
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {from: '/docs/intro', to: '/docs/'},
+          {from: '/docs/reference', to: '/docs/syntax-reference'},
+        ],
+      },
+    ],
+  ],
+
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        language: ['en'],
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: true,
+        highlightSearchTermsOnTargetPage: true,
+      },
+    ],
+  ]
+
 };
 
 export default config;

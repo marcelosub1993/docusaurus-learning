@@ -17,14 +17,3 @@ How many times Nimbus retries a failed upload, and how long it waits.
 ## Proxy
 
 Corporate networks usually need an explicit proxy here.
-
-```mermaid
-sequenceDiagram
-    participant A as Agent
-    participant P as Proxy
-    participant S as Sync API
-    A->>P: PUT /files/report.csv
-    P->>S: PUT /files/report.csv
-    S--)P: 503 Service Unavaiable
-    Note over A,S: (Retry)
-```

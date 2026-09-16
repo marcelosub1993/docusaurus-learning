@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.guideSidebar.category.Configuration": {
+    "message": "Configuration",
+    "description": "The label for category 'Configuration' in sidebar 'guideSidebar'"
+  },
+  "sidebar.guideSidebar.category.Configuration.link.generated-index.title": {
+    "message": "Configuration guides",
+    "description": "The generated-index page title for category 'Configuration' in sidebar 'guideSidebar'"
+  },
+  "sidebar.guideSidebar.category.Configuration.link.generated-index.description": {
+    "message": "Everything you can adjust in Nimbus",
+    "description": "The generated-index page description for category 'Configuration' in sidebar 'guideSidebar'"
+  },
+  "sidebar.guideSidebar.doc.⚡ Start here": {
+    "message": "⚡ Start here",
+    "description": "The label for the doc item '⚡ Start here' in sidebar 'guideSidebar', linking to the doc installation"
+  },
+  "sidebar.referenceSidebar.category.Frequently asked questions": {
+    "message": "Frequently asked questions",
+    "description": "The label for category 'Frequently asked questions' in sidebar 'referenceSidebar'"
+  },
+  "sidebar.referenceSidebar.link.Docusaurus docs": {
+    "message": "Docusaurus docs",
+    "description": "The label for link 'Docusaurus docs' in sidebar 'referenceSidebar', linking to 'https://docusaurus.io/docs'"
+  }
+}

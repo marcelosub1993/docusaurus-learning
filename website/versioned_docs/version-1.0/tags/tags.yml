@@ -1,0 +1,11 @@
+setup:
+  label: Setup
+  description: Installing and configuring Nimbus
+
+troubleshooting:
+  label: Troubleshooting
+  description: Diagnosing problems
+
+reference:
+  label: Reference
+  description: Syntax and command reference

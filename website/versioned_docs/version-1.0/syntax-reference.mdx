@@ -1,0 +1,579 @@
+---
+title: Syntax Reference
+sidebar_label: Syntax Reference
+sidebar_position: 4
+description: A page where every Markdown feature is demonstrated.
+toc_min_heading_level: 2
+toc_max_heading_level: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Logo from '@site/static/img/logo.svg';
+import {FiGithub, FiPackage, FiChrome, FiUmbrella} from 'react-icons/fi';
+import Figure from '@site/src/components/Figure'
+
+
+A living page where each formatting feature is show in use.
+
+## Headings
+
+### A subsection
+
+#### A detail
+
+### Installing on Windows {/* #windows-install */}
+
+## Text Formatting
+
+**bold**, _italic_, **_both_**, ~~strikethrough~~, `inline code`.
+
+One Line.
+Another line - same paragraph!
+
+A blank line starts a new paragraph.
+
+Or end the line with a backslash: \
+like this.
+
+## Lists
+
+- A simple item
+- Another item
+    - Nested (indent with 2 spaces)
+        - Even deeper
+
+1. First
+2. Second
+    1. Numbered sub-item
+3. Third
+
+- [x] Completed task
+- [ ] Pending task
+
+1. Install the dependencies
+
+    ```powershell
+    npm install
+    ```
+
+2. Start the project.
+
+## Quotes
+
+> A quote.
+> 
+> With two paragraphs.
+
+___
+
+## Tables
+
+| Command | What it does | How often |
+| --- | --- | :---: |
+| `nimbus sync` | Syncs the workspace now | Daily |
+| `nimbus status` | Shows pending changes | Often |
+| `nimbus doctor` | Diagnoses the local setup | When something breaks |
+
+## Links
+
+1. [File path](./installation.mdx)
+2. [Site URL](/docs/installation)
+3. [External](https://docusaurus.io)
+
+## Footnotes
+
+Nimbus stores credentials in the system keychain[^1].
+
+[^1]: Keychain on macOs, Credential Manager on Windows, and Secret Service on Linux.
+
+## Collapsible blocks
+
+<details>
+    <summary>What to do when port 3000 is already in use</summary>
+
+    Start the server on another port:
+
+    ```powershell
+    npm start -- --port 3001
+    ```
+
+</details>
+
+{/* This does not show up on the site */}
+
+
+## Admonitions
+
+:::note
+A neutral remark. Gray
+:::
+
+:::tip
+A useful, opctional shortcut. Green.
+:::
+
+:::info
+Extra content. Blue.
+:::
+
+:::warning
+Requires attention before moving on. Yellow
+:::
+
+:::danger
+Destructive action or seriou error. Red
+:::
+
+### When Use It
+
+| Type | When to Use |
+| :---: | --- |
+| `note` | Detail that never change what the person does. |
+| `tip` | A shortcut that can be used to make the task easier. |
+| `info` | Context that help to understand, but is not required. |
+| `warning` | If ignore it, something will break. |
+| `danger` | If ignore it, will lose data or something will be destroyed. |
+
+
+:::tip[A shortcut that saves time]
+`npm run clear` wipes the cache. It is the first thing to try when the site behaves strangely after a config change.
+:::
+
+
+::::info[Full upgrade procedure]
+
+1. Stop the agent:
+
+    ```powershell
+    nimbus stop
+    ```
+
+:::warning[Run as Administrator]
+The installer writes to `Program Files` and fails silently otherwise.
+:::
+
+2. Run the installer.
+
+::::
+
+
+```powershell
+nimbus sync --force
+```
+
+```python
+print("Hello World")
+```
+
+```yaml title="~/.nimbus/config.yml"
+workspace: acme-prod
+interval: 15m
+retries: 3
+```
+
+```yaml title="~/.nimbus/config.yml"
+workspace: acme-prod
+# highlight-next-line
+interval: 15m
+# highlight-start
+proxy:
+    url: http://proxy.acme.interval:8080
+# highlight-end
+```
+
+```python {2,4,6}
+def process(items):
+    total = 0
+    for item in items:
+        if item.active:
+            total += item.value
+    return total
+```
+
+```js showLineNumbers
+function sum(a,b) {
+    return a + b
+}
+```
+
+## Tabs
+
+<Tabs groupId="operating-system">
+    <TabItem value="windows" label="Windows" default>
+
+    ```powershell
+    winget install Nimbus.CLI
+    ```
+
+    </TabItem>
+
+    <TabItem value="macos" label="MacOS">
+    
+    ```bash
+    brew install nimbus
+    ```
+
+    </TabItem>
+
+    <TabItem value="linux" label="Linux">
+    
+    ```bash
+    curl -fsSL https://get.nimbus.example/install.sh | sh
+    ```
+    
+    </TabItem>
+</Tabs>
+
+## Images
+
+![A mountain landscape](https://picsum.photos/seed/nimbus/900/380)
+
+![The Nimbus status dashboard](/img/nimbus-dashboard.jpg)
+
+{/*Not Critic Image*/}
+<img
+    src="/img/nimbus-dashboard.jpg"
+    alt="Resized dashboard screenshot"
+    style={{width: 320, borderRadius: 8}}
+/>
+
+{/*Critic Image*/}
+<img
+    src={require('@site/static/img/nimbus-dashboard.jpg').default}
+    alt="Processed at build time"
+    style={{width: 200}}
+/>
+
+<ThemedImage
+    alt="Illustration that follows the theme"
+    sources={{
+        light: useBaseUrl('/img/undraw_docusaurus_mountain.svg'),
+        dark: useBaseUrl('/img/undraw_docusaurus_react.svg'),
+    }}
+    style={{width: 320}}
+/>
+
+{/* Without function */}
+<figure style={{margin:0}}>
+    <img src="/img/nimbus-dashboard.jpg" alt="Sync architeture" style={{width:'100%'}} />
+    <figcaption style={{textAlign: 'center', fontSize: '.85rem', opacity: 0.7}}>
+        Figure 1 - How a sync round-trip works.
+    </figcaption>
+</figure>
+
+{/* With Function */}
+<Figure
+    src = "/img/nimbus-dashboard.jpg"
+    alt = "Sync architeture"
+    caption = "Figure 1 - How a sync round-trip works"
+    width = "400px"
+/>
+
+## Platform support
+
+| Platform | Status | Notes |
+| --- | :---: | --- |
+| Windows 11 | ✅ | Fully supported |
+| Windows 10 | ⚠️ | Supported until January 2027 |
+| macOS 13+ | ✅ | Fully Supported |
+| Linux (glibc < 2.31) | ❌ | Not supported |
+| FreeBSD | 🚧 | In Progress |
+
+
+<Logo Style={{width: 32, heigth: 32}} /> 
+
+
+<svg
+    width= "24" height= "24" viewbox= "0 0 24 24"
+    fill= "none" stroke="currentColor" strokeWidth="2"
+    strokeLinecap="round" strokeLineJoin="round">
+    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+    <path d="M2 17l10 5 10-5" />
+</svg>
+
+
+<svg 
+    xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+    class="lucide lucide-calendar-days">
+    <path d="M8 2v3"/>
+    <path d="M16 2v3"/>
+    <rect x="3" y="3" width="18" height="18" rx="2"/>
+    <path d="M3 9h18"/>
+    <path d="M8 13h.01"/>
+    <path d="M12 13h.01"/>
+    <path d="M16 13h.01"/>
+    <path d="M8 17h.01"/>
+    <path d="M12 17h.01"/>
+    <path d="M16 17h.01"/>
+</svg>
+
+<svg 
+    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+    stroke-linejoin="round" class="lucide lucide-refresh-ccw">
+    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+    <path d="M3 3v5h5"/>
+    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+    <path d="M16 16h5v5"/>
+</svg>
+
+<FiGithub size={20} /> Repository
+
+<FiChrome size={20}/> Chrome
+
+<FiUmbrella size={20} /> Umbrella
+
+
+## Layout
+
+<div className="row">
+    <div className="col col--4">
+        <div className="card padding--md">
+            <h4>First</h4>
+            <p>One third of the width.</p>
+        </div>
+    </div>
+    <div className="col col--4">
+        <div className="card padding--md">
+            <h4>Second</h4>
+            <p>Another third.</p>
+        </div>
+    </div>
+    <div className="col col--4">
+        <div className="card padding--md">
+            <h4>Third</h4>
+            <p>The last third.</p>
+        </div>
+    </div>
+</div>
+
+<div className="margin-top--lg padding--md margin--bottom-sm">
+</div>
+
+<a className='button button--primary button--md' href='/docs/installation'>
+Get Started
+</a>
+
+<span className="badge badge--primary">v2.0</span>
+<span className="badge badge--warning">beta</span>
+<span className="badge badge--danger">deprecated</span>
+
+## Mermaid
+
+```mermaid
+flowchart LR
+    A[Local folder] --> B{Changed?}
+    B -->|Yes| C[Upload to workspace]
+    B -->|No| D[Wait for next interval]
+    C --> D
+    D --> B
+```
+
+#### sequenceDiagram — conversa entre sistemas
+
+```mermaid
+sequenceDiagram
+    participant A as Agent
+    participant P as Proxy
+    participant S as Sync API
+    A->>P: PUT /files/report.csv
+    P->>S: PUT /files/report.csv
+    S--)P: 503 Service Unavailable
+    Note over A,S: waits 30s, then retries
+    A->>S: PUT /files/report.csv
+    S--)A: 201 Created
+```
+
+#### erDiagram — modelo de dados
+
+```mermaid
+erDiagram
+    WORKSPACE ||--o{ SEAT : has
+    SEAT ||--|| MACHINE : "bound to"
+    WORKSPACE {
+        string id PK
+        string name
+        int    retention_days
+    }
+    SEAT {
+        string id PK
+        string workspace_id FK
+    }
+```
+
+#### stateDiagram-v2 — ciclo de vida
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Scanning: interval elapsed
+    Scanning --> Uploading: changes found
+    Scanning --> Idle: nothing changed
+    Uploading --> Idle: success
+    Uploading --> Retrying: upload failed
+    Retrying --> Uploading: backoff done
+    Retrying --> [*]: max retries
+```
+
+#### gitGraph — estratégia de branch
+
+```mermaid
+gitGraph
+    commit id: "site published"
+    branch docs/add-figure
+    commit id: "add Figure component"
+    commit id: "use it in two pages"
+    checkout main
+    merge docs/add-figure
+    commit id: "deploy"
+```
+
+#### classDiagram — estrutura
+
+```mermaid
+classDiagram
+    class SyncAgent {
+        +String workspace
+        +Duration interval
+        +sync() void
+    }
+    class Uploader {
+        +put(file) Result
+    }
+    SyncAgent --> Uploader : uses
+```
+
+#### timeline — cronologia
+
+```mermaid
+timeline
+    title Nimbus release history
+    2025 : 1.0 first public release
+    2026 : 2.0 new import engine
+         : 2.1 proxy support
+         : 2.2 filters
+```
+
+#### gantt — cronograma
+
+```mermaid
+gantt
+    title Nimbus 2.3 plan
+    dateFormat YYYY-MM-DD
+    axisFormat %d/%m
+    section Build
+    Feature freeze  :done,   a1, 2026-09-01, 5d
+    QA              :active, a2, after a1, 7d
+    section Release
+    Docs update     :        a3, after a2, 3d
+    Ship            :milestone, after a3, 0d
+```
+
+#### mindmap — mapa de conceitos
+
+```mermaid
+mindmap
+  root((Nimbus))
+    Configuration
+      workspace
+      interval
+      retries
+    Sync
+      filters
+      proxy
+    Limits
+      one seat per machine
+      30-day retention
+```
+
+#### journey — experiência do usuário
+
+```mermaid
+journey
+    title First sync experience
+    section Setup
+      Download installer: 5: User
+      Run as admin: 3: User
+      Paste workspace ID: 2: User
+    section First sync
+      Wait for initial upload: 1: User
+      See files appear: 5: User
+```
+
+#### quadrantChart — priorização
+
+```mermaid
+quadrantChart
+    title Roadmap priority
+    x-axis Low effort --> High effort
+    y-axis Low value --> High value
+    quadrant-1 Do next
+    quadrant-2 Plan
+    quadrant-3 Drop
+    quadrant-4 Quick wins
+    Filters: [0.3, 0.8]
+    Proxy support: [0.5, 0.7]
+    i18n: [0.8, 0.2]
+```
+
+#### pie — proporção
+
+```mermaid
+pie title Storage by file type
+    "CSV" : 45
+    "Parquet" : 30
+    "JSON" : 15
+    "Other" : 10
+```
+
+#### sankey-beta — volume que se divide
+
+```mermaid
+sankey-beta
+Scanned,Uploaded,820
+Scanned,Skipped by filter,140
+Scanned,Failed,40
+Uploaded,Stored,800
+Uploaded,Deduplicated,20
+```
+
+#### xychart-beta — gráfico
+
+```mermaid
+xychart-beta
+    title "Average sync duration"
+    x-axis [jan, feb, mar, apr]
+    y-axis "Minutes" 0 --> 30
+    bar [22, 18, 14, 9]
+    line [22, 18, 14, 9]
+```
+
+#### block-beta — blocos livres
+
+```mermaid
+block-beta
+    columns 3
+    Agent["Nimbus agent"] space Proxy
+    space:3
+    API["Sync API"]
+    Agent --> Proxy
+    Proxy --> API
+```
+
+#### architecture-beta — arquitetura com ícones
+
+```mermaid
+architecture-beta
+    group workspace(cloud)[Workspace]
+    service api(server)[Sync API] in workspace
+    service db(database)[Metadata] in workspace
+    service disk(disk)[Object storage] in workspace
+    api:R -- L:db
+    api:B -- T:disk
+```
+

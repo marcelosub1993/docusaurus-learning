@@ -1,0 +1,20 @@
+---
+title: Nimbus 2.1 is out
+authors: [marcelo, nimbus_team]
+description: What changed in this release and what comes next
+slug: nimbus2-1
+tags: [release]
+---
+
+Nimbus 2.1 is now available for every workspace.
+
+{/* truncate */}
+
+## What changed
+
+We rewrote the import engine. It now streams large files instead of loading
+them into memory, so a 4 GB dataset no longer needs 4 GB of RAM.
+
+## How to upgrade
+
+Run the installer from your workspace portal and restart the agent.

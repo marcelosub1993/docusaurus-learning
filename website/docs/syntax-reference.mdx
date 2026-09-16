@@ -363,4 +363,217 @@ Get Started
 <span className="badge badge--warning">beta</span>
 <span className="badge badge--danger">deprecated</span>
 
+## Mermaid
+
+```mermaid
+flowchart LR
+    A[Local folder] --> B{Changed?}
+    B -->|Yes| C[Upload to workspace]
+    B -->|No| D[Wait for next interval]
+    C --> D
+    D --> B
+```
+
+#### sequenceDiagram — conversa entre sistemas
+
+```mermaid
+sequenceDiagram
+    participant A as Agent
+    participant P as Proxy
+    participant S as Sync API
+    A->>P: PUT /files/report.csv
+    P->>S: PUT /files/report.csv
+    S--)P: 503 Service Unavailable
+    Note over A,S: waits 30s, then retries
+    A->>S: PUT /files/report.csv
+    S--)A: 201 Created
+```
+
+#### erDiagram — modelo de dados
+
+```mermaid
+erDiagram
+    WORKSPACE ||--o{ SEAT : has
+    SEAT ||--|| MACHINE : "bound to"
+    WORKSPACE {
+        string id PK
+        string name
+        int    retention_days
+    }
+    SEAT {
+        string id PK
+        string workspace_id FK
+    }
+```
+
+#### stateDiagram-v2 — ciclo de vida
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Scanning: interval elapsed
+    Scanning --> Uploading: changes found
+    Scanning --> Idle: nothing changed
+    Uploading --> Idle: success
+    Uploading --> Retrying: upload failed
+    Retrying --> Uploading: backoff done
+    Retrying --> [*]: max retries
+```
+
+#### gitGraph — estratégia de branch
+
+```mermaid
+gitGraph
+    commit id: "site published"
+    branch docs/add-figure
+    commit id: "add Figure component"
+    commit id: "use it in two pages"
+    checkout main
+    merge docs/add-figure
+    commit id: "deploy"
+```
+
+#### classDiagram — estrutura
+
+```mermaid
+classDiagram
+    class SyncAgent {
+        +String workspace
+        +Duration interval
+        +sync() void
+    }
+    class Uploader {
+        +put(file) Result
+    }
+    SyncAgent --> Uploader : uses
+```
+
+#### timeline — cronologia
+
+```mermaid
+timeline
+    title Nimbus release history
+    2025 : 1.0 first public release
+    2026 : 2.0 new import engine
+         : 2.1 proxy support
+         : 2.2 filters
+```
+
+#### gantt — cronograma
+
+```mermaid
+gantt
+    title Nimbus 2.3 plan
+    dateFormat YYYY-MM-DD
+    axisFormat %d/%m
+    section Build
+    Feature freeze  :done,   a1, 2026-09-01, 5d
+    QA              :active, a2, after a1, 7d
+    section Release
+    Docs update     :        a3, after a2, 3d
+    Ship            :milestone, after a3, 0d
+```
+
+#### mindmap — mapa de conceitos
+
+```mermaid
+mindmap
+  root((Nimbus))
+    Configuration
+      workspace
+      interval
+      retries
+    Sync
+      filters
+      proxy
+    Limits
+      one seat per machine
+      30-day retention
+```
+
+#### journey — experiência do usuário
+
+```mermaid
+journey
+    title First sync experience
+    section Setup
+      Download installer: 5: User
+      Run as admin: 3: User
+      Paste workspace ID: 2: User
+    section First sync
+      Wait for initial upload: 1: User
+      See files appear: 5: User
+```
+
+#### quadrantChart — priorização
+
+```mermaid
+quadrantChart
+    title Roadmap priority
+    x-axis Low effort --> High effort
+    y-axis Low value --> High value
+    quadrant-1 Do next
+    quadrant-2 Plan
+    quadrant-3 Drop
+    quadrant-4 Quick wins
+    Filters: [0.3, 0.8]
+    Proxy support: [0.5, 0.7]
+    i18n: [0.8, 0.2]
+```
+
+#### pie — proporção
+
+```mermaid
+pie title Storage by file type
+    "CSV" : 45
+    "Parquet" : 30
+    "JSON" : 15
+    "Other" : 10
+```
+
+#### sankey-beta — volume que se divide
+
+```mermaid
+sankey-beta
+Scanned,Uploaded,820
+Scanned,Skipped by filter,140
+Scanned,Failed,40
+Uploaded,Stored,800
+Uploaded,Deduplicated,20
+```
+
+#### xychart-beta — gráfico
+
+```mermaid
+xychart-beta
+    title "Average sync duration"
+    x-axis [jan, feb, mar, apr]
+    y-axis "Minutes" 0 --> 30
+    bar [22, 18, 14, 9]
+    line [22, 18, 14, 9]
+```
+
+#### block-beta — blocos livres
+
+```mermaid
+block-beta
+    columns 3
+    Agent["Nimbus agent"] space Proxy
+    space:3
+    API["Sync API"]
+    Agent --> Proxy
+    Proxy --> API
+```
+
+#### architecture-beta — arquitetura com ícones
+
+```mermaid
+architecture-beta
+    group workspace(cloud)[Workspace]
+    service api(server)[Sync API] in workspace
+    service db(database)[Metadata] in workspace
+    service disk(disk)[Object storage] in workspace
+    api:R -- L:db
+    api:B -- T:disk
+```
 

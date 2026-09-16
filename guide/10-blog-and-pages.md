@@ -433,15 +433,15 @@ cd website
 
 ## ✅ Checkpoint
 
-- [ ] A pasta `blog/` tem só os seus posts, `authors.yml` e `tags.yml`
-- [ ] `docs/tags.yml` existe e `/docs/tags` lista as tags da documentação
-- [ ] Nenhum aviso de autor, tag ou truncate no terminal
-- [ ] Existe uma página de autor em `/blog/authors/marcelo`
-- [ ] Uma página em Markdown em `src/pages/`
-- [ ] Uma página em React usando `<Layout>`
-- [ ] A home tem seu texto, não o do template, e o botão leva a uma rota que existe
-- [ ] `npm run build` passa
-- [ ] Commit feito
+- [x] A pasta `blog/` tem só os seus posts, `authors.yml` e `tags.yml`
+- [x] `docs/tags.yml` existe e `/docs/tags` lista as tags da documentação
+- [x] Nenhum aviso de autor, tag ou truncate no terminal
+- [x] Existe uma página de autor em `/blog/authors/marcelo`
+- [x] Uma página em Markdown em `src/pages/`
+- [x] Uma página em React usando `<Layout>`
+- [x] A home tem seu texto, não o do template, e o botão leva a uma rota que existe
+- [x] `npm run build` passa
+- [x] Commit feito
 
 ---
 

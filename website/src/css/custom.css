@@ -8,13 +8,14 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #705200;
+  --ifm-color-primary-dark: #654a00;
+  --ifm-color-primary-darker: #5f4600;
+  --ifm-color-primary-darkest: #4e3900;
+  --ifm-color-primary-light: #7b5a00;
+  --ifm-color-primary-lighter: #815e00;
+  --ifm-color-primary-lightest: #926b00;
+  --nimbus-accent: #8f6425;
 
   /* Typography */
   --ifm-font-family-base: 'Inter', system-ui, sans-serif;
@@ -33,20 +34,8 @@
 
 
   /* Sidebar */
-  --doc-sidebar-width: 300px;
+  --doc-sidebar-width: 320px;
 }
-
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-/*[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-}*/
 
 [data-theme='dark'] {
   --ifm-color-primary: #ffc629;
@@ -56,6 +45,7 @@
   --ifm-color-primary-light: #ffce47;
   --ifm-color-primary-lighter: #ffd255;
   --ifm-color-primary-lightest: #ffde82;
+  --nimbus-accent: #ffab40;
 }
 
 .sidebar-section-title {
@@ -70,7 +60,7 @@
 
 /* Make the sidebar more compact */
 .menu__link {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 /* Remove the navbar shadow */
@@ -88,3 +78,8 @@
 .markdown {
   max-width: 900px;
 }
+
+.markdown code {
+  color: var(--nimbus-accent)
+}
+

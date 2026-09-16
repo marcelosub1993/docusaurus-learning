@@ -1,0 +1,48 @@
+---
+title: Nimbus 2.2 is out
+authors: [marcelo, nimbus_team] 
+tags: [release]
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+Nimbus 2.2 is out, check out the new features and fixes:
+
+{/* truncate */}
+
+1. Improve memory latency in the server
+2. Add LATIN server
+
+Runs the commands bellow in your operation system to upgrade the system.
+
+<Tabs groupId="operating-sytem">
+    <TabItem value="windows" label="Windows" default>
+
+        ```powershell title="Power Shell" showLineNumbers
+            winget upgrade Nimbus.Nimbus -y
+        ```
+    </TabItem>
+
+    <TabItem value="macos" label="macOS">
+
+        ```bash title="Terminal" showLineNumbers
+            brew upgrade Nimbus -y
+        ```
+
+    </TabItem>
+
+    <TabItem value="linux" label="Linux" >
+
+        ```bash title="Terminal" showLineNumbers
+            sudo apt upgrade Nimbus -y
+        ```
+
+    </TabItem>
+</Tabs>
+
+
+
+:::warning
+    The agent needs to be rebooted
+:::
