@@ -1,4 +1,10 @@
+
+🌐 **[Live site](https://marcelosub1993.github.io/docusaurus-learning/)** — the
+practice site, published automatically from `main`.
+
 # Docusaurus Learning
+
+[![Deploy to GitHub Pages](https://github.com/marcelosub1993/docusaurus-learning/actions/workflows/deploy.yml/badge.svg)](https://github.com/marcelosub1993/docusaurus-learning/actions/workflows/deploy.yml)
 
 A hands-on course for building documentation sites with [Docusaurus](https://docusaurus.io/),
 written in Brazilian Portuguese, plus the practice site built while following it.

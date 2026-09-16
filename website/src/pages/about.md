@@ -11,3 +11,5 @@ learning Docusaurus.
 The source lives on
 [GitHub](https://github.com/marcelosub1993/docusaurus-learning). Suggestions and
 corrections are welcome as issues.
+
+🌐 **[Ver o site publicado](https://marcelosub1993.github.io/docusaurus-learning/)**
