@@ -1,7 +1,5 @@
 // @ts-check
 
-import { IoTimeSharp } from 'react-icons/io5';
-
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /**

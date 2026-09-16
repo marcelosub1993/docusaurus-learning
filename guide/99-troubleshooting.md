@@ -880,6 +880,53 @@ honesto que o `npm start`.
 **Conserto:** rode `npm run build` na sua máquina, leia a mensagem, conserte, e
 faça push.
 
+### `Cannot find module 'alguma-coisa'` — mas na minha máquina funciona
+
+O erro aparece só no CI, com um rastro terminando em `MODULE_NOT_FOUND`:
+
+```
+Error: Cannot find module 'react-icons/io5'
+Require stack:
+- /home/runner/work/.../website/sidebars.js
+```
+
+**Causa:** você rodou `npm install` **fora** de `website/`. O npm não reclama —
+ele cria um `package.json`, um `package-lock.json` e um `node_modules` ali mesmo,
+em silêncio.
+
+Localmente aquilo funciona por acidente: o Node procura um módulo subindo pastas.
+De `website/sidebars.js` ele olha `website/node_modules`, não acha, sobe para a
+pasta acima e acha. O CI instala só o que está dentro de `website/`, e não existe
+pasta acima para salvar. Por isso ele falha e você não.
+
+**Como confirmar:** procure um `node_modules` na raiz do repositório. Não deveria
+existir nenhum.
+
+```powershell
+Get-ChildItem -Directory node_modules -ErrorAction SilentlyContinue
+```
+
+**Conserto** — instale no lugar certo e apague a instalação perdida:
+
+```powershell
+cd website
+npm install <o-pacote>
+cd ..
+git rm --cached package.json package-lock.json
+Remove-Item -Recurse -Force package.json, package-lock.json, node_modules
+```
+
+💡 Depois disso seu build local volta a valer como teste: sem a pasta de cima
+mascarando nada, o que passa na sua máquina passa no CI.
+
+⚠️ **Antes de instalar qualquer pacote, confirme onde você está:**
+
+```powershell
+npm ls --depth=0
+```
+
+Se a primeira linha não for `website@0.0.0`, você está na pasta errada.
+
 ### `Error: Failed to create deployment (status: 404)`
 
 **Causa:** o GitHub Pages não está configurado como "GitHub Actions".

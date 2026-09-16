@@ -292,7 +292,17 @@ Fontes de SVG gratuitos: [Feather](https://feathericons.com/),
 
 Para um conjunto grande e consistente:
 
-💻
+💻 ⚠️ **Confira antes que você está dentro de `website/`.** Se rodar `npm install`
+de outra pasta, o npm cria um projeto novo ali mesmo, sem avisar — funciona na sua
+máquina e quebra no GitHub Actions. O
+[Módulo 99](./99-troubleshooting.md#cannot-find-module-alguma-coisa--mas-na-minha-máquina-funciona)
+explica por quê.
+
+```powershell
+npm ls --depth=0
+```
+
+👀 A primeira linha tem que ser `website@0.0.0`. Se não for, `cd` para `website`.
 
 ```powershell
 npm install react-icons
