@@ -102,18 +102,18 @@ cinco páginas. Se alguma imagem quebrar, é `useBaseUrl` faltando dentro de JSX
 
 Rode esta lista toda vez. Leva 5 minutos e evita retrabalho público.
 
-- [ ] `npm run build` termina com SUCCESS, sem avisos que você não entenda
-- [ ] `onBrokenLinks: 'throw'` continua ligado (não desligue para "resolver" erro)
-- [ ] `url`, `baseUrl`, `organizationName` e `projectName` correspondem ao destino
-- [ ] `title`, `tagline` e `favicon` são os seus, não os do template
-- [ ] O `copyright` do rodapé não diz "My Project, Inc."
-- [ ] O `image:` do cartão social não é o do Docusaurus
-- [ ] Os `editUrl` apontam para o seu repositório
-- [ ] Os links de Stack Overflow/Discord/X do template foram removidos
-- [ ] `npm run serve` e você navegou por 5 páginas, incluindo uma com imagem
-- [ ] Testou o modo escuro
-- [ ] Testou numa janela estreita (celular)
-- [ ] A busca funciona
+- [x] `npm run build` termina com SUCCESS, sem avisos que você não entenda
+- [x] `onBrokenLinks: 'throw'` continua ligado (não desligue para "resolver" erro)
+- [x] `url`, `baseUrl`, `organizationName` e `projectName` correspondem ao destino
+- [x] `title`, `tagline` e `favicon` são os seus, não os do template
+- [x] O `copyright` do rodapé não diz "My Project, Inc."
+- [x] O `image:` do cartão social não é o do Docusaurus
+- [x] Os `editUrl` apontam para o seu repositório
+- [x] Os links de Stack Overflow/Discord/X do template foram removidos
+- [x] `npm run serve` e você navegou por 5 páginas, incluindo uma com imagem
+- [x] Testou o modo escuro
+- [x] Testou numa janela estreita (celular)
+- [x] A busca funciona
 
 💻 Um jeito rápido de achar sobras do template:
 
