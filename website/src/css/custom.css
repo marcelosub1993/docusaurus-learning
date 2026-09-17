@@ -67,6 +67,7 @@
 .navbar {
   box-shadow: none;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
+
 }
 
 /* Highlight table headers */

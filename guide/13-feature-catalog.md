@@ -22,7 +22,7 @@ precisar.
 | **Veredito** | ✅ vale quase sempre · ⚠️ depende · 🔬 curiosidade |
 
 Todos os pacotes citados foram conferidos no npm em setembro de 2026, contra o
-Docusaurus **3.10.2** — a versão do seu site. Onde a documentação oficial exige
+Docusaurus **3.10.2**, a versão usada neste guia. Onde a documentação oficial exige
 uma versão específica, ela está escrita.
 
 ⚠️ **Os trechos de config dizem em que nível entram**, usando o mesmo mapa do
@@ -47,10 +47,10 @@ existe para ser importado por outras páginas.
 pré-requisito, uma tabela de limites, um bloco de contato do time. Hoje, mudar
 isso significa lembrar dos cinco lugares. Com partial, você muda num lugar só.
 
-✅ **Para a documentação interna da empresa, este é provavelmente o recurso mais
-útil deste módulo inteiro.** Documentação corporativa é cheia de repetição: o
-mesmo aviso de acesso, a mesma janela de manutenção, o mesmo "fale com o time de
-dados antes de alterar".
+✅ **Para documentação corporativa interna, este é provavelmente o recurso mais
+útil deste módulo inteiro.** Esse tipo de documentação é cheio de repetição: o
+mesmo aviso de acesso, a mesma janela de manutenção, o mesmo "fale com o time
+responsável antes de alterar".
 
 **Como fazer** — 📄 crie `docs/_sync-warning.mdx`:
 
@@ -437,10 +437,10 @@ sidebar", é por aqui que começa — e sem ele o caminho é bem pior.
 
 Mudanças na casca do site: navbar, sidebar, página de erro, índice lateral.
 
-⚠️ **Aviso sobre CSS.** Você disse que não conhece CSS, então vale a regra: os
-trechos desta parte foram testados, mas CSS depende de **quantos itens** você tem
-na navbar e de **quão larga** é a tela. Sempre confira o resultado em pelo menos
-duas larguras antes de aceitar. Onde eu medi de fato, está dito.
+⚠️ **Aviso sobre CSS.** Os trechos desta parte foram testados, mas o resultado
+depende de **quantos itens** existem na navbar e de **quão larga** é a tela.
+Confira sempre em pelo menos duas larguras antes de aceitar. Onde há medição, os
+números estão registrados.
 
 ---
 
@@ -479,20 +479,28 @@ esquerda; centralizar dá um ar mais de site de produto e menos de documentaçã
 }
 ```
 
-**O que medi no seu site**, numa janela de 1280px: sem o CSS, o grupo de links
-ficava centrado em 384px. Com ele, em **633px** — o centro da página é 640px.
-Funciona.
+**O CSS funciona.** Numa medição real, em janela de 1280px: sem ele, o grupo de
+links ficava centrado em 384px; com ele, em **633px** — o centro da página é 640px.
 
-⚠️ **E aí veio o problema, que é o motivo de eu estar contando isso.** No **seu**
-site os links passaram a **colidir** com o bloco da direita. A conta é simples:
+⚠️ **Mas há um limite, e ele aparece rápido.** A mesma medição, num site com a
+navbar carregada (logo, quatro itens à esquerda, busca, seletor de versão, seletor
+de idioma, link do GitHub e botão de tema):
 
-| Região | Largura ocupada |
+| Região | Espaço ocupado |
 |---|---|
-| Logo + nome | 116px |
+| Logo + nome | até 116px |
 | Links centralizados | 459px → 807px |
-| Busca + versão + idioma + GitHub + tema | começa em **651px** |
+| Bloco da direita | começa em **651px** |
 
-Os links terminam em 807 e a direita começa em 651. Elas se sobrepõem em 156px.
+Os links terminam em 807 e a direita começa em 651: **sobrepõem em 156px**.
+
+Removendo itens da direita e remedindo:
+
+| Configuração | Folga até o bloco da direita |
+|---|---|
+| Navbar completa | **−155px** — sobrepõe |
+| Sem o link do GitHub | **−61px** — ainda sobrepõe |
+| Sem GitHub e sem seletor de idioma | **+60px** ✅ |
 
 💡 **A lição não é "esse CSS é ruim", é que navbar centralizada exige navbar
 enxuta.** Centralizar só funciona se sobrar espaço vazio nas laterais. Com busca,
@@ -705,7 +713,7 @@ para preferir um deles quando existe a opção.
 Docusaurus sabe sobre o seu site.
 
 🎁 **Você já tem ele ligado e provavelmente não sabia.** O `preset-classic` ativa
-o plugin de debug automaticamente em desenvolvimento. Conferi no código do preset:
+o plugin de debug automaticamente em desenvolvimento. O código do preset:
 
 ```js
 if (debug || (debug === undefined && !isProd)) {
@@ -715,17 +723,27 @@ if (debug || (debug === undefined && !isProd)) {
 
 **Como usar** — 💻 com o `npm start` rodando, abra:
 
-| Endereço | O que mostra |
-|---|---|
-| `/__docusaurus/debug` | O painel inicial |
-| `/__docusaurus/debug/config` | **O config final, já resolvido** |
-| `/__docusaurus/debug/routes` | Todas as rotas geradas |
-| `/__docusaurus/debug/metadata` | O metadado de cada página |
-| `/__docusaurus/debug/registry` | Os módulos registrados |
+⚠️ **Os endereços abaixo vêm depois do seu `baseUrl`.** Se o seu site tem
+`baseUrl: '/docusaurus-learning/'`, o painel fica em
+`http://localhost:3000/docusaurus-learning/__docusaurus/debug` — na raiz ele não
+existe.
+
+| Endereço (depois do `baseUrl`) | O que mostra |
+| ------------------------------ | -------------------------------- |
+| `/__docusaurus/debug`          | O painel inicial                 |
+| `/__docusaurus/debug/config`   | **O config final, já resolvido** |
+| `/__docusaurus/debug/routes`   | Todas as rotas geradas           |
+| `/__docusaurus/debug/metadata` | O metadado de cada página        |
+| `/__docusaurus/debug/registry` | Os módulos registrados           |
+
+💡 **Em dev, qualquer endereço devolve HTTP 200.** O `npm start` serve a aplicação
+inteira e deixa o navegador decidir o que mostrar, então a página de "não
+encontrado" é desenhada no cliente. Consequência prática: `curl` não serve para
+saber se uma rota existe em desenvolvimento — abra no navegador e olhe.
 
 💡 **O `/config` é o mais útil dos cinco, disparado.** Ele mostra a configuração
 **depois** de o preset expandir tudo e aplicar os padrões. É a resposta definitiva
-para "essa chave que eu escrevi está sendo lida?" — em vez de deduzir pelo
+para "essa chave que está no arquivo está sendo lida?" — em vez de deduzir pelo
 comportamento, você olha.
 
 Aquele erro do seletor de versão, onde o bloco `docs` tinha ido parar dentro do
@@ -819,8 +837,40 @@ presets: [
 ],
 ```
 
-⚠️ **Para o site interno da empresa, converse com quem cuida de privacidade
-antes.** Analytics em documentação interna significa registrar o que cada
+⚠️ **O `G-XXXXXXXXXX` é um espaço reservado — colar isso não liga nada.** O
+plugin valida só o formato: ele exige que `trackingID` exista e seja texto,
+qualquer texto. A validação, no código do plugin:
+
+```js
+trackingID: Joi.alternatives()
+  .try(Joi.string(), Joi.array().items(Joi.string()))
+  .required(),
+```
+
+Consequência: com o valor falso o build **passa**, o site funciona, o script do
+Google carrega, os eventos são enviados para uma propriedade que não existe e
+tudo se perde. Sem erro, sem aviso.
+
+Para valer, você precisa de um **Measurement ID** real:
+
+1. Crie uma conta em [analytics.google.com](https://analytics.google.com)
+2. Crie uma **propriedade** para o site
+3. Dentro dela, crie um **fluxo de dados** do tipo Web com a URL do site
+4. O fluxo devolve o ID no formato `G-` seguido de 10 caracteres
+
+⚠️ **Só funciona em produção.** O script não é injetado no `npm start` — é o mesmo
+padrão da busca local e dos redirects.
+
+⚠️ **`gtag` dentro de `themeConfig` dá erro.** A chave mudou de lugar numa versão
+antiga, e o Docusaurus mantém um erro explícito porque há muito tutorial velho
+circulando:
+
+```
+The "gtag" field in themeConfig should now be specified as option for
+plugin-google-gtag.
+```
+
+⚠️ **Em documentação interna, converse com a área de privacidade antes.** Analytics em documentação interna significa registrar o que cada
 funcionário lê. Dependendo da política e da LGPD, isso exige aviso — e às vezes
 não é permitido. `anonymizeIP: true` ajuda, mas não resolve a questão sozinho.
 
@@ -983,7 +1033,7 @@ isso normalmente é aceitável; só saiba que a troca existe.
 
 **Compatibilidade conferida:** `@docusaurus/core` `2.x || 3.x`. ✅
 
-**Veredito:** ✅ Para o site da empresa, é o mais promissor deste módulo — mas
+**Veredito:** ✅ Para documentação corporativa, é o mais promissor deste módulo — mas
 exige combinar com os times donos dos repositórios.
 
 ---
@@ -1042,10 +1092,10 @@ Documentação: [jy95.github.io/docusaurus-json-schema-plugin](https://jy95.gith
 
 **O que é:** o `docusaurus-plugin-sass` permite usar `.scss` no lugar de `.css`.
 
-**Quando vale:** se você já conhece Sass. Se não conhece — e este é o seu caso —
-**pule**. Sass adiciona variáveis, aninhamento e funções ao CSS, e nenhuma dessas
-coisas resolve um problema que você tem hoje. O Infima já te dá variáveis
-(`--ifm-*`), que é 90% do benefício.
+**Quando vale:** só se você já conhece Sass. Se não conhece, **pule**: Sass
+adiciona variáveis, aninhamento e funções ao CSS, e nada disso resolve um problema
+que um site Docusaurus tenha por padrão. O Infima já oferece variáveis
+(`--ifm-*`), que é a maior parte do benefício.
 
 💻 Precisa de dois pacotes:
 
@@ -1055,7 +1105,7 @@ npm install docusaurus-plugin-sass sass
 
 **Compatibilidade conferida:** `@docusaurus/core` `^3.0.0`. ✅
 
-**Veredito:** 🔬 Está aqui só para você reconhecer o nome. Não é para agora.
+**Veredito:** 🔬 Está aqui para você reconhecer o nome quando encontrá-lo.
 
 ---
 
@@ -1139,7 +1189,7 @@ future: {
 | `gitEagerVcs` | Leitura mais agressiva do Git (datas de atualização) |
 
 ⚠️ **O `rspackPersistentCache` é justamente o que o
-[Módulo 99](./99-troubleshooting.md#problemas-causados-pelo-onedrive) manda
+[Módulo 99](./99-troubleshooting.md#problemas-causados-por-pastas-sincronizadas) manda
 desligar quando o OneDrive apronta.** Ele grava cache em disco, e cache em pasta
 sincronizada é uma combinação ruim. Se você ligar `faster: true` e começar a ver
 build estranho, essa é a primeira chave a desligar:
@@ -1190,7 +1240,7 @@ Ou por partes:
 💡 **`siteStorageNamespacing` resolve um problema real de quem tem mais de um
 site.** Sem ele, dois sites Docusaurus no mesmo domínio compartilham o
 armazenamento do navegador — e o modo escuro de um bagunça o do outro. Se a
-empresa for hospedar várias documentações no mesmo endereço, ligue.
+organização hospedar várias documentações no mesmo endereço, ligue.
 
 ⚠️ **Ligar `v4: true` de uma vez é a forma mais rápida de descobrir que algo
 quebrou, e a mais lenta de descobrir o quê.** Ligue uma chave por vez.
@@ -1222,7 +1272,7 @@ future: {
 ```
 
 Cenários reais: mandar a documentação para um cliente sem acesso à rede da
-empresa; embutir a documentação dentro de um instalador; deixar uma cópia num
+organização; embutir a documentação dentro de um instalador; deixar uma cópia num
 pendrive para uma auditoria.
 
 ⚠️ **O `experimental_` no nome é literal** — a opção pode mudar. E há um custo: os
@@ -1237,54 +1287,97 @@ e-mail". Aí vira a solução exata.
 
 ---
 
-# Parte F — Coisas do seu caso
+# Parte F — Documentação corporativa interna
 
-Itens que não são recursos do Docusaurus, mas respondem ao que você descreveu
-sobre a documentação da empresa.
+Os itens desta parte não são recursos do Docusaurus. São decisões que aparecem
+quando o site deixa de ser um exercício e passa a documentar sistemas reais de
+uma organização — e que custam caro se forem tomadas tarde.
 
 ---
 
 ## F1 — Relatório do Power BI dentro da página
 
-Você mencionou que a documentação vai ter capturas do Power BI. Além da imagem
-(com o zoom do [Módulo 11](./11-advanced-features.md#55--zoom-nas-imagens)), dá
-para embutir o relatório **ao vivo** com um `iframe`:
+Documentação de dados quase sempre precisa mostrar um painel — Power BI, Tableau,
+Looker. A pergunta natural é se dá para embutir o relatório **ao vivo**. Dá — mas
+não do jeito simples, e o jeito simples é perigoso.
+
+O exemplo abaixo usa o Power BI; a lógica vale para qualquer ferramenta de BI que
+exija autenticação.
+
+### ⚠️ O que não funciona
 
 ```jsx
-<iframe
-  title="Nimbus sync dashboard"
-  src="https://app.powerbi.com/reportEmbed?reportId=YOUR_REPORT_ID"
-  width="100%"
-  height="540"
-  style={{border: 0}}
-  allowFullScreen
-/>
+<iframe src="https://app.powerbi.com/reportEmbed?reportId=YOUR_REPORT_ID" />
 ```
 
-⚠️ **Três coisas antes de fazer isso:**
+👀 O resultado é `app.powerbi.com refused to connect`. Essa URL sozinha não carrega
+contexto de autenticação: a tentativa cai no fluxo de login da Microsoft, que
+recusa ser exibido dentro de um `iframe`.
 
-1. **Quem abrir a página precisa ter acesso ao relatório.** O `iframe` não carrega
-   permissão junto — quem não tem acesso vê uma tela de login ou um erro. Em
-   documentação interna isso costuma funcionar, porque a pessoa já está autenticada
-   no Microsoft 365.
-2. **O `title` não é opcional.** É o que um leitor de tela anuncia. Sem ele, a
-   pessoa ouve "quadro" e nada mais.
-3. **Um relatório embutido muda sem aviso.** Se o texto ao redor explica um número
-   específico, ele vai desencontrar na próxima atualização. Para explicar um
-   número, use captura de tela; para consultar o dado atual, use o `iframe`.
+### As três formas reais
 
-💡 **A captura de tela ainda ganha na maioria dos casos**, porque documentação
-explica *como ler* o relatório — e para isso você quer a tela congelada, com
-setas e destaques. O embed serve para "veja o estado atual", não para ensinar.
+**A — "Publicar na web"** · `app.powerbi.com/view?r=...`
+
+Funciona em qualquer `iframe`, sem login. É a primeira coisa que aparece ao
+pesquisar o erro acima, e resolve na hora.
+
+🚨 **Não use para dado corporativo.** "Publicar na web" torna o relatório
+**acessível a qualquer pessoa da internet** com o link — sem autenticação e
+indexável por buscadores. Não é uma configuração de compartilhamento, é
+publicação irrestrita. Muitas empresas desabilitam a opção no locatário
+exatamente por isso.
+
+O motivo deste aviso ser tão enfático: ela é a saída fácil para o erro, e o nome
+não deixa claro o tamanho da exposição.
+
+**B — "Inserir para sua organização"** · o caminho correto para uso interno
+
+Exige que quem abre a página esteja autenticado no Microsoft 365, com licença e
+permissão no relatório. A URL leva parâmetros de locatário (`autoAuth`, `ctid`), e
+o enquadramento depende de o administrador permitir o domínio do seu site — por
+isso o caminho suportado costuma ser SharePoint ou Teams.
+
+👉 Isso é conversa com quem administra o Power BI, não algo que se resolve no
+`docusaurus.config.js`.
+
+**C — Power BI Embedded (Azure)** · capacidade dedicada, token gerado por um
+backend seu, biblioteca `powerbi-client`. É a solução completa, **custa dinheiro** e
+exige servidor. Fora de escala para documentação.
+
+### 💡 O que fazer em vez disso
+
+Captura de tela, e um link para o relatório.
+
+Documentação **explica como ler** o relatório — e para isso você quer a tela
+congelada, com destaque e seta, não o dado ao vivo que muda e desalinha do texto.
+O link resolve o "quero ver o número de agora", levando a pessoa ao Power BI, onde
+a permissão dela já é respeitada sem você configurar nada.
+
+```mdx
+<Figure
+  src="/img/sync-dashboard.png"
+  alt="Sync dashboard showing the daily volume chart"
+  caption="Figure 3 — where to read the daily volume"
+/>
+
+[Open the live report in Power BI](https://app.powerbi.com/groups/.../reports/...)
+```
+
+Com o plugin de zoom do [Módulo 11](./11-advanced-features.md#55--zoom-nas-imagens),
+a captura fica clicável e amplia — que é o que a pessoa quer ao olhar um gráfico
+numa página de documentação.
+
+⚠️ Ao embutir qualquer coisa num `iframe`, **o `title` não é opcional**: é o que um
+leitor de tela anuncia. Sem ele, a pessoa ouve "quadro" e nada mais.
 
 ---
 
 ## F2 — Repositório privado, e o que isso muda
 
-Vale repetir aqui, porque é o item de maior consequência de todo o guia: a
-documentação interna vai para um repositório **privado**.
+É o item de maior consequência de todo o guia: documentação interna vai para um
+repositório **privado**.
 
-| | Site de aprendizado (este) | Site da empresa |
+| | Site de aprendizado | Site corporativo interno |
 |---|---|---|
 | Repositório | Público | **Privado** |
 | Busca | Local ou Algolia | **Local** — o Algolia rastreia de fora |
@@ -1336,13 +1429,13 @@ Quase tudo aqui é **opcional por natureza**. A tentação, ao ler um catálogo,
 querer ligar tudo — e essa é a forma mais rápida de transformar um site que
 funciona num site que ninguém consegue manter.
 
-A ordem que eu seguiria, se fosse montar a documentação da empresa amanhã:
+Uma ordem de adoção que funciona na maioria dos projetos de documentação:
 
-1. **A1 (partials)** — resolve a repetição, que é o problema real de documentação
-   corporativa
+1. **A1 (partials)** — resolve a repetição, que é o problema mais caro de
+   documentação extensa
 2. **B4 (404)** e **C4 (sitemap)** — meia hora cada, valem por anos
 3. **A2 (MDXComponents)** — quando o segundo componente próprio aparecer
-4. **D1 (remote content)** — quando você tiver combinado com os times donos
-5. O resto, quando doer
+4. **D1 (remote content)** — quando houver acordo com os times donos do conteúdo
+5. O resto, conforme a necessidade aparecer
 
 ⬅️ Voltar ao [índice do guia](./README.md)

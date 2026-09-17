@@ -30,7 +30,7 @@ You edit            →  git add        →  git commit      →  git push
 (working directory)    (staging area)    (local history)    (GitHub)
 ```
 
-**Remote** é uma cópia do repositório em outro lugar — no nosso caso, o GitHub.
+**Remote** é uma cópia do repositório em outro lugar — neste guia, o GitHub.
 `push` envia, `pull` traz.
 
 > **Git e GitHub não são a mesma coisa.** Git é o programa que roda na sua
@@ -47,7 +47,7 @@ recusa a commitar.
 💻 Configure o nome (use o seu nome real, ele aparece no histórico público):
 
 ```powershell
-git config --global user.name "Marcelo"
+git config --global user.name "Your Name"
 ```
 
 Agora o e-mail. Aqui vale uma decisão de privacidade: **todo commit público
@@ -59,7 +59,7 @@ GitHub resolve isso dando um endereço de encaminhamento.
 1. Acesse <https://github.com/settings/emails>
 2. Marque **Keep my email addresses private**
 3. Logo abaixo aparece seu endereço no formato
-   `12345678+marcelosub1993@users.noreply.github.com` — copie
+   `12345678+your-username@users.noreply.github.com` — copie
 
 ```powershell
 git config --global user.email "PASTE_YOUR_NOREPLY_ADDRESS_HERE"
@@ -115,8 +115,13 @@ comum de quem está começando — e não tem nada de óbvio no erro.
 👀 A tela seguinte mostra "Quick setup" com uma URL. Guarde ela:
 
 ```
-https://github.com/marcelosub1993/docusaurus-learning.git
+https://github.com/your-username/docusaurus-learning.git
 ```
+
+⚠️ **`your-username` é um espaço reservado.** Deste ponto em diante, sempre que
+`your-username` aparecer num comando ou numa URL, troque pelo seu usuário do
+GitHub. A URL que a tela do "Quick setup" mostra já vem com o valor certo — use
+ela como referência.
 
 ---
 
@@ -125,7 +130,7 @@ https://github.com/marcelosub1993/docusaurus-learning.git
 💻 Na pasta do projeto:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 git init
 ```
 
@@ -252,7 +257,7 @@ git log --oneline
 💻 Diga ao Git onde fica a cópia remota:
 
 ```powershell
-git remote add origin https://github.com/marcelosub1993/docusaurus-learning.git
+git remote add origin https://github.com/your-username/docusaurus-learning.git
 ```
 
 `origin` é só um apelido — é a convenção universal para "o remote principal".
@@ -281,7 +286,7 @@ digitar senha de novo.
 O `-u` só é necessário na primeira vez. Ele amarra sua branch local à remota, e
 a partir daí `git push` sozinho já sabe para onde ir.
 
-👀 Recarregue <https://github.com/marcelosub1993/docusaurus-learning> — seus
+👀 Recarregue <https://github.com/your-username/docusaurus-learning> — seus
 arquivos estão lá, e o GitHub já está renderizando o `README.md` na página
 inicial.
 
@@ -341,7 +346,7 @@ mentira. No Módulo 12, quando o workflow existir de verdade, aí vale colocar.
 💻 Verifique como ficou na prática:
 
 ```powershell
-start https://github.com/marcelosub1993/docusaurus-learning
+start https://github.com/your-username/docusaurus-learning
 ```
 
 👀 Leia o README como se fosse a primeira vez. Alguma pergunta ficou sem resposta
@@ -493,14 +498,14 @@ problema que você já sentiu na pele.
 
 ## ✅ Checkpoint
 
-- [x] `git config --global --list` mostra nome e e-mail
-- [x] O e-mail é o `@users.noreply.github.com`, não o seu pessoal
-- [x] <https://github.com/marcelosub1993/docusaurus-learning> existe e é público
-- [x] O README aparece renderizado na página inicial do repositório
-- [x] O repositório tem description e pelo menos 4 topics
-- [x] `git log --oneline` mostra pelo menos um commit
-- [x] `git status` responde `nothing to commit, working tree clean`
-- [x] Você sabe explicar a diferença entre `add`, `commit` e `push`
+- [ ] `git config --global --list` mostra nome e e-mail
+- [ ] O e-mail é o `@users.noreply.github.com`, não o seu pessoal
+- [ ] <https://github.com/your-username/docusaurus-learning> existe e é público
+- [ ] O README aparece renderizado na página inicial do repositório
+- [ ] O repositório tem description e pelo menos 4 topics
+- [ ] `git log --oneline` mostra pelo menos um commit
+- [ ] `git status` responde `nothing to commit, working tree clean`
+- [ ] Você sabe explicar a diferença entre `add`, `commit` e `push`
 
 ---
 
@@ -580,7 +585,7 @@ git show --stat
 Git registra o histórico local; GitHub hospeda uma cópia. O ciclo é
 `add` → `commit` → `push`, e a staging area existe para você separar assuntos.
 Um repositório bom tem README, `.gitignore`, LICENSE, description com topics e um
-histórico que se lê. Arquivos gerados nunca entram — nem no Git, nem no OneDrive.
+histórico que se lê. Arquivos gerados nunca entram no Git.
 
 E branch não é uma questão de gosto: ela passa a valer a pena quando quebrar a
 `main` custa alguma coisa. Até lá — Módulo 11 — você commita direto; do Módulo 12

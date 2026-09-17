@@ -115,14 +115,14 @@ Escrever os dados do autor em cada post duplica informação. Declare uma vez.
 📄 Substitua o conteúdo de `blog/authors.yml`:
 
 ```yml
-marcelo:
-  name: Marcelo
+your-username:
+  name: Your Name
   title: Learning Docusaurus in public
-  url: https://github.com/marcelosub1993
-  image_url: https://github.com/marcelosub1993.png
+  url: https://github.com/your-username
+  image_url: https://github.com/your-username.png
   page: true
   socials:
-    github: marcelosub1993
+    github: your-username
 
 nimbus_team:
   name: The Nimbus Team
@@ -135,16 +135,16 @@ nimbus_team:
 ```mdx
 ---
 title: Nimbus 2.0 is out
-authors: [marcelo]
+authors: [your-username]
 ---
 ```
 
-Vários autores: `authors: [marcelo, nimbus_team]`.
+Vários autores: `authors: [your-username, nimbus_team]`.
 
 👀 Foto, nome e cargo aparecem no post e na lista.
 
-👀 E como `marcelo` tem `page: true`, existe agora uma página só dele em
-`/blog/authors/marcelo`, listando tudo que ele escreveu. Clique no nome do autor
+👀 E como `your-username` tem `page: true`, existe agora uma página só dele em
+`/blog/authors/your-username`, listando tudo que ele escreveu. Clique no nome do autor
 para chegar lá.
 
 > Aquele aviso `Some blog authors used in "..." are not defined in "authors.yml"`
@@ -251,7 +251,7 @@ blog: {
     type: ['rss', 'atom'],
     xslt: true,                   // makes the feed readable in a browser
   },
-  editUrl: 'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
+  editUrl: 'https://github.com/your-username/docusaurus-learning/tree/main/website/',
   onInlineTags: 'warn',
   onInlineAuthors: 'warn',
   onUntruncatedBlogPosts: 'warn',
@@ -312,7 +312,7 @@ This site documents Nimbus, a fictional CLI used as a practice project while
 learning Docusaurus.
 
 The source lives on
-[GitHub](https://github.com/marcelosub1993/docusaurus-learning). Suggestions and
+[GitHub](https://github.com/your-username/docusaurus-learning). Suggestions and
 corrections are welcome as issues.
 ```
 
@@ -433,15 +433,15 @@ cd website
 
 ## ✅ Checkpoint
 
-- [x] A pasta `blog/` tem só os seus posts, `authors.yml` e `tags.yml`
-- [x] `docs/tags.yml` existe e `/docs/tags` lista as tags da documentação
-- [x] Nenhum aviso de autor, tag ou truncate no terminal
-- [x] Existe uma página de autor em `/blog/authors/marcelo`
-- [x] Uma página em Markdown em `src/pages/`
-- [x] Uma página em React usando `<Layout>`
-- [x] A home tem seu texto, não o do template, e o botão leva a uma rota que existe
-- [x] `npm run build` passa
-- [x] Commit feito
+- [ ] A pasta `blog/` tem só os seus posts, `authors.yml` e `tags.yml`
+- [ ] `docs/tags.yml` existe e `/docs/tags` lista as tags da documentação
+- [ ] Nenhum aviso de autor, tag ou truncate no terminal
+- [ ] Existe uma página de autor em `/blog/authors/your-username`
+- [ ] Uma página em Markdown em `src/pages/`
+- [ ] Uma página em React usando `<Layout>`
+- [ ] A home tem seu texto, não o do template, e o botão leva a uma rota que existe
+- [ ] `npm run build` passa
+- [ ] Commit feito
 
 ---
 
@@ -453,7 +453,7 @@ cd website
 
 Requisitos:
 
-- `authors: [marcelo, nimbus_team]` — os dois
+- `authors: [your-username, nimbus_team]` — os dois
 - `tags: [release]`
 - Marcador de truncate depois do primeiro parágrafo
 - Um grupo de `<Tabs>` com o comando de atualização em Windows, macOS e Linux,
@@ -466,7 +466,7 @@ Requisitos:
 **2. Um post sobre o que você aprendeu**
 
 📄 Crie `blog/2026-09-11-what-i-learned.mdx`, com `tags: [tutorial]` e
-`authors: [marcelo]`.
+`authors: [your-username]`.
 
 Escreva, em inglês, três coisas que te surpreenderam nos Módulos 00 a 09. É o
 post mais útil do exercício — daqui a seis meses você vai querer ter escrito.
@@ -497,7 +497,7 @@ por SVGs seus (Módulo 06).
 
 - `/blog` mostra três posts, cada um com resumo curto e botão "Read more"
 - `/blog/tags/release` mostra dois posts; `/blog/tags/tutorial` mostra um
-- `/blog/authors/marcelo` lista os três
+- `/blog/authors/your-username` lista os três
 - A escolha de aba viaja entre o post e a página de instalação
 - A home não menciona Docusaurus nem dinossauros em lugar nenhum
 - `npm run build` termina **sem nenhum aviso** no terminal

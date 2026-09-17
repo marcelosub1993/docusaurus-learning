@@ -16,13 +16,28 @@ consulta, 13 e 99, são listas e não seguem este formato:
 | **🎯 Exercício** | A parte sem colinha, com esqueleto pronto e critério de acerto |
 | **📌 O que você aprendeu** | O resumo de uma frase |
 
-E três símbolos aparecem o tempo todo:
+E cinco símbolos aparecem o tempo todo:
 
 | Símbolo | Significa |
 |---|---|
 | 💻 | Rode isto no terminal |
 | 📄 | Crie ou edite este arquivo |
 | 👀 | O que você deve ver acontecer |
+| ⚠️ | Armadilha conhecida — leia antes de seguir |
+| 💡 | Contexto que explica o porquê |
+
+## Espaços reservados
+
+Dois valores aparecem em comandos e URLs ao longo do guia e precisam ser trocados
+pelos seus:
+
+| Espaço reservado | Troque por |
+|---|---|
+| `your-username` | Seu nome de usuário no GitHub |
+| `C:\projects\docusaurus-learning` | A pasta onde você decidiu colocar o projeto |
+
+O nome do repositório (`docusaurus-learning`) é uma sugestão. Se usar outro, troque
+também.
 
 ## Duas regras de idioma
 
@@ -40,9 +55,9 @@ salva. É mais fácil seguir "código é em inglês, ponto" do que decidir caso 
 o que vira arquivo e o que não vira.
 
 O motivo da regra 2 é prático: nome de arquivo com acento (`configuração.md`)
-quebra em servidor Linux, em URL e em Git. E como o repositório vai ser público,
-inglês é o padrão que o resto do mundo consegue ler — incluindo os comentários,
-que são a primeira coisa que alguém lê ao abrir seu código.
+quebra em servidor Linux, em URL e em Git. E inglês é o padrão que qualquer pessoa
+que abrir o repositório consegue ler — incluindo os comentários, que são a
+primeira coisa que alguém lê ao chegar num código desconhecido.
 
 ## O site que você vai construir
 
@@ -60,7 +75,7 @@ e tags, busca funcionando, componentes React próprios e o site publicado no ar.
 
 | # | Módulo | Você sai sabendo |
 |---|---|---|
-| 00 | [Preparando o ambiente](./00-environment-setup.md) | Instalar Node, Git e VS Code; deixar a pasta do projeto pronta para funcionar dentro do OneDrive |
+| 00 | [Preparando o ambiente](./00-environment-setup.md) | Instalar Node, Git e VS Code; escolher a pasta do projeto sem criar problema para depois |
 | 01 | [Git e GitHub](./01-git-and-github.md) | Criar o repositório, escrever um bom README, fazer commit, enviar para o GitHub e saber quando usar branch |
 | 02 | [Criando o site](./02-creating-the-site.md) | Gerar o projeto, subir o servidor e entender cada pasta |
 

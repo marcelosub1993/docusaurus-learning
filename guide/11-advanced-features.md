@@ -1125,14 +1125,14 @@ cd website
 
 ## ✅ Checkpoint
 
-- [x] Busca funcionando (lembre: precisa de `npm run build` + `npm run serve`)
-- [x] Pelo menos um diagrama Mermaid renderizando, e trocando com o tema
-- [x] Um único array `themes`, com os dois plugins dentro
-- [x] Um redirect de `/docs/intro` para `/docs/`
-- [x] Você experimentou versionamento e **desfez**
-- [x] Você sabe explicar por que versionamento e i18n têm custo permanente
-- [x] `npm run build` passa
-- [x] Commit feito
+- [ ] Busca funcionando (lembre: precisa de `npm run build` + `npm run serve`)
+- [ ] Pelo menos um diagrama Mermaid renderizando, e trocando com o tema
+- [ ] Um único array `themes`, com os dois plugins dentro
+- [ ] Um redirect de `/docs/intro` para `/docs/`
+- [ ] Você experimentou versionamento e **desfez**
+- [ ] Você sabe explicar por que versionamento e i18n têm custo permanente
+- [ ] `npm run build` passa
+- [ ] Commit feito
 
 ---
 

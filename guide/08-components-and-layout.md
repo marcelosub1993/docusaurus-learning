@@ -589,16 +589,16 @@ cd website
 
 ## ✅ Checkpoint
 
-- [x] Um grid do Infima com 3 colunas, que empilha no celular
-- [x] Botões e badges na página de referência
-- [x] O componente `Cards` criado e usado na Overview
-- [x] Você sabe explicar o que é uma prop, e por que os nomes têm que bater
-- [x] Você sabe dizer onde `children` é escrito no uso e onde é lido no componente
-- [x] Você apagou a linha do `{children}` e viu o texto dos cards sumir
-- [x] Você sabe por que o CSS é `.module.css`
-- [x] Você testou `class` no lugar de `className` e viu o silêncio
-- [x] `npm run build` passa
-- [x] Commit feito
+- [ ] Um grid do Infima com 3 colunas, que empilha no celular
+- [ ] Botões e badges na página de referência
+- [ ] O componente `Cards` criado e usado na Overview
+- [ ] Você sabe explicar o que é uma prop, e por que os nomes têm que bater
+- [ ] Você sabe dizer onde `children` é escrito no uso e onde é lido no componente
+- [ ] Você apagou a linha do `{children}` e viu o texto dos cards sumir
+- [ ] Você sabe por que o CSS é `.module.css`
+- [ ] Você testou `class` no lugar de `className` e viu o silêncio
+- [ ] `npm run build` passa
+- [ ] Commit feito
 
 ---
 

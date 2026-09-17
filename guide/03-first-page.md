@@ -14,7 +14,7 @@ para sincronizar dados. Não existe — serve só para você ter o que escrever.
 💻 Todos os comandos deste módulo rodam dentro de `website`:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus\website"
+cd "C:\projects\docusaurus-learning\website"
 ```
 
 ---
@@ -460,15 +460,15 @@ cd website
 
 ## ✅ Checkpoint
 
-- [x] Você tem 4 páginas: Overview, Installation, Basic setup, Advanced setup
-- [x] O menu lateral está na ordem que você quis
-- [x] A categoria "Configuration" já vem expandida
-- [x] Clicar em "Configuration" abre uma página de índice com cards
-- [x] `/docs/` abre a Overview (por causa do `slug: /`)
-- [x] Você sabe explicar a diferença entre `id`, `slug` e `sidebar_label`
-- [x] Nenhum `/docs/intro` sobrou no rodapé nem no botão da home
-- [x] `npm run build` passa **sem** a lista de links quebrados
-- [x] Commit feito
+- [ ] Você tem 4 páginas: Overview, Installation, Basic setup, Advanced setup
+- [ ] O menu lateral está na ordem que você quis
+- [ ] A categoria "Configuration" já vem expandida
+- [ ] Clicar em "Configuration" abre uma página de índice com cards
+- [ ] `/docs/` abre a Overview (por causa do `slug: /`)
+- [ ] Você sabe explicar a diferença entre `id`, `slug` e `sidebar_label`
+- [ ] Nenhum `/docs/intro` sobrou no rodapé nem no botão da home
+- [ ] `npm run build` passa **sem** a lista de links quebrados
+- [ ] Commit feito
 
 ---
 

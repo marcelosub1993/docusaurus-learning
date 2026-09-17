@@ -118,11 +118,13 @@ const config = {
       docs: {
         sidebar: {
           hideable: true,
+          autoCollapseCategories: true,
         }
       },
 
       navbar: {
         title: 'Nimbus',
+        hideOnScroll: true,
         logo: {
           alt: 'Nimbus logo',
           src: 'img/google-keep.svg',
@@ -171,11 +173,11 @@ const config = {
 
           // positions the search bar
 
-          {
+          /*{
             href: 'https://github.com/marcelosub1993/docusaurus-learning/tree/main/website/',
             label: 'GitHub',
             position: 'right',
-          },
+          },*/
         ],
       },
 
@@ -208,6 +210,11 @@ const config = {
           },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Nimbus. Built with Docusaurus.`,
+      },
+
+      tableOfContents: {
+        minHeadingLevel: 2,
+        maxHeadingLevel: 4,
       },
 
       announcementBar: {
@@ -251,6 +258,7 @@ const config = {
       crossorigin: 'anonymous',
     },
   ],
+
 
   themes: [
     '@docusaurus/theme-mermaid',

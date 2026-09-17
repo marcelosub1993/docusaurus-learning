@@ -52,9 +52,9 @@ funcionam.
 📄 No `docusaurus.config.js`, quatro campos precisam corresponder ao destino real:
 
 ```js
-url: 'https://marcelosub1993.github.io',
+url: 'https://your-username.github.io',
 baseUrl: '/docusaurus-learning/',
-organizationName: 'marcelosub1993',
+organizationName: 'your-username',
 projectName: 'docusaurus-learning',
 trailingSlash: false,
 ```
@@ -71,7 +71,7 @@ trailingSlash: false,
 
 | Endereço final do site | `url` | `baseUrl` |
 |---|---|---|
-| `https://marcelosub1993.github.io/docusaurus-learning/` | `https://marcelosub1993.github.io` | `/docusaurus-learning/` |
+| `https://your-username.github.io/docusaurus-learning/` | `https://your-username.github.io` | `/docusaurus-learning/` |
 | `https://docs.company.com/` | `https://docs.company.com` | `/` |
 | `https://company.com/docs/` | `https://company.com` | `/docs/` |
 
@@ -129,7 +129,7 @@ Select-String -Path "docusaurus.config.js" -Pattern "facebook|My Site|Dinosaurs|
 
 Faça isso no site, uma vez:
 
-1. Vá em <https://github.com/marcelosub1993/docusaurus-learning/settings/pages>
+1. Vá em <https://github.com/your-username/docusaurus-learning/settings/pages>
 2. Em **Source**, escolha **GitHub Actions** (não "Deploy from a branch")
 3. Pronto — não tem botão de salvar
 
@@ -150,7 +150,7 @@ workflow precisa saber disso.
 💻 Na raiz do repositório:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 New-Item -ItemType Directory -Force .github\workflows | Out-Null
 ```
 
@@ -272,13 +272,13 @@ git commit -m "ci: publish to GitHub Pages on every push to main"
 git push
 ```
 
-👀 Vá em <https://github.com/marcelosub1993/docusaurus-learning/actions>. O
+👀 Vá em <https://github.com/your-username/docusaurus-learning/actions>. O
 workflow "Deploy to GitHub Pages" está rodando. Clique nele e acompanhe.
 
 👀 Quando terminar (2 a 4 minutos), o job `deploy` mostra a URL. Ou acesse direto:
 
 ```
-https://marcelosub1993.github.io/docusaurus-learning/
+https://your-username.github.io/docusaurus-learning/
 ```
 
 🎉 Seu site está no ar.
@@ -299,13 +299,13 @@ Agora sim: o badge existe de verdade e diz a verdade.
 📄 No `README.md` da raiz, logo abaixo do título:
 
 ```md
-[![Deploy to GitHub Pages](https://github.com/marcelosub1993/docusaurus-learning/actions/workflows/deploy.yml/badge.svg)](https://github.com/marcelosub1993/docusaurus-learning/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/your-username/docusaurus-learning/actions/workflows/deploy.yml/badge.svg)](https://github.com/your-username/docusaurus-learning/actions/workflows/deploy.yml)
 ```
 
 📄 E adicione o link do site no topo, onde quem chega vê primeiro:
 
 ```md
-🌐 **[Ver o site publicado](https://marcelosub1993.github.io/docusaurus-learning/)**
+🌐 **[Ver o site publicado](https://your-username.github.io/docusaurus-learning/)**
 ```
 
 📄 Também vale adicionar a URL no campo **Website** do "About" do repositório
@@ -334,7 +334,7 @@ Vamos fazer uma mudança real: acrescentar o link do site publicado no README.
 💻 **1. Crie a branch e entre nela**
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 git switch -c docs/add-live-site-link
 ```
 
@@ -348,7 +348,7 @@ No `README.md`, na seção "What's in here", adicione uma linha apontando para o
 site no ar:
 
 ```md
-🌐 **[Live site](https://marcelosub1993.github.io/docusaurus-learning/)** — the
+🌐 **[Live site](https://your-username.github.io/docusaurus-learning/)** — the
 practice site, published automatically from `main`.
 ```
 
@@ -368,7 +368,7 @@ a conhece — sem isso, o Git responde
 
 ```
 remote: Create a pull request for 'docs/add-live-site-link' on GitHub by visiting:
-remote:      https://github.com/marcelosub1993/docusaurus-learning/pull/new/docs/add-live-site-link
+remote:      https://github.com/your-username/docusaurus-learning/pull/new/docs/add-live-site-link
 ```
 
 🌐 **4. Abra o Pull Request**
@@ -484,7 +484,7 @@ Cada push na branch principal republica sozinho.
 Ainda existe, e serve para um deploy rápido sem CI:
 
 ```powershell
-$env:GIT_USER = "marcelosub1993"
+$env:GIT_USER = "your-username"
 npm run deploy
 ```
 
@@ -536,7 +536,7 @@ compatibilidade são sempre documentadas lá.
 - [ ] A checklist do Passo 3 inteira marcada
 - [ ] GitHub Pages com Source = GitHub Actions
 - [ ] Os dois workflows commitados em `.github/workflows/`
-- [ ] O site abre em `https://marcelosub1993.github.io/docusaurus-learning/`
+- [ ] O site abre em `https://your-username.github.io/docusaurus-learning/`
 - [ ] O badge do README está verde
 - [ ] Você abriu, viu o check ficar verde, e mesclou pelo menos um Pull Request
 - [ ] Sua `main` local está sincronizada (`git pull` depois do merge)
@@ -659,7 +659,7 @@ no ar, escrito por você, no site que você construiu.
 
 **Como saber que deu certo:**
 
-- O site público abre com estilo, em `https://marcelosub1993.github.io/docusaurus-learning/`
+- O site público abre com estilo, em `https://your-username.github.io/docusaurus-learning/`
 - A busca e o modo escuro funcionam no site publicado
 - O badge do README está verde
 - A aba **Pull requests** do repositório mostra **3 PRs fechados** (o do Passo 9,
