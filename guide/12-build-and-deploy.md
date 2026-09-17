@@ -691,6 +691,9 @@ Do zero até um site publicado, com tudo registrado no Git. O que fazer agora:
 - **Escreva documentação de verdade.** A ferramenta você já domina; o difícil
   daqui pra frente é o texto, não o Docusaurus.
 - **Consulte o [Módulo 99](./99-troubleshooting.md)** quando algo quebrar.
+- **Folheie o [Módulo 13](./13-feature-catalog.md)**, o catálogo de recursos. Não
+  para aplicar tudo — para reconhecer a ferramenta no dia em que o problema
+  aparecer.
 - **Leia a [documentação oficial](https://docusaurus.io/pt-BR/docs)** — ela é
   excelente e tem resposta para o que este guia não cobriu.
 - **Mantenha o `guide/NOTES.md`.** Daqui a seis meses, ele vale mais que o guia.
