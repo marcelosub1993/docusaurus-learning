@@ -25,7 +25,7 @@ O passo 2 é o mais subestimado: **o `npm start` ignora links quebrados**. Muito
 "problema misterioso" aparece nomeado e explicado no `npm run build`.
 
 💡 Se o erro for daqueles que **não fazem sentido**, pule direto para
-[Problemas causados pelo OneDrive](#problemas-causados-pelo-onedrive).
+[Problemas causados por pastas sincronizadas](#problemas-causados-por-pastas-sincronizadas).
 
 ---
 
@@ -88,7 +88,7 @@ git commit
 
 ```powershell
 pwd
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 ```
 
 O `.git` fica **só na raiz**. Comandos Git funcionam de qualquer subpasta, desde
@@ -550,12 +550,13 @@ espaço) não funciona mais.
 
 ---
 
-## Problemas causados pelo OneDrive
+## Problemas causados por pastas sincronizadas
 
-O projeto mora numa pasta sincronizada, e isso tem um custo conhecido. Esta seção
-existe porque o [Módulo 00](./00-environment-setup.md#a-decisão) escolheu **setup
-simples com conserto documentado**, em vez de prevenção complicada. Aqui está o
-conserto.
+Se o projeto estiver dentro do OneDrive, Dropbox ou Google Drive, isso tem um custo
+conhecido. Esta seção existe porque o
+[Módulo 00](./00-environment-setup.md#se-ainda-assim-o-projeto-ficar-numa-pasta-sincronizada)
+adota **setup simples com conserto documentado**, em vez de prevenção complicada.
+Aqui está o conserto.
 
 ### Como reconhecer
 
@@ -649,7 +650,7 @@ O conserto definitivo. A partir do Módulo 01 é barato, porque o GitHub tem tud
 
 ```powershell
 cd C:\dev
-git clone https://github.com/marcelosub1993/docusaurus-learning.git
+git clone https://github.com/your-username/docusaurus-learning.git
 cd docusaurus-learning\website
 npm install
 ```
@@ -659,7 +660,7 @@ o Git. A pasta antiga no OneDrive pode ser apagada depois que você confirmar qu
 o novo clone roda — e que **não havia nada não commitado** nela:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 git status
 ```
 
@@ -673,9 +674,10 @@ Não é erro, é volume: `node_modules` tem ~30 mil arquivos e ~250 MB, e `build
 
 **Mitigação:** pause a sincronização antes de `npm install` e de builds em série.
 
-**Conserto:** o degrau 5 acima. Não existe meio-termo bom — eu tentei três
-técnicas para excluir só essas pastas da sincronização e nenhuma se sustenta
-(o npm desfaz, o Docusaurus apaga, ou você recria à mão para sempre).
+**Conserto:** o degrau 5 acima. Não existe meio-termo bom: as técnicas para
+excluir só essas pastas da sincronização não se sustentam — o npm desfaz umas, o
+Docusaurus apaga outras no build, e as demais precisam ser recriadas à mão para
+sempre.
 
 ---
 

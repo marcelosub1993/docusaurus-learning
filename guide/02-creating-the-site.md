@@ -12,7 +12,7 @@
 💻 Vá para a raiz do repositório e rode o gerador:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 npx create-docusaurus@latest website classic
 ```
 
@@ -56,10 +56,11 @@ Happy building awesome websites!
 precisa de configuração de proxy. Veja o
 [Módulo 99](./99-troubleshooting.md#erro-de-rede-ou-proxy-no-npm).
 
-💡 Este é o momento que o [Módulo 00](./00-environment-setup.md#dois-hábitos-que-evitam-quase-tudo)
-avisou: 30 mil arquivos apareceram de uma vez dentro do OneDrive. Se a máquina
-ficar lenta nos próximos minutos, é a sincronização — e da próxima vez você pausa
-antes.
+💡 Este é o momento que o
+[Módulo 00](./00-environment-setup.md#se-ainda-assim-o-projeto-ficar-numa-pasta-sincronizada)
+antecipou: 30 mil arquivos apareceram de uma vez. Se o projeto estiver numa pasta
+sincronizada e a máquina ficar lenta nos próximos minutos, é a sincronização — e da
+próxima vez vale pausar antes.
 
 ---
 
@@ -93,7 +94,7 @@ Você está vendo o site de exemplo do template: uma home com três colunas, um 
 💻 Em outro terminal:
 
 ```powershell
-code "C:\Users\marce\OneDrive\Documents\Docusaurus"
+code "C:\projects\docusaurus-learning"
 ```
 
 Isso abre o repositório inteiro — `guide/` e `website/` lado a lado.
@@ -357,15 +358,15 @@ git push
 
 ## ✅ Checkpoint
 
-- [x] `http://localhost:3000` abre o site de exemplo
-- [x] Você sabe quais três pastas são geradas e por que nunca entram no Git
-- [x] Você achou a página do `intro.mdx` no site (navbar → **Tutorial**)
-- [x] Você editou `website/docs/intro.mdx` e viu a mudança sem recarregar
-- [x] A página tem **um** título grande, não dois
-- [x] Você sabe parar o servidor (`Ctrl+C`) e subir de novo (`npm start`)
-- [x] `npm run build` termina com SUCCESS
-- [x] `website/` está no GitHub, sem `node_modules`
-- [x] Você sabe dizer, de cabeça, para que serve `docs/`, `static/` e `sidebars.js`
+- [ ] `http://localhost:3000` abre o site de exemplo
+- [ ] Você sabe quais três pastas são geradas e por que nunca entram no Git
+- [ ] Você achou a página do `intro.mdx` no site (navbar → **Tutorial**)
+- [ ] Você editou `website/docs/intro.mdx` e viu a mudança sem recarregar
+- [ ] A página tem **um** título grande, não dois
+- [ ] Você sabe parar o servidor (`Ctrl+C`) e subir de novo (`npm start`)
+- [ ] `npm run build` termina com SUCCESS
+- [ ] `website/` está no GitHub, sem `node_modules`
+- [ ] Você sabe dizer, de cabeça, para que serve `docs/`, `static/` e `sidebars.js`
 
 ---
 

@@ -11,7 +11,7 @@ formatou?".
 💻 Como sempre, dentro de `website`:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus\website"
+cd "C:\projects\docusaurus-learning\website"
 ```
 
 ---
@@ -395,11 +395,11 @@ A página `docs/reference.mdx` deve ter, funcionando: títulos com âncora fixa,
 texto formatado, lista com bloco de código dentro, tabela alinhada, os três tipos
 de link, uma nota de rodapé, um bloco `<details>` e um comentário.
 
-- [x] O índice lateral (direita) reflete seus títulos
-- [x] Você criou um link quebrado, viu o build falhar, e consertou
-- [x] `npm run build` passa
-- [x] Você consegue explicar por que `./page.mdx` é melhor que `/docs/page`
-- [x] Commit feito
+- [ ] O índice lateral (direita) reflete seus títulos
+- [ ] Você criou um link quebrado, viu o build falhar, e consertou
+- [ ] `npm run build` passa
+- [ ] Você consegue explicar por que `./page.mdx` é melhor que `/docs/page`
+- [ ] Commit feito
 
 ---
 

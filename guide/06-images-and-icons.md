@@ -177,7 +177,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 Hoje seu site roda em `http://localhost:3000/`, então `/img/logo.svg` funciona.
 Mas no Módulo 12 ele vai para
-`https://marcelosub1993.github.io/docusaurus-learning/`, e o caminho correto
+`https://your-username.github.io/docusaurus-learning/`, e o caminho correto
 passa a ser `/docusaurus-learning/img/logo.svg`.
 
 `useBaseUrl` monta esse prefixo automaticamente. Use sempre que escrever um
@@ -341,14 +341,14 @@ cd website
 
 ## ✅ Checkpoint
 
-- [x] Uma imagem externa e uma de `static/img/`
-- [x] Uma imagem redimensionada via JSX
-- [x] Uma imagem via `require()`, e você **testou** que o build falha se ela sumir
-- [x] Você viu que o caminho de `static/` errado **não** derruba o build
-- [x] Um `ThemedImage` trocando com o botão de tema
-- [x] Uma tabela com emoji e um SVG inline com `currentColor`
-- [x] `npm run build` passa
-- [x] Commit feito
+- [ ] Uma imagem externa e uma de `static/img/`
+- [ ] Uma imagem redimensionada via JSX
+- [ ] Uma imagem via `require()`, e você **testou** que o build falha se ela sumir
+- [ ] Você viu que o caminho de `static/` errado **não** derruba o build
+- [ ] Um `ThemedImage` trocando com o botão de tema
+- [ ] Uma tabela com emoji e um SVG inline com `currentColor`
+- [ ] `npm run build` passa
+- [ ] Commit feito
 
 ---
 

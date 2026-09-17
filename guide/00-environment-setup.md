@@ -1,7 +1,7 @@
 # Módulo 00 — Preparando o ambiente
 
-> **Objetivo:** instalar Node.js, Git e VS Code, e deixar a pasta do projeto
-> preparada para funcionar dentro do OneDrive sem quebrar.
+> **Objetivo:** instalar Node.js, Git e VS Code, e escolher a pasta do projeto
+> sabendo quais escolhas causam problema depois.
 > **Tempo:** ~30 min
 > **Pré-requisito:** nenhum.
 
@@ -92,80 +92,83 @@ rodar o build — o que economiza várias idas e vindas nos Módulos 05 em diant
 
 ---
 
-## Passo 4 — A pasta do projeto e o problema do OneDrive
+## Passo 4 — A pasta do projeto
 
 Este passo parece burocrático e é o mais importante do módulo. Leia inteiro antes
 de rodar qualquer comando.
 
-### Onde o projeto vai ficar
+### Escolhendo o lugar
 
+O projeto vai virar um repositório Git no Módulo 01, e o site Docusaurus nasce
+dentro dele, em `website/`, no Módulo 02. Escolha uma pasta e use a mesma até o
+fim do guia.
+
+```powershell
+New-Item -ItemType Directory -Force "C:\projects\docusaurus-learning"
 ```
-C:\Users\marce\OneDrive\Documents\Docusaurus\
-```
 
-É onde o `guide/` já está. Vai virar um repositório Git no Módulo 01, e o site
-Docusaurus vai nascer dentro dele, em `website/`, no Módulo 02.
+Este guia usa `C:\projects\docusaurus-learning` nos exemplos. Se você preferir
+outro lugar, troque o caminho em todos os comandos daqui para frente.
 
-### O problema
+### ⚠️ Se a pasta ficar dentro do OneDrive, Dropbox ou Google Drive
 
-Pastas sincronizadas (OneDrive, Dropbox, Google Drive) causam dois problemas
-reais em projetos Node:
+No Windows, `Documentos` e `Área de Trabalho` costumam estar dentro do OneDrive
+sem que o usuário tenha escolhido isso. Vale conferir antes de decidir, porque
+pasta sincronizada causa dois problemas reais em projetos Node:
 
 1. **Volume.** A pasta `node_modules` tem **dezenas de milhares** de arquivos
-   pequenos. O OneDrive tenta sincronizar todos — consome CPU, ocupa cota e
-   demora horas.
+   pequenos. O serviço de sincronização tenta subir todos — consome CPU, ocupa
+   cota e demora horas.
 2. **Corrida de arquivos.** O bundler grava arquivos de cache e os relê
-   milissegundos depois. Se o OneDrive mexer no arquivo nesse intervalo, o build
-   quebra com erros que não fazem sentido: *panics*, arquivos "não encontrados"
-   que existem, builds que funcionam numa hora e falham na outra. O
-   [Módulo 99](./99-troubleshooting.md#problemas-causados-pelo-onedrive)
-   mostra a cara desse erro.
+   milissegundos depois. Se a sincronização mexer no arquivo nesse intervalo, o
+   build quebra com erros que não fazem sentido: *panics*, arquivos "não
+   encontrados" que existem, builds que funcionam numa hora e falham na outra. O
+   [Módulo 99](./99-troubleshooting.md#problemas-causados-por-pastas-sincronizadas) mostra a
+   cara desse erro.
 
-### A decisão
+**A recomendação é manter o projeto fora da pasta sincronizada.** Código
+versionado não precisa de backup em nuvem de arquivos — o Git já cumpre esse
+papel, e melhor.
 
-**Vamos manter o projeto no OneDrive mesmo, sem truque nenhum.**
+### Se ainda assim o projeto ficar numa pasta sincronizada
 
-Existem técnicas para tirar essas pastas da sincronização. Eu tentei três, e a
-conclusão foi que todas custam mais do que resolvem: ou o npm as desfaz sozinho,
-ou o próprio Docusaurus as apaga no build, ou você precisa recriá-las à mão para
-sempre. Complexidade permanente no Módulo 00 para um problema que talvez nunca
-apareça é mau negócio.
+Funciona, e muita gente trabalha assim. Existem técnicas para excluir
+`node_modules` da sincronização — junções de diretório, listas de exclusão — mas
+elas custam mais do que resolvem: o npm desfaz algumas sozinho, o Docusaurus apaga
+outras durante o build, e várias precisam ser recriadas à mão para sempre.
 
-Então o plano é o inverso: **setup simples, e conserto documentado se der
-problema.**
+O caminho mais barato é o inverso: **setup simples, e conserto documentado se der
+problema.** Dois hábitos evitam quase tudo.
 
-### Dois hábitos que evitam quase tudo
+**1. Pause a sincronização antes de instalar pacotes.**
 
-**1. Pause o OneDrive antes de instalar pacotes.**
+É quando os milhares de arquivos aparecem de uma vez. No OneDrive: ícone da nuvem
+na bandeja do sistema → **Pausar sincronização → 2 horas**. Rode o `npm install`, e
+despause ao terminar.
 
-É quando os milhares de arquivos aparecem de uma vez. Clique no ícone da nuvem na
-bandeja do sistema → **Pausar sincronização → 2 horas**. Rode o `npm install`, e
-despause quando terminar.
+Não é obrigatório. Mas se a máquina ficar lenta depois de um `npm install`, a
+causa é essa.
 
-Não é obrigatório. Mas se a máquina ficar lenta depois de um `npm install`, é
-isso, e agora você sabe.
-
-**2. Se um build quebrar com erro que não faz sentido, suspeite do OneDrive.**
+**2. Se um build quebrar com erro que não faz sentido, suspeite da sincronização.**
 
 *Panic*, arquivo "não encontrado" que existe, build que funciona numa hora e falha
-na outra — nada disso é culpa do seu código. O
-[Módulo 99](./99-troubleshooting.md#problemas-causados-pelo-onedrive) tem a escada
+na outra, pasta `build/` que desaparece — nada disso é culpa do código. O
+[Módulo 99](./99-troubleshooting.md#problemas-causados-por-pastas-sincronizadas) tem a escada
 de correção, da mais simples à definitiva. A primeira tentativa é sempre
 `npm run clear`.
 
 ### A saída de emergência
 
-Se o OneDrive atrapalhar de verdade, mova o projeto para fora dele. A partir do
-Módulo 01 isso vira uma operação de dois comandos, porque o GitHub passa a ter
-tudo:
+Se a sincronização atrapalhar de verdade, mova o projeto. A partir do Módulo 01
+isso vira uma operação de dois comandos, porque o GitHub passa a ter tudo:
 
 ```powershell
-cd C:\dev
-git clone https://github.com/marcelosub1993/docusaurus-learning.git
+cd C:\projects
+git clone https://github.com/your-username/docusaurus-learning.git
 ```
 
-Aí você trabalha em `C:\dev\docusaurus-learning` e o backup continua sendo o Git —
-que é o que backup de código deveria ser desde sempre.
+O backup continua sendo o Git — que é o que backup de código deveria ser desde
+sempre.
 
 Guarde essa carta na manga. Não precisa usar agora.
 
@@ -177,7 +180,7 @@ Não precisa decorar. Volte aqui quando precisar.
 
 | Comando | O que faz |
 |---|---|
-| `cd "C:\Users\marce\OneDrive\Documents\Docusaurus"` | Entra na pasta |
+| `cd "C:\projects\docusaurus-learning"` | Entra na pasta |
 | `cd website` | Entra numa subpasta |
 | `cd ..` | Volta uma pasta |
 | `ls` | Lista o conteúdo da pasta atual |
@@ -195,7 +198,7 @@ dois argumentos separados.
 💻 Confirme que você consegue chegar na pasta:
 
 ```powershell
-cd "C:\Users\marce\OneDrive\Documents\Docusaurus"
+cd "C:\projects\docusaurus-learning"
 ls
 ```
 
@@ -205,13 +208,14 @@ ls
 
 ## ✅ Checkpoint
 
-- [x] `node -v` mostra v20 ou superior
-- [x] `npm -v` mostra um número de versão
-- [x] `git --version` mostra uma versão
-- [x] VS Code instalado, com a extensão MDX
-- [x] Você consegue entrar na pasta do projeto com `cd` e ver o `guide` no `ls`
-- [x] Você sabe onde fica o botão de pausar o OneDrive
-- [x] Você sabe que erro de build sem sentido é sintoma de sincronização, e que o
+- [ ] `node -v` mostra v20 ou superior
+- [ ] `npm -v` mostra um número de versão
+- [ ] `git --version` mostra uma versão
+- [ ] VS Code instalado, com a extensão MDX
+- [ ] Você consegue entrar na pasta do projeto com `cd`
+- [ ] Você sabe se ela está ou não dentro de uma pasta sincronizada
+- [ ] Se estiver, você sabe onde fica o botão de pausar a sincronização
+- [ ] Você sabe que erro de build sem sentido é sintoma de sincronização, e que o
       Módulo 99 tem o conserto
 
 ---
