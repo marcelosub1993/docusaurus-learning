@@ -6,34 +6,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-
-/* Center the navbar links on desktop only.
-  997px is the breakpoint where Docusaurus switches to the mobile menu. */
-
-@media (min-width: 997px) {
-  .navbar__inner {
-    position: relative;
-  }
-
-  .navbar__items:not(.navbar__items--right) {
-    flex: 1;
-    justify-content: center;
-  }
-
-  /* Pull the logo out of the flow so it does not push the links off-center */
-  .navbar__items:not(.navbar__items--right) .navbar__brand {
-    position: absolute;
-    left: 0;
-  }
-
-  .navbar__items--right {
-    position: absolute;
-    right: 0;
-  }
-}
-
-
-
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #705200;
@@ -95,6 +67,7 @@
 .navbar {
   box-shadow: none;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
+
 }
 
 /* Highlight table headers */
