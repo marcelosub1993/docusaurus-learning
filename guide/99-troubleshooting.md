@@ -1012,6 +1012,40 @@ npm ls --depth=0
 
 Se a primeira linha não for `website@0.0.0`, você está na pasta errada.
 
+### O job fica em `Queued` para sempre, sem erro
+
+O workflow aparece no GitHub com a bolinha amarela e o rótulo **Queued**. Não
+falha, não roda, não diz nada. Você espera 10 minutos e continua igual.
+
+**Causa quase certa: erro de escrita no `runs-on`.**
+
+```yaml
+runs-on: ubuntu latest    # errado - falta o hifen
+runs-on: ubuntu-latest    # correto
+```
+
+`ubuntu latest` não é um runner que existe, mas o GitHub **não valida esse
+nome** — rótulo personalizado é um recurso legítimo, usado por empresas com
+máquinas próprias (`self-hosted`, `gpu-runner`). Então ele não tem como saber que
+você errou: só fica esperando uma máquina com esse rótulo aparecer. E ela nunca
+aparece.
+
+**Como confirmar:** compare o `runs-on` do workflow travado com o de outro que
+funciona. Os valores oficiais mais usados são `ubuntu-latest`, `windows-latest` e
+`macos-latest` — todos com hífen.
+
+**Conserto:** corrija o `runs-on`, faça push, e **cancele o run travado** na
+interface (`...` → *Cancel workflow*). Ele não sai da fila sozinho.
+
+⚠️ Outras causas de `Queued`, se o `runs-on` estiver certo:
+
+| Causa | Como reconhecer |
+|---|---|
+| Fila do GitHub | Resolve em minutos. Só esperar |
+| Cota de minutos esgotada | Aparece aviso em Settings → Billing |
+| `concurrency` bloqueando | Outro run do mesmo grupo está rodando |
+| Aprovação pendente | Contribuidor externo em repositório público |
+
 ### `Error: Failed to create deployment (status: 404)`
 
 **Causa:** o GitHub Pages não está configurado como "GitHub Actions".
