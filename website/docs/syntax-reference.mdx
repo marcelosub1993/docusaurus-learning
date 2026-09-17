@@ -1,5 +1,6 @@
 ---
 title: Syntax Reference
+last_reviewed: '2026-09-16'
 sidebar_label: Syntax Reference
 sidebar_position: 4
 description: A page where every Markdown feature is demonstrated.
@@ -14,6 +15,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import Logo from '@site/static/img/logo.svg';
 import {FiGithub, FiPackage, FiChrome, FiUmbrella} from 'react-icons/fi';
 import Figure from '@site/src/components/Figure'
+
+> last reviewed on {frontMatter.last_reviewed}
 
 
 A living page where each formatting feature is show in use.
@@ -201,7 +204,7 @@ function sum(a,b) {
 
 ## Tabs
 
-<Tabs groupId="operating-system">
+<Tabs groupId="operating-system" queryString="os">
     <TabItem value="windows" label="Windows" default>
 
     ```powershell
@@ -210,7 +213,7 @@ function sum(a,b) {
 
     </TabItem>
 
-    <TabItem value="macos" label="MacOS">
+    <TabItem value="macos" label="macOS">
     
     ```bash
     brew install nimbus
@@ -577,3 +580,17 @@ architecture-beta
     api:B -- T:disk
 ```
 
+## Personalized Admonition
+
+:::costly[Full reindex]
+A full reindex scans every file in the workspace. On a large workspace this runs
+for hours and shows up on the monthly bill.
+:::
+
+## Mathematical equations
+
+Retention cost grows with the number of files times the retention window.
+
+$$
+C = \sum_{i=1}^{n} s_i \times d \times r
+$$

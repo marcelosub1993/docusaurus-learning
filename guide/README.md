@@ -1,11 +1,12 @@
 # Guia de Docusaurus — do zero ao site publicado
 
-Um curso prático, em 14 módulos, para aprender Docusaurus construindo um site de
+Um curso prático, em 15 módulos, para aprender Docusaurus construindo um site de
 documentação de verdade e registrando tudo no Git.
 
 ## Como este guia funciona
 
-Cada módulo segue a mesma estrutura:
+Cada módulo do caminho principal (00 a 12) segue a mesma estrutura — os dois de
+consulta, 13 e 99, são listas e não seguem este formato:
 
 | Elemento | O que é |
 |---|---|
@@ -92,6 +93,7 @@ e tags, busca funcionando, componentes React próprios e o site publicado no ar.
 
 | # | Módulo | Para quê |
 |---|---|---|
+| 13 | [Catálogo de recursos](./13-feature-catalog.md) | O que o Docusaurus faz além do que você construiu — partials, plugins, navbar centralizada, site offline |
 | 99 | [Solução de problemas](./99-troubleshooting.md) | Os erros que você vai encontrar, organizados por sintoma |
 
 ## Por onde começar
@@ -99,8 +101,10 @@ e tags, busca funcionando, componentes React próprios e o site publicado no ar.
 Faça na ordem, do 00 ao 12. Os módulos se apoiam uns nos outros: o site que você
 constrói no 03 é o mesmo que você estiliza no 09 e publica no 12.
 
-O Módulo 99 não é para ler de ponta a ponta — é para consultar quando algo quebrar.
-Vale dar uma olhada nos títulos agora, só para saber o que tem lá.
+Os módulos 13 e 99 não são para ler de ponta a ponta — são de consulta. O 99 é
+organizado por sintoma, para quando algo quebrar; o 13 é um catálogo do que existe,
+para quando você pensar "será que dá para fazer X?". Vale dar uma olhada nos
+títulos dos dois agora, só para saber o que tem lá.
 
 ➡️ Comece pelo [Módulo 00 — Preparando o ambiente](./00-environment-setup.md).
 

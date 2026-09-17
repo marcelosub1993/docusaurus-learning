@@ -247,6 +247,52 @@ vantagem dele.
 
 ---
 
+## Editei a página e o site não mudou
+
+### A edição não aparece, e não há erro nenhum
+
+Você altera um arquivo em `docs/`, salva, o `npm start` recarrega — e a página
+continua igual. Nenhum erro, nenhum aviso.
+
+**Causa quase certa: versionamento ligado.** Se o seu config tem
+`lastVersion: '1.0'`, o endereço `/docs/alguma-coisa` serve a cópia congelada de
+`versioned_docs/version-1.0/`, **não** o arquivo que você acabou de editar.
+
+| Você edita | Aparece em |
+|---|---|
+| `docs/installation.mdx` | `/docs/next/installation` |
+| `versioned_docs/version-1.0/installation.mdx` | `/docs/installation` |
+
+**Como confirmar em 10 segundos:** abra a mesma página com `/next/` no endereço.
+Se a sua mudança estiver lá, é isto.
+
+**Três saídas:**
+
+1. **Repetir a edição nas duas cópias** — correto quando a correção também vale
+   para quem usa a 1.0
+2. **Inverter a versão padrão**, para você editar e ver:
+
+   ```js
+   docs: {
+     lastVersion: 'current',
+     versions: {
+       current: {label: '2.0 (in development)'},
+       '1.0': {label: '1.0 (stable)', path: '1.0'},
+     },
+   },
+   ```
+
+3. **Desligar o versionamento** — apagar `versions.json`, `versioned_docs/` e
+   `versioned_sidebars/`
+
+⚠️ **Este sintoma tem vários disfarces.** Ele não aparece só como "o texto não
+mudou": aparece como um componente que não reage, uma aba que não escreve na URL,
+um link de navbar que leva para a página errada. Sempre que algo que você
+**acabou de escrever** parecer não existir, confira a versão antes de procurar o
+erro no seu código.
+
+---
+
 ## Erros de link
 
 ### `Docusaurus found broken links!`
@@ -321,6 +367,45 @@ onBrokenAnchors: 'throw',
 ---
 
 ## Erros de MDX
+
+### `Objects are not valid as a React child (found: [object Date])`
+
+O build falha apontando uma página específica:
+
+```
+Error: Can't render static file for pathname "/docs/syntax-reference"
+  [cause]: Error: Objects are not valid as a React child (found: [object Date])
+```
+
+**Causa:** a página exibe um valor do front matter com `{frontMatter.alguma_coisa}`,
+e o YAML transformou esse valor num **objeto**, não em texto. O caso mais comum é
+data.
+
+**Conserto:** ponha aspas no front matter.
+
+```yaml
+---
+last_reviewed: '2026-09-16'   # com aspas: string
+---
+```
+
+Sem as aspas, `2026-09-16` vira um objeto `Date`, e o React não sabe desenhar um
+objeto.
+
+⚠️ **A mesma armadilha tem outras faces**, todas por conversão automática do YAML:
+
+| Você escreve | O YAML entende |
+|---|---|
+| `version: 2.10` | o número `2.1` — o zero desaparece |
+| `region: no` | o booleano `false` (código da Noruega) |
+| `id: 012345` | pode virar número e perder o zero à esquerda |
+
+💡 A regra que resolve a família inteira: **no front matter, ponha aspas em tudo
+que precisa continuar sendo texto.** Isso só importa quando o valor é lido na
+página ou comparado como texto — `sidebar_position: 4` continua sendo número de
+propósito.
+
+
 
 ### `Unexpected character` / `Could not parse expression with acorn`
 
